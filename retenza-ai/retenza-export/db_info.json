@@ -1,0 +1,815 @@
+[
+  {
+    "collection": "ProductAssociations",
+    "count": 6,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      },
+      {
+        "v": 2,
+        "key": {
+          "commerce_id": 1,
+          "produitA": 1,
+          "produitB": 1
+        },
+        "name": "idx_association_unique",
+        "unique": true
+      },
+      {
+        "v": 2,
+        "key": {
+          "commerce_id": 1,
+          "confiance": -1
+        },
+        "name": "idx_confiance_desc"
+      },
+      {
+        "v": 2,
+        "key": {
+          "dateCalcul": 1
+        },
+        "name": "idx_date_calcul"
+      }
+    ],
+    "fields": [
+      "_id",
+      "produitA",
+      "commerce_id",
+      "produitB",
+      "confiance",
+      "dateCalcul",
+      "lift",
+      "support",
+      "support_total"
+    ]
+  },
+  {
+    "collection": "analyses_ia",
+    "count": 438,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "client_id",
+      "recency",
+      "frequency",
+      "monetary",
+      "monetary_total",
+      "freq_recente",
+      "freq_historique",
+      "delta_frequence",
+      "baisse_frequence_detectee",
+      "date_calcul_delta",
+      "recency_score",
+      "frequency_score",
+      "monetary_score",
+      "score_global_sa",
+      "segment_gmm",
+      "probability_gmm",
+      "probabilities_gmm",
+      "churn_score",
+      "churn_risk_label",
+      "nom",
+      "email",
+      "client_db_id",
+      "date_naissance",
+      "influence_score",
+      "referral_code",
+      "commerce_id",
+      "date_analyse",
+      "fraud_block_reason",
+      "is_fraud_blocked",
+      "trust_score",
+      "trust_score_updated_at",
+      "score_f",
+      "score_m",
+      "score_r"
+    ]
+  },
+  {
+    "collection": "audit_logs",
+    "count": 223,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "occurred_at",
+      "actor",
+      "action",
+      "target",
+      "ip",
+      "user_agent",
+      "metadata",
+      "previous_hash",
+      "entry_hash"
+    ]
+  },
+  {
+    "collection": "avis_clients",
+    "count": 14,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "client_email",
+      "client_status",
+      "review_text",
+      "source",
+      "client_history",
+      "history_source",
+      "result",
+      "model_used",
+      "duration_ms",
+      "created_at"
+    ]
+  },
+  {
+    "collection": "campagnes_envoyees",
+    "count": 9059,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "client_email",
+      "client_nom",
+      "segment",
+      "churn_score",
+      "churn_risk_label",
+      "subject",
+      "body",
+      "sent_at",
+      "status",
+      "category"
+    ]
+  },
+  {
+    "collection": "chatbot_conversations",
+    "count": 18,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "session_id",
+      "commerce_id",
+      "email",
+      "messages",
+      "updated_at"
+    ]
+  },
+  {
+    "collection": "chatbot_language_feedbacks",
+    "count": 6,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "timestamp",
+      "email",
+      "commerce_id",
+      "session_id",
+      "message_idx",
+      "reason"
+    ]
+  },
+  {
+    "collection": "chatbot_message_feedbacks",
+    "count": 13,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "timestamp",
+      "email",
+      "commerce_id",
+      "session_id",
+      "message_idx",
+      "feedback",
+      "text"
+    ]
+  },
+  {
+    "collection": "chatbot_status",
+    "count": 4,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "email",
+      "nom",
+      "commerce_id",
+      "warnings",
+      "is_blocked",
+      "blocked_at",
+      "block_reason",
+      "warnings_history"
+    ]
+  },
+  {
+    "collection": "clients",
+    "count": 446,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      },
+      {
+        "v": 2,
+        "key": {
+          "commerce_id": 1
+        },
+        "name": "commerce_id_1",
+        "background": true
+      },
+      {
+        "v": 2,
+        "key": {
+          "id": 1
+        },
+        "name": "id_1",
+        "background": true,
+        "unique": true,
+        "sparse": true
+      }
+    ],
+    "fields": [
+      "_id",
+      "id",
+      "commerce_id",
+      "nom",
+      "email",
+      "telephone",
+      "date_naissance",
+      "created_at",
+      "archetype_real",
+      "device_id_creation",
+      "ip_creation_compte",
+      "is_fraud_blocked",
+      "trust_score",
+      "fraud_block_reason",
+      "trust_score_updated_at"
+    ]
+  },
+  {
+    "collection": "commandes",
+    "count": 195,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "client_email",
+      "numero_commande",
+      "statut",
+      "date_commande",
+      "date_expedition",
+      "date_livraison_estimee",
+      "date_livraison_reelle",
+      "numero_suivi",
+      "transporteur",
+      "produits",
+      "montant_total",
+      "adresse_livraison"
+    ]
+  },
+  {
+    "collection": "commerces",
+    "count": 3,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "brand_id",
+      "created_at",
+      "name",
+      "status",
+      "updated_at",
+      "nom"
+    ]
+  },
+  {
+    "collection": "commerces_settings",
+    "count": 4,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "cooldown_days",
+      "updated_at",
+      "brand_id",
+      "smart_automation_enabled",
+      "accountant_email",
+      "automation_rules",
+      "cooldown_reset_at",
+      "monthly_export_enabled",
+      "send_hour_end",
+      "send_hour_start",
+      "send_hours_enabled",
+      "absence_heure_limite",
+      "absence_multiplier",
+      "absence_reduction",
+      "absence_template",
+      "cross_sell_auto_recommend",
+      "cross_sell_min_confidence",
+      "fraud_max_basket_multiplier",
+      "fraud_max_daily_purchases",
+      "marketing_costs",
+      "shop_anniversary_date",
+      "shop_anniversary_discount_percent",
+      "shop_anniversary_mode",
+      "shop_anniversary_promo_code",
+      "daily_run_hour"
+    ]
+  },
+  {
+    "collection": "heures_creuses_settings",
+    "count": 3,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "analysis_window_days",
+      "audience",
+      "enabled",
+      "max_detected_slots",
+      "minimum_history_days",
+      "offer",
+      "opening_hours",
+      "purchase_source",
+      "slot_duration_minutes",
+      "threshold_percent",
+      "timezone",
+      "updated_at",
+      "geo_radius_km",
+      "min_slot_transactions"
+    ]
+  },
+  {
+    "collection": "heures_creuses_snapshots",
+    "count": 3,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "calculated_at",
+      "slots",
+      "source",
+      "window",
+      "total_transactions_analyzed"
+    ]
+  },
+  {
+    "collection": "job_runs",
+    "count": 21146,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "job_name",
+      "started_at",
+      "status",
+      "finished_at"
+    ]
+  },
+  {
+    "collection": "kpis_boutiques",
+    "count": 2,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "clients_actifs_30j",
+      "clients_revenus_30j",
+      "date_calcul",
+      "taux_retour_30j"
+    ]
+  },
+  {
+    "collection": "login_attempts",
+    "count": 0,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      },
+      {
+        "v": 2,
+        "key": {
+          "expires_at": 1
+        },
+        "name": "expires_at_1",
+        "expireAfterSeconds": 0
+      }
+    ],
+    "fields": []
+  },
+  {
+    "collection": "mfa_challenges",
+    "count": 19,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "token_hash",
+      "user_id",
+      "expires_at"
+    ]
+  },
+  {
+    "collection": "mfa_pending",
+    "count": 3,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "user_id",
+      "expires_at",
+      "secret"
+    ]
+  },
+  {
+    "collection": "parrainages",
+    "count": 3,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "parrain_email",
+      "parrain_nom",
+      "filleul_email",
+      "filleul_nom",
+      "status",
+      "date_parrainage",
+      "date_completion",
+      "amount_generated",
+      "referral_code"
+    ]
+  },
+  {
+    "collection": "points_fidelite",
+    "count": 448,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "client_email",
+      "commerce_id",
+      "client_nom",
+      "date_creation",
+      "derniere_maj",
+      "palier_fid10_notifie",
+      "palier_fid20_notifie",
+      "palier_fidvip_notifie",
+      "points_cumules",
+      "points_disponibles",
+      "points_utilises"
+    ]
+  },
+  {
+    "collection": "points_transactions",
+    "count": 1081,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "client_email",
+      "client_nom",
+      "type",
+      "points",
+      "montant_transaction",
+      "solde_avant",
+      "solde_apres",
+      "date",
+      "description"
+    ]
+  },
+  {
+    "collection": "scheduler_status",
+    "count": 1,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "last_run"
+    ]
+  },
+  {
+    "collection": "sessions",
+    "count": 1,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      },
+      {
+        "v": 2,
+        "key": {
+          "expires_at": 1
+        },
+        "name": "expires_at_1",
+        "expireAfterSeconds": 0
+      }
+    ],
+    "fields": [
+      "_id",
+      "token_hash",
+      "user_id",
+      "created_at",
+      "expires_at",
+      "last_seen_at",
+      "ip",
+      "user_agent"
+    ]
+  },
+  {
+    "collection": "support_tickets",
+    "count": 12,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "commerce_id",
+      "commerce_name",
+      "created_at",
+      "email",
+      "messages_count",
+      "reason",
+      "session_id",
+      "status",
+      "summary",
+      "updated_at",
+      "last_message_at",
+      "unread_by_admin",
+      "unread_count",
+      "admin_last_read_at"
+    ]
+  },
+  {
+    "collection": "system_health",
+    "count": 2,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      }
+    ],
+    "fields": [
+      "_id",
+      "service_name",
+      "checked_at",
+      "status"
+    ]
+  },
+  {
+    "collection": "transactions",
+    "count": 7129,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      },
+      {
+        "v": 2,
+        "key": {
+          "commerce_id": 1
+        },
+        "name": "commerce_id_1",
+        "background": true
+      },
+      {
+        "v": 2,
+        "key": {
+          "client_id": 1
+        },
+        "name": "client_id_1",
+        "background": true
+      }
+    ],
+    "fields": [
+      "_id",
+      "id",
+      "commerce_id",
+      "client_id",
+      "date_transaction",
+      "montant"
+    ]
+  },
+  {
+    "collection": "users",
+    "count": 1,
+    "indexes": [
+      {
+        "v": 2,
+        "key": {
+          "_id": 1
+        },
+        "name": "_id_"
+      },
+      {
+        "v": 2,
+        "key": {
+          "email": 1
+        },
+        "name": "email_1",
+        "unique": true
+      }
+    ],
+    "fields": [
+      "_id",
+      "email",
+      "commerce_ids",
+      "created_at",
+      "is_active",
+      "password_hash",
+      "role",
+      "updated_at",
+      "mfa_enabled",
+      "mfa_recovery_codes_hashes",
+      "mfa_secret_encrypted",
+      "mfa_verified_at",
+      "last_login_at"
+    ]
+  }
+]

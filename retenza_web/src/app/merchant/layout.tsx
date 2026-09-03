@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { logoutAction } from '@/services/authActions';
 import { LayoutDashboard, Users, Gift, ShoppingBag, Megaphone, LogOut, Menu, X, Search, Bell, User, BarChart2, Sparkles, Clock, MessageSquare, Bot, Globe, ShieldAlert, TrendingUp, Settings } from 'lucide-react';
 
-
+import AINotificationBell from '@/components/AINotificationBell';
 
 export default function MerchantLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -25,20 +25,22 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
 
   const navItems = [
     { name: 'Tableau de bord', href: '/merchant', icon: LayoutDashboard },
-    // — Modules IA —
+    { name: 'Clients', href: '/merchant/clients', icon: Users },
+    { name: 'Campagnes', href: '/merchant/campagnes', icon: Megaphone },
+    { name: 'Récompenses', href: '/merchant/programme', icon: Gift },
+    { name: 'Marketplace', href: '/merchant/marketplace', icon: ShoppingBag },
+    //  Modules IA 
     { name: 'Dashboard', href: '/merchant/dashboard-ia', icon: LayoutDashboard },
-    { name: 'Clients', href: '/merchant/clients-ia', icon: Users },
-    { name: 'Campagnes', href: '/merchant/campagnes-ia', icon: Megaphone },
+    { name: 'Clients (IA)', href: '/merchant/clients-ia', icon: Users },
+    { name: 'Campagnes (IA)', href: '/merchant/campagnes-ia', icon: Megaphone },
     { name: 'Statistiques', href: '/merchant/statistiques', icon: BarChart2 },
     { name: 'Heures Creuses', href: '/merchant/heures-creuses', icon: Clock },
     { name: 'Sécurité & Fraude', href: '/merchant/securite', icon: ShieldAlert },
     { name: 'Avis Clients', href: '/merchant/avis', icon: MessageSquare },
     { name: 'Audit Chatbot', href: '/merchant/parametres/audit-moderation', icon: ShieldAlert },
     { name: 'Cross-Sell / Up-Sell', href: '/merchant/recommandations', icon: TrendingUp },
-    { name: 'Récompenses', href: '/merchant/programme', icon: Gift },
-    { name: 'Marketplace', href: '/merchant/marketplace', icon: ShoppingBag },
-    { name: 'Paramètres', href: '/merchant/parametres/avances', icon: Sparkles },
-    // —
+    { name: 'Paramètres (IA)', href: '/merchant/parametres/avances', icon: Sparkles },
+    // 
     { name: 'Profil', href: '/merchant/profil', icon: User },
   ];
 
@@ -137,10 +139,7 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
 
           {/* Right icons */}
           <div className="flex items-center gap-3 ml-auto">
-            <button className="relative p-2 text-gray-500 hover:text-gray-900 transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
+            <AINotificationBell />
             <div className="w-9 h-9 rounded-xl bg-[#FFF5F2] border border-[#DD2C1F]/10 flex items-center justify-center text-[#DD2C1F] font-bold text-[13px] shadow-sm cursor-pointer">
               {initials}
             </div>

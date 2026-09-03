@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "3a6d99f2ca764b289cb22d515b7ac6b3",
+  "collectionName": "support_tickets",
+  "type": "collection"
+}

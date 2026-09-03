@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "36e633341ed8445daac6d6dfabdb2635",
+  "collectionName": "heures_creuses_settings",
+  "type": "collection"
+}

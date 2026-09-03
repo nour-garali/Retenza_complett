@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    },
+    {
+      "v": 2,
+      "key": {
+        "expires_at": 1
+      },
+      "name": "expires_at_1",
+      "expireAfterSeconds": 0
+    }
+  ],
+  "uuid": "feab9358a88b4afca180c9b4064e1511",
+  "collectionName": "login_attempts",
+  "type": "collection"
+}

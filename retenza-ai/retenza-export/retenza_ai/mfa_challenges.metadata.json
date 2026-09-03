@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "f3d4b9637be24b67b58ab027d5d06f7f",
+  "collectionName": "mfa_challenges",
+  "type": "collection"
+}

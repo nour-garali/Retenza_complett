@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "9b2fb89187214a7694951edbff070bb9",
+  "collectionName": "avis_clients",
+  "type": "collection"
+}

@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "5375f1843be64928b2cca3dbd17cf94b",
+  "collectionName": "commerces",
+  "type": "collection"
+}

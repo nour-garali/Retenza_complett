@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* ── Retenza Connect Brand Colors ── */
+  --retenza-red:        #E8462F;
+  --retenza-red-dark:   #C93A25;
+  --retenza-red-light:  #FDECEA;
+  --retenza-orange:     #F06038;
+
+  /* ── Background & Surface ── */
+  --background:         #FAF3EE;
+  --card-bg:            #FFFFFF;
+  --sidebar-bg:         #FFFFFF;
+
+  /* ── Borders (warm tones) ── */
+  --border-color:       #EEE5DF;
+  --border-warm:        #E8D9CF;
+
+  /* ── Text ── */
+  --foreground:         #1A1A1A;
+  --text-secondary:     #7A6E68;
+  --text-muted:         #B0A49C;
+
+  /* ── Semantic Colors (unchanged) ── */
+  --success:            #10b981;
+  --warning:            #f59e0b;
+  --danger:             #ef4444;
+  --info:               #3b82f6;
+
+  /* ── Legacy aliases (keeps Tailwind theme working) ── */
+  --primary:            var(--retenza-red);
+  --primary-hover:      var(--retenza-red-dark);
+}
+
+@theme inline {
+  --color-background:     var(--background);
+  --color-foreground:     var(--foreground);
+  --color-primary:        var(--primary);
+  --color-primary-hover:  var(--primary-hover);
+  --color-card-bg:        var(--card-bg);
+  --color-border-color:   var(--border-color);
+  --color-text-secondary: var(--text-secondary);
+
+  /* Retenza brand tokens available as Tailwind utilities */
+  --color-retenza-red:        var(--retenza-red);
+  --color-retenza-red-dark:   var(--retenza-red-dark);
+  --color-retenza-red-light:  var(--retenza-red-light);
+  --color-retenza-orange:     var(--retenza-orange);
+  --color-retenza-bg:         var(--background);
+  --color-retenza-border:     var(--border-color);
+  --color-retenza-text:       var(--foreground);
+  --color-retenza-muted:      var(--text-secondary);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Custom Scrollbar — warm Retenza tones */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4B8AD;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E8462F;
+}
+
+/* Keyframes for micro-animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Retenza button helpers */
+.btn-retenza {
+  background: linear-gradient(135deg, #E8462F, #F06038);
+  color: #ffffff;
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(232, 70, 47, 0.25);
+}
+
+.btn-retenza:hover {
+  background: linear-gradient(135deg, #C93A25, #E8462F);
+  box-shadow: 0 6px 20px rgba(232, 70, 47, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-retenza-outline {
+  background: #ffffff;
+  color: #E8462F;
+  border: 1.5px solid #E8462F;
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-retenza-outline:hover {
+  background: #FDECEA;
+}

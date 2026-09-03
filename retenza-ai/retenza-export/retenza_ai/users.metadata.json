@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    },
+    {
+      "v": 2,
+      "key": {
+        "email": 1
+      },
+      "name": "email_1",
+      "unique": true
+    }
+  ],
+  "uuid": "057d5d313ea04a7a8537ab1e384af710",
+  "collectionName": "users",
+  "type": "collection"
+}

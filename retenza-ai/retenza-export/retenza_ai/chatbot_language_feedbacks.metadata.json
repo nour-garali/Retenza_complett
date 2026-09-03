@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "b4f655038be64cdb979bdf17a3dfcc1b",
+  "collectionName": "chatbot_language_feedbacks",
+  "type": "collection"
+}

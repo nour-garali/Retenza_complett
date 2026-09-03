@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "30a57ef09ce443fd81dd32b27cca243e",
+  "collectionName": "analyses_ia",
+  "type": "collection"
+}

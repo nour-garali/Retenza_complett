@@ -1,0 +1,1 @@
+'use strict'; const r=require('express').Router();const c=require('../controllers/superAdminController');r.get('/overview',c.overview);r.get('/commerces',c.list);r.get('/commerces/:commerceId',c.detail);r.patch('/commerces/:commerceId/status',c.status);r.get('/health',c.health);r.get('/audit-logs',c.logs);module.exports=r;

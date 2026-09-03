@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "71658f7f670d47208ed80ac2245ca404",
+  "collectionName": "points_transactions",
+  "type": "collection"
+}

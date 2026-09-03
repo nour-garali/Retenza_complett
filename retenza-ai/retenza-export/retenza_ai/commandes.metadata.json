@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "69a4317ebcc34ff380e6f9d86c538166",
+  "collectionName": "commandes",
+  "type": "collection"
+}

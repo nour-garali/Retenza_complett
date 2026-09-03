@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "c1847016cbd3482495d83f68c17be2d9",
+  "collectionName": "kpis_boutiques",
+  "type": "collection"
+}

@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "8d3c0cf9aa7746b5858f41bd5ae8538f",
+  "collectionName": "job_runs",
+  "type": "collection"
+}

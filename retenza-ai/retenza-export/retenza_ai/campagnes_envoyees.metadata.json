@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "v": 2,
+      "key": {
+        "_id": 1
+      },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "fbdc7ec007654326a94f838be96fa546",
+  "collectionName": "campagnes_envoyees",
+  "type": "collection"
+}
