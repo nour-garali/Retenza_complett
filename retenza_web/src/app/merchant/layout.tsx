@@ -25,11 +25,9 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
 
   const navItems = [
     { name: 'Tableau de bord', href: '/merchant', icon: LayoutDashboard },
-    { name: 'Clients', href: '/merchant/clients', icon: Users },
-    { name: 'Campagnes', href: '/merchant/campagnes', icon: Megaphone },
     { name: 'Récompenses', href: '/merchant/programme', icon: Gift },
     { name: 'Marketplace', href: '/merchant/marketplace', icon: ShoppingBag },
-    //  Modules IA 
+    // — Modules IA —
     { name: 'Dashboard', href: '/merchant/dashboard-ia', icon: LayoutDashboard },
     { name: 'Clients (IA)', href: '/merchant/clients-ia', icon: Users },
     { name: 'Campagnes (IA)', href: '/merchant/campagnes-ia', icon: Megaphone },
