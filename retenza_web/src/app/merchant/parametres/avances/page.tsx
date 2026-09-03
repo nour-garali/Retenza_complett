@@ -615,7 +615,7 @@ export default function ParametresAvancesPage() {
       </PageHeader>
 
       {/* ─── ONGLETS DE NAVIGATION (Style identique à Modération & Audit) ─── */}
-      <div className="px-6 md:px-8 mt-4">
+      <div className="px-6 md:px-8 mt-0">
         <div className="flex border-b border-[#EEE5DF] gap-6 max-w-7xl mx-auto overflow-x-auto scrollbar-none pb-0">
           {[
             { id: "all", label: "Tout afficher", icon: Settings2 },

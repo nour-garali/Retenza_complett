@@ -765,7 +765,7 @@ export default function RecommandationsPage() {
       />
 
       {/* Onglets */}
-      <div className="px-8 mt-6">
+      <div className="px-8 mt-0">
         <div className="flex border-b border-[#EEE5DF] gap-6">
           {TABS.map(tab => {
             const isActive = activeTab === tab.id;
