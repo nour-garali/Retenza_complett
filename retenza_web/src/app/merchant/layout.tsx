@@ -29,16 +29,16 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
     { name: 'Marketplace', href: '/merchant/marketplace', icon: ShoppingBag },
     // — Modules IA —
     { name: 'Dashboard', href: '/merchant/dashboard-ia', icon: LayoutDashboard },
-    { name: 'Clients (IA)', href: '/merchant/clients-ia', icon: Users },
-    { name: 'Campagnes (IA)', href: '/merchant/campagnes-ia', icon: Megaphone },
+    { name: 'Clients', href: '/merchant/clients-ia', icon: Users },
+    { name: 'Campagnes', href: '/merchant/campagnes-ia', icon: Megaphone },
     { name: 'Statistiques', href: '/merchant/statistiques', icon: BarChart2 },
     { name: 'Heures Creuses', href: '/merchant/heures-creuses', icon: Clock },
     { name: 'Sécurité & Fraude', href: '/merchant/securite', icon: ShieldAlert },
     { name: 'Avis Clients', href: '/merchant/avis', icon: MessageSquare },
     { name: 'Audit Chatbot', href: '/merchant/parametres/audit-moderation', icon: ShieldAlert },
     { name: 'Cross-Sell / Up-Sell', href: '/merchant/recommandations', icon: TrendingUp },
-    { name: 'Paramètres (IA)', href: '/merchant/parametres/avances', icon: Sparkles },
-    // 
+    { name: 'Paramètres', href: '/merchant/parametres/avances', icon: Sparkles },
+    // —
     { name: 'Profil', href: '/merchant/profil', icon: User },
   ];
 
