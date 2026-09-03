@@ -1,0 +1,42 @@
+{
+  "name": "retenza-connect-backend",
+  "version": "1.0.0",
+  "description": "RetenzaConnect API - Loyalty & commerce management backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "adb reverse tcp:3000 tcp:3000 >nul 2>&1 & nodemon server.js",
+    "dev:mobile": "adb reverse tcp:3000 tcp:3000 && nodemon server.js",
+    "dev:local": "nodemon -e js --exec \"node -r dotenv/config -r ./config/loadEnvLocal.js server.js\"",
+    "seed:admin": "node scripts/seedAdmin.js"
+  },
+  "keywords": [
+    "retenza",
+    "loyalty",
+    "express",
+    "mongodb"
+  ],
+  "author": "Retenza",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.18.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.6.0",
+    "express-validator": "^7.2.1",
+    "google-auth-library": "^10.9.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.3",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^9.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.2.0",
+    "nodemon": "^3.1.9"
+  }
+}

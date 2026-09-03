@@ -1,0 +1,452 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { logoutAction } from '@/services/authActions';
+import { triggerReconciliation } from '@/services/reconciliationActions';
+import { 
+  Mail, Phone, Star, Camera, Edit2, Shield, CreditCard, 
+  RefreshCw, CheckCircle, AlertCircle, X, Save, Upload
+} from 'lucide-react';
+
+type Tab = 'overview' | 'security' | 'wallet';
+
+function DataField({ label, value }: { label: string; value: string | React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="text-[13px] font-semibold text-gray-500">{label}</span>
+      <span className="text-[14px] font-medium text-gray-900">{value}</span>
+    </div>
+  );
+}
+
+function Chip({ icon: Icon, text, highlight = false }: { icon: React.ElementType, text: string, highlight?: boolean }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className={`w-6 h-6 rounded-full flex items-center justify-center ${highlight ? 'bg-[#FCE7DD]' : 'bg-gray-100'}`}>
+        <Icon className={`w-3 h-3 ${highlight ? 'text-[#D73E26]' : 'text-gray-500'}`} />
+      </div>
+      <span className={`text-[13px] font-medium ${highlight ? 'text-[#D73E26]' : 'text-gray-600'}`}>{text}</span>
+    </div>
+  );
+}
+
+export default function ClientProfilPage() {
+  const { user, login } = useAuth(); // We'll use login to update the user in context locally
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
+
+  // Reconciliation state
+  const [reconciling, setReconciling] = useState(false);
+  const [reconcileResult, setReconcileResult] = useState<any>(null);
+  const [reconcileError, setReconcileError] = useState<string | null>(null);
+
+  // Edit Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Avatar upload state
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [savedAvatar, setSavedAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setEditForm({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        phone: (user as any).phone || '',
+      });
+    }
+  }, [user]);
+
+  const handleReconcile = async () => {
+    setReconciling(true); setReconcileResult(null); setReconcileError(null);
+    try {
+      const result = await triggerReconciliation();
+      if ('error' in result) setReconcileError(result.error);
+      else setReconcileResult(result);
+    } catch {
+      setReconcileError('Une erreur est survenue.');
+    } finally {
+      setReconciling(false);
+    }
+  };
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setAvatarPreview(result);
+        
+        // If they click the avatar on the main page (drawer closed), apply it instantly
+        if (!isEditModalOpen) {
+          setSavedAvatar(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    if (user) {
+      // Update local context
+      login({
+        ...user,
+        firstName: editForm.firstName,
+        lastName: editForm.lastName,
+        phone: editForm.phone,
+      } as any);
+    }
+    
+    // Save avatar
+    if (avatarPreview) {
+      setSavedAvatar(avatarPreview);
+    }
+    
+    setIsSaving(false);
+    setIsEditModalOpen(false);
+  };
+  
+  const openEditDrawer = () => {
+    setAvatarPreview(savedAvatar); // reset preview to saved state on open
+    setIsEditModalOpen(true);
+  };
+
+  const initials = `${user?.firstName?.charAt(0) || ''}${user?.lastName?.charAt(0) || ''}`.toUpperCase() || 'CL';
+  const fullName = `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Client';
+  const phone = (user as any)?.phone || 'Non renseigné';
+
+  return (
+    <>
+      {/* Full bleed white background */}
+      <div className="-mx-6 lg:-mx-8 -mb-8 bg-white min-h-[calc(100vh-64px)] pb-16">
+        
+        {/* 1. Cover Banner */}
+        <div className="max-w-[1040px] mx-auto px-6 lg:px-8 pt-6 lg:pt-8">
+          <div className="h-40 bg-gradient-to-r from-[#FFF5F2] to-[#FFF8F5] relative overflow-hidden rounded-3xl border border-[#FCE7DD]/60">
+            <div className="absolute right-[10%] -bottom-12 w-48 h-48 border border-[#FCE7DD] rounded-full" />
+            <div className="absolute right-[25%] -bottom-6 w-32 h-32 border border-[#FCE7DD] rounded-full" />
+          </div>
+        </div>
+
+        {/* 2. Content Container */}
+        <div className="max-w-[1040px] mx-auto px-6 lg:px-8">
+          
+          {/* Avatar & Header Info */}
+          <div className="pb-10">
+            
+            <div className="flex justify-between items-end mb-6">
+              <div className="-mt-16 relative ml-2 sm:ml-6">
+                <div className="w-32 h-32 rounded-full bg-[#FCE7DD] text-[#D73E26] flex items-center justify-center text-4xl font-bricolage font-bold border-[6px] border-white shadow-sm overflow-hidden relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                  {savedAvatar ? (
+                    <img src={savedAvatar} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    initials
+                  )}
+                  {/* Hover overlay for quick camera change directly from profile */}
+                  <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Camera className="w-8 h-8 text-white mb-1" />
+                    <span className="text-white text-[11px] font-semibold">Changer</span>
+                  </div>
+                </div>
+              </div>
+              
+              <button 
+                onClick={openEditDrawer}
+                className="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-xl text-[13px] font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm bg-white mt-4 sm:mt-0"
+              >
+                <Edit2 className="w-4 h-4" /> Modifier le profil
+              </button>
+            </div>
+
+            {/* Name & Bio */}
+            <div className="mb-6 ml-2 sm:ml-6">
+              <h1 className="text-[28px] font-bold text-gray-900 mb-2">{fullName}</h1>
+              <p className="text-[14px] text-gray-500 max-w-2xl leading-relaxed">
+                Membre de la communauté Retenza. Ce profil regroupe vos informations personnelles, 
+                vos paramètres de sécurité et la gestion de vos cartes de fidélité connectées.
+              </p>
+            </div>
+
+            {/* Information Chips */}
+            <div className="flex flex-wrap items-center gap-6 ml-2 sm:ml-6">
+              <Chip icon={Mail} text={user?.email || ''} />
+              <Chip icon={Phone} text={phone} />
+              <Chip icon={Star} text="Membre Vérifié" highlight />
+            </div>
+
+          </div>
+
+          {/* 3. Subtle Inner Tabs */}
+          <div className="flex gap-8 border-b border-gray-100 ml-2 sm:ml-6">
+            {[
+              { id: 'overview', label: 'Aperçu des informations' },
+              { id: 'wallet', label: 'Synchronisation Wallet' },
+              { id: 'security', label: 'Sécurité & Accès' }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as Tab)}
+                className={`pb-4 text-[14px] font-semibold transition-colors border-b-2 -mb-px ${
+                  activeTab === tab.id 
+                    ? 'border-[#D73E26] text-[#D73E26]' 
+                    : 'border-transparent text-gray-500 hover:text-gray-800'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* 4. Tab Content Area */}
+          <div className="py-10 ml-2 sm:ml-6">
+            
+            {/* TAB: OVERVIEW */}
+            {activeTab === 'overview' && (
+              <div className="animate-in fade-in duration-300">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12">
+                  <DataField label="Prénom" value={user?.firstName || '—'} />
+                  <DataField label="Nom de famille" value={user?.lastName || '—'} />
+                  <DataField label="Téléphone" value={phone} />
+                  
+                  <DataField label="Adresse e-mail" value={user?.email || '—'} />
+                  <DataField label="Statut du compte" value={<span className="text-green-600 font-bold">Actif</span>} />
+                  <DataField label="Date d'inscription" value="Aujourd'hui" />
+
+                  <DataField label="Cartes Wallet" value="0 synchronisée" />
+                  <DataField label="Points cumulés" value="0 pts" />
+                  <DataField label="Préférences" value="Notifications activées" />
+                </div>
+              </div>
+            )}
+
+            {/* TAB: WALLET */}
+            {activeTab === 'wallet' && (
+              <div className="animate-in fade-in duration-300 max-w-3xl">
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h3 className="text-[16px] font-bold text-gray-900 mb-2">Importer vos anciennes cartes</h3>
+                    <p className="text-[14px] text-gray-500 leading-relaxed">
+                      Si vous avez utilisé des cartes de fidélité chez nos commerçants partenaires avant de finaliser 
+                      votre compte, vous pouvez les synchroniser ici. Notre système retrouvera automatiquement vos points.
+                    </p>
+                  </div>
+
+                  {reconcileResult && (
+                    <div className={`p-4 rounded-xl flex items-start gap-3 ${reconcileResult.mergedCount > 0 ? 'bg-green-50 text-green-800' : 'bg-gray-50 text-gray-700'}`}>
+                      {reconcileResult.mergedCount > 0 ? <CheckCircle className="w-5 h-5 text-green-600 shrink-0" /> : <AlertCircle className="w-5 h-5 text-gray-400 shrink-0" />}
+                      <p className="text-[13px] font-medium mt-0.5">{reconcileResult.message}</p>
+                    </div>
+                  )}
+
+                  {reconcileError && (
+                    <div className="p-4 rounded-xl bg-red-50 text-red-800 flex items-center gap-3">
+                      <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+                      <p className="text-[13px] font-medium">{reconcileError}</p>
+                    </div>
+                  )}
+
+                  <div>
+                    <button 
+                      onClick={handleReconcile}
+                      disabled={reconciling}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 hover:bg-black text-white text-[13px] font-semibold rounded-xl transition-colors disabled:opacity-70 shadow-sm"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${reconciling ? 'animate-spin' : ''}`} />
+                      {reconciling ? 'Synchronisation...' : 'Lancer la synchronisation'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB: SECURITY */}
+            {activeTab === 'security' && (
+              <div className="animate-in fade-in duration-300 max-w-md">
+                <h3 className="text-[16px] font-bold text-gray-900 mb-6">Mettre à jour le mot de passe</h3>
+                
+                <div className="space-y-6">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[13px] font-semibold text-gray-500">Mot de passe actuel</label>
+                    <input 
+                      type="password" 
+                      className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[13px] font-semibold text-gray-500">Nouveau mot de passe</label>
+                    <input 
+                      type="password" 
+                      className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent"
+                      placeholder="••••••••"
+                    />
+                  </div>
+
+                  <div className="pt-4">
+                    <button className="px-6 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white text-[13px] font-semibold rounded-xl transition-colors shadow-sm">
+                      Sauvegarder
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      </div>
+      
+      {/* Hidden file input for Avatar Upload */}
+      <input 
+        type="file" 
+        accept="image/png, image/jpeg, image/gif, image/webp" 
+        className="hidden" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+      />
+
+      {/* Edit Profile Drawer (Right Side) */}
+      {isEditModalOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setIsEditModalOpen(false)}
+          />
+          
+          {/* Drawer */}
+          <div 
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-gray-100 flex flex-col animate-in slide-in-from-right duration-300"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+              <div>
+                <h2 className="text-[20px] font-bricolage font-bold text-[#1B100C]">Modifier le profil</h2>
+                <p className="text-[13px] text-gray-500 mt-1">Mettez à jour vos informations personnelles.</p>
+              </div>
+              <button 
+                onClick={() => setIsEditModalOpen(false)}
+                className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Form Content */}
+            <div className="flex-1 overflow-y-auto p-8">
+              <div className="space-y-6">
+                
+                {/* Avatar Preview (Visual & Functional) */}
+                <div className="flex items-center gap-4 mb-8">
+                   <div className="w-16 h-16 rounded-full bg-[#FCE7DD] text-[#D73E26] flex items-center justify-center text-xl font-bricolage font-bold border-2 border-white shadow-sm overflow-hidden shrink-0">
+                    {avatarPreview ? (
+                      <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      initials
+                    )}
+                   </div>
+                   <div>
+                     <button 
+                       type="button" 
+                       onClick={() => fileInputRef.current?.click()}
+                       className="text-[13px] font-semibold text-[#D73E26] hover:text-[#C0321C] transition-colors flex items-center gap-1.5"
+                     >
+                       <Upload className="w-3.5 h-3.5" /> Changer la photo
+                     </button>
+                     <p className="text-[11px] text-gray-400 mt-1">JPG, GIF ou PNG. Max 2MB.</p>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="text-[13px] font-semibold text-gray-700">Prénom</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={editForm.firstName}
+                      onChange={e => setEditForm({...editForm, firstName: e.target.value})}
+                      className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[13px] font-semibold text-gray-700">Nom</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={editForm.lastName}
+                      onChange={e => setEditForm({...editForm, lastName: e.target.value})}
+                      className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[13px] font-semibold text-gray-700">Numéro de téléphone</label>
+                  <input 
+                    type="tel" 
+                    value={editForm.phone}
+                    onChange={e => setEditForm({...editForm, phone: e.target.value})}
+                    placeholder="Ex: +33 6 12 34 56 78"
+                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
+                  />
+                </div>
+                
+                <div className="space-y-2 opacity-70">
+                  <label className="text-[13px] font-semibold text-gray-700 flex items-center justify-between">
+                    Adresse e-mail 
+                    <span className="text-[11px] font-normal text-gray-400 bg-gray-200 px-2 py-0.5 rounded-full">Lecture seule</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    value={user?.email || ''}
+                    disabled
+                    className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-500 cursor-not-allowed"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+              <form onSubmit={handleSaveProfile} className="flex items-center gap-3">
+                <button 
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
+                >
+                  Annuler
+                </button>
+                <button 
+                  type="submit"
+                  disabled={isSaving}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#D73E26] hover:bg-[#C0321C] text-white text-[14px] font-semibold shadow-md shadow-[#D73E26]/20 transition-all disabled:opacity-70 disabled:shadow-none"
+                >
+                  {isSaving ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  {isSaving ? 'Patientez...' : 'Enregistrer'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
+    </>
+  );
+}

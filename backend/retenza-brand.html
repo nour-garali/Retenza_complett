@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retenza — Charte graphique & interfaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --grenadier:#D73E26;
+    --grenadier-deep:#A82C18;
+    --grenadier-700:#B83320;
+    --ember:#F2774E;
+    --ember-soft:#FBE4DA;
+    --ink:#20140F;
+    --ink-60:#6E5B52;
+    --ink-40:#9A8980;
+    --line:#ECE3DD;
+    --paper:#FBF8F6;
+    --white:#FFFFFF;
+    --vip:#D73E26;
+    --risk:#E8902A;
+    --regular:#3F7E78;
+    --lost:#A99C95;
+    --sans:'Inter',-apple-system,system-ui,sans-serif;
+    --display:'Bricolage Grotesque','Inter',sans-serif;
+    --mono:'Space Mono','SF Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(251,248,246,.82);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .nav{display:flex;gap:28px}
+  .nav a{color:var(--ink-60);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+  .nav a:hover{color:var(--grenadier)}
+  @media(max-width:720px){.nav{display:none}}
+
+  /* ---------- logo lockup ---------- */
+  .lockup{display:flex;align-items:center;gap:11px}
+  .mark{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--grenadier);
+    display:grid;place-items:center;position:relative;
+    box-shadow:0 4px 14px rgba(215,62,38,.28);
+    flex:none;
+  }
+  .mark.lg{width:120px;height:120px;border-radius:30px;box-shadow:0 16px 44px rgba(215,62,38,.32)}
+  .mark .glyph{position:relative;width:60%;height:60%}
+  .wordmark{
+    font-family:var(--display);font-weight:800;
+    font-size:21px;letter-spacing:-.03em;color:var(--ink);
+  }
+  .wordmark .dot{color:var(--grenadier)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:84px 0 72px;position:relative;overflow:hidden}
+  .hero:before{
+    content:"";position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(680px 420px at 78% 8%, rgba(242,119,78,.18), transparent 60%),
+      radial-gradient(540px 380px at 12% 96%, rgba(215,62,38,.08), transparent 55%);
+  }
+  .hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  @media(max-width:860px){.hero-in{grid-template-columns:1fr;gap:40px}}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+    color:var(--grenadier-deep);background:var(--ember-soft);
+    padding:6px 12px;border-radius:100px;margin-bottom:22px;text-transform:uppercase;
+  }
+  .eyebrow .dotpulse{width:7px;height:7px;border-radius:50%;background:var(--grenadier);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  h1.hero-title{
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(38px,5.4vw,62px);line-height:1.02;letter-spacing:-.035em;
+  }
+  h1.hero-title em{font-style:normal;color:var(--grenadier)}
+  .hero-sub{font-size:18px;color:var(--ink-60);max-width:460px;margin-top:22px}
+  .hero-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+  .tag{font-size:13px;font-weight:500;color:var(--ink-60);border:1px solid var(--line);background:var(--white);padding:7px 14px;border-radius:100px}
+
+  /* live revenue ticker — signature */
+  .ticker{
+    background:var(--ink);color:var(--white);
+    border-radius:24px;padding:34px 32px 28px;position:relative;overflow:hidden;
+    box-shadow:0 30px 60px rgba(32,20,15,.28);
+  }
+  .ticker:before{content:"";position:absolute;top:-40%;right:-20%;width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,rgba(242,119,78,.45),transparent 65%)}
+  .ticker .label{position:relative;font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:#E8C9BD;text-transform:uppercase}
+  .ticker .amount{position:relative;font-family:var(--display);font-weight:800;font-size:clamp(40px,7vw,58px);letter-spacing:-.03em;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+  .ticker .amount .cur{color:var(--ember)}
+  .ticker .meta{position:relative;display:flex;justify-content:space-between;align-items:flex-end;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+  .ticker .meta .k{font-size:12px;color:#C9B6AD;font-family:var(--mono)}
+  .ticker .meta .v{font-family:var(--display);font-weight:700;font-size:22px}
+  .ticker .commission{position:relative;display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-size:13px;color:#E8C9BD}
+  .ticker .commission b{color:var(--ember);font-family:var(--mono)}
+
+  /* ---------- section scaffolding ---------- */
+  section.block{padding:72px 0;border-top:1px solid var(--line)}
+  .sec-head{margin-bottom:42px;max-width:620px}
+  .sec-num{font-family:var(--mono);font-size:12px;color:var(--grenadier);letter-spacing:.08em}
+  .sec-title{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.4vw,36px);letter-spacing:-.03em;margin-top:8px}
+  .sec-desc{color:var(--ink-60);margin-top:12px;font-size:16px}
+
+  /* ---------- logo gallery ---------- */
+  .logo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:820px){.logo-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.logo-grid{grid-template-columns:1fr}}
+  .logo-cell{border:1px solid var(--line);border-radius:18px;background:var(--white);padding:30px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between}
+  .logo-cell.dark{background:var(--ink);border-color:var(--ink)}
+  .logo-cell.grena{background:var(--grenadier);border-color:var(--grenadier)}
+  .logo-cell .cap{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-40)}
+  .logo-cell.dark .cap,.logo-cell.grena .cap{color:rgba(255,255,255,.6)}
+  .logo-cell.dark .wordmark{color:var(--white)}
+  .logo-cell.grena .wordmark{color:var(--white)}
+  .logo-cell.grena .wordmark .dot{color:var(--ink)}
+  .logo-cell.dark .wordmark .dot{color:var(--ember)}
+  .mark.onwhite{background:var(--white);box-shadow:none;border:1px solid var(--line)}
+  .mark.mono-ink{background:var(--ink);box-shadow:none}
+
+  /* clear space + construction */
+  .construct{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+  @media(max-width:680px){.construct{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line);border-radius:18px;background:var(--white);padding:28px}
+  .panel h4{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:14px}
+  .clearbox{position:relative;display:inline-grid;place-items:center;padding:34px;outline:1px dashed var(--ember);outline-offset:-1px;border-radius:6px}
+  .dont{font-size:13px;color:var(--ink-60);display:flex;gap:9px;align-items:flex-start;margin-top:9px}
+  .dont .x{color:var(--grenadier);font-weight:700;flex:none}
+  .dont .ok{color:var(--regular);font-weight:700;flex:none}
+
+  /* ---------- colors ---------- */
+  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:820px){.swatches{grid-template-columns:1fr 1fr}}
+  .swatch{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--white)}
+  .swatch .chip{height:96px}
+  .swatch .info{padding:13px 15px}
+  .swatch .nm{font-weight:600;font-size:14px}
+  .swatch .hex{font-family:var(--mono);font-size:12px;color:var(--ink-60);margin-top:2px}
+
+  /* ---------- type ---------- */
+  .type-row{border:1px solid var(--line);border-radius:18px;background:var(--white);padding:28px 30px;margin-bottom:16px}
+  .type-meta{font-family:var(--mono);font-size:12px;color:var(--grenadier);letter-spacing:.04em;margin-bottom:14px}
+  .specimen-display{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,52px);letter-spacing:-.03em;line-height:1}
+  .specimen-body{font-family:var(--sans);font-size:19px;color:var(--ink);max-width:640px}
+  .specimen-mono{font-family:var(--mono);font-size:24px;letter-spacing:-.01em}
+  .glyphset{font-family:var(--display);font-weight:500;font-size:22px;color:var(--ink-60);margin-top:12px;letter-spacing:.04em}
+
+  /* ---------- UI mockups ---------- */
+  .mocks{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+  @media(max-width:900px){.mocks{grid-template-columns:1fr}}
+  .mock-col{display:flex;flex-direction:column;gap:24px}
+
+  /* phone */
+  .phone{width:300px;margin:0 auto;border-radius:42px;background:var(--ink);padding:11px;box-shadow:0 30px 70px rgba(32,20,15,.30)}
+  .phone-screen{border-radius:32px;overflow:hidden;background:var(--paper)}
+  .ph-status{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:600}
+  .ph-pad{padding:10px 16px 22px}
+  .mlabel{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-40);margin:0 0 10px 4px}
+
+  /* wallet card */
+  .wallet{
+    border-radius:22px;padding:22px 22px 18px;color:var(--white);
+    background:linear-gradient(135deg,var(--grenadier) 0%,var(--grenadier-deep) 100%);
+    position:relative;overflow:hidden;box-shadow:0 14px 30px rgba(215,62,38,.32)
+  }
+  .wallet:before{content:"";position:absolute;width:200px;height:200px;border-radius:50%;right:-60px;top:-80px;background:rgba(255,255,255,.10)}
+  .wallet .biz{display:flex;justify-content:space-between;align-items:center;position:relative}
+  .wallet .biz .nm{font-family:var(--display);font-weight:700;font-size:17px}
+  .wallet .biz .badge{font-family:var(--mono);font-size:10px;background:rgba(255,255,255,.2);padding:4px 8px;border-radius:100px}
+  .wallet .pts{position:relative;margin-top:18px}
+  .wallet .pts .big{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+  .wallet .pts .u{font-size:13px;opacity:.85}
+  .stamps{display:flex;gap:8px;margin-top:18px;position:relative}
+  .stamp{width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:grid;place-items:center;font-size:12px}
+  .stamp.on{background:var(--white);color:var(--grenadier);border-color:var(--white);font-weight:700}
+  .wallet .foot{position:relative;display:flex;justify-content:space-between;align-items:center;margin-top:18px;font-size:12px;opacity:.9}
+
+  /* push notif */
+  .push{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:14px 15px;display:flex;gap:12px;box-shadow:0 8px 22px rgba(32,20,15,.07)}
+  .push .ic{width:40px;height:40px;border-radius:11px;background:var(--grenadier);flex:none;display:grid;place-items:center}
+  .push .body .top{display:flex;justify-content:space-between;align-items:center}
+  .push .body .app{font-weight:700;font-size:13px}
+  .push .body .t{font-size:11px;color:var(--ink-40);font-family:var(--mono)}
+  .push .body .msg{font-size:13px;color:var(--ink);margin-top:3px;line-height:1.4}
+  .push .body .msg b{color:var(--grenadier)}
+
+  /* storefront / vitrine QR */
+  .vitrine{
+    border-radius:22px;background:var(--white);border:1px solid var(--line);
+    padding:26px;text-align:center;position:relative;overflow:hidden
+  }
+  .vitrine .topband{height:8px;background:var(--grenadier);border-radius:100px;width:64px;margin:0 auto 18px}
+  .vitrine h5{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .vitrine p{font-size:13px;color:var(--ink-60);margin-top:6px}
+  .qr{width:128px;height:128px;margin:20px auto 8px;border-radius:16px;padding:11px;background:var(--white);border:1px solid var(--line)}
+  .vitrine .scanline{font-family:var(--mono);font-size:11px;color:var(--grenadier-deep);letter-spacing:.04em;text-transform:uppercase}
+
+  /* dashboard */
+  .dash{border:1px solid var(--line);border-radius:22px;background:var(--white);overflow:hidden;box-shadow:0 18px 44px rgba(32,20,15,.07)}
+  .dash-top{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .dash-top .left{display:flex;align-items:center;gap:10px}
+  .dash-top .right{display:flex;gap:8px;align-items:center}
+  .pill{font-size:12px;font-family:var(--mono);color:var(--ink-60);background:var(--paper);border:1px solid var(--line);padding:5px 11px;border-radius:100px}
+  .pill.live{color:var(--grenadier);background:var(--ember-soft);border-color:transparent}
+  .dash-body{padding:22px 20px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:700px){.kpis{grid-template-columns:1fr 1fr}}
+  .kpi{border:1px solid var(--line);border-radius:14px;padding:16px}
+  .kpi .k{font-size:12px;color:var(--ink-60)}
+  .kpi .v{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+  .kpi .d{font-family:var(--mono);font-size:11px;margin-top:5px}
+  .kpi .d.up{color:var(--regular)}
+  .kpi .d.flag{color:var(--grenadier)}
+
+  .dash-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:18px}
+  @media(max-width:760px){.dash-grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:16px;padding:18px}
+  .card h6{font-family:var(--display);font-weight:700;font-size:15px;margin-bottom:4px}
+  .card .csub{font-size:12px;color:var(--ink-40);margin-bottom:16px}
+
+  /* bar chart */
+  .bars{display:flex;align-items:flex-end;gap:12px;height:130px;padding-top:8px}
+  .bar{flex:1;background:var(--ember-soft);border-radius:7px 7px 4px 4px;position:relative;display:flex;align-items:flex-end;justify-content:center}
+  .bar span{position:absolute;bottom:100%;margin-bottom:5px;font-family:var(--mono);font-size:10px;color:var(--ink-60)}
+  .bar i{width:100%;background:var(--grenadier);border-radius:7px 7px 0 0;display:block}
+  .bar.peak i{background:var(--grenadier)}
+  .barlabels{display:flex;gap:12px;margin-top:8px}
+  .barlabels div{flex:1;text-align:center;font-size:11px;color:var(--ink-40)}
+
+  /* scoring list */
+  .score-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .score-row:last-child{border-bottom:0}
+  .score-row .who{display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--ember-soft);color:var(--grenadier-deep);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+  .score-row .nm{font-weight:600;font-size:14px}
+  .score-row .sub{font-size:12px;color:var(--ink-40)}
+  .stat{font-size:11px;font-weight:700;font-family:var(--mono);padding:4px 10px;border-radius:100px;letter-spacing:.02em;flex:none}
+  .stat.vip{color:#fff;background:var(--vip)}
+  .stat.risk{color:#7A4A0E;background:#FBE9CF}
+  .stat.reg{color:#1F4742;background:#D6E8E4}
+  .stat.lost{color:#5C534E;background:#EDE7E3}
+
+  /* status legend */
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:520px){.legend{grid-template-columns:1fr}}
+  .leg{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);border-radius:13px;padding:13px}
+  .leg .dotc{width:12px;height:12px;border-radius:50%;margin-top:4px;flex:none}
+  .leg .lt{font-weight:700;font-size:14px}
+  .leg .ld{font-size:12px;color:var(--ink-60)}
+
+  /* principles / voice */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:780px){.grid3{grid-template-columns:1fr}}
+  .ptile{border:1px solid var(--line);border-radius:16px;background:var(--white);padding:22px}
+  .ptile .n{font-family:var(--mono);font-size:12px;color:var(--grenadier)}
+  .ptile h5{font-family:var(--display);font-weight:700;font-size:17px;margin:8px 0 6px}
+  .ptile p{font-size:14px;color:var(--ink-60)}
+
+  /* footer */
+  footer{background:var(--ink);color:#E6D8D1;padding:54px 0 40px;margin-top:8px}
+  footer .ft-in{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+  footer .claim{font-family:var(--display);font-weight:700;font-size:clamp(22px,3vw,30px);color:#fff;letter-spacing:-.02em;max-width:440px}
+  footer .meta{font-family:var(--mono);font-size:13px}
+  footer .meta a{color:var(--ember);text-decoration:none}
+  footer .wordmark{color:#fff}
+  footer .wordmark .dot{color:var(--ember)}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="lockup">
+      <span class="mark"><span class="glyph">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16.5 16.5C16.5 19 14.6 20.8 12.4 20.8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity="0"/>
+        </svg>
+      </span></span>
+      <span class="wordmark">retenza<span class="dot">.</span></span>
+    </div>
+    <nav class="nav">
+      <a href="#logo">Logo</a>
+      <a href="#couleurs">Couleurs</a>
+      <a href="#typo">Typographie</a>
+      <a href="#interfaces">Interfaces</a>
+    </nav>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-in">
+    <div>
+      <span class="eyebrow"><span class="dotpulse"></span>Charte graphique · v1</span>
+      <h1 class="hero-title">L'identité de la croissance locale <em>basée sur le résultat.</em></h1>
+      <p class="hero-sub">Une marque chaude, directe et mesurable. Le Grenadier comme signal d'action, le blanc comme espace de clarté — et le chiffre d'affaires toujours au centre.</p>
+      <div class="hero-tags">
+        <span class="tag">Grenadier #D73E26</span>
+        <span class="tag">Blanc #FFFFFF</span>
+        <span class="tag">Bricolage Grotesque</span>
+        <span class="tag">Inter</span>
+      </div>
+    </div>
+
+    <!-- signature: live revenue ticker -->
+    <div class="ticker">
+      <div class="label">CA généré par la plateforme</div>
+      <div class="amount"><span class="cur">+</span><span id="ca">0</span> <span class="cur">€</span></div>
+      <div class="commission">Vous payez seulement <b>5–10 %</b> du CA additionnel</div>
+      <div class="meta">
+        <div><div class="k">Clients revenus</div><div class="v" id="ret">0</div></div>
+        <div style="text-align:right"><div class="k">Taux de retour</div><div class="v">+30 %</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGO -->
+<section class="block" id="logo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 — Logo</div>
+      <h2 class="sec-title">Le symbole : un « R » qui revient sur lui‑même</h2>
+      <p class="sec-desc">Le monogramme évoque la rétention — le client qui revient — par une jambe du R qui s'élance vers le haut comme une courbe de croissance. Toujours présenté dans une tuile arrondie, lisible jusqu'à 16 px (favicon, badge Wallet).</p>
+    </div>
+
+    <div class="logo-grid">
+      <div class="logo-cell">
+        <div class="lockup">
+          <span class="mark"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+          <span class="wordmark">retenza<span class="dot">.</span></span>
+        </div>
+        <div class="cap">Logo principal · fond clair</div>
+      </div>
+
+      <div class="logo-cell dark">
+        <div class="lockup">
+          <span class="mark"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+          <span class="wordmark">retenza<span class="dot">.</span></span>
+        </div>
+        <div class="cap">Fond sombre</div>
+      </div>
+
+      <div class="logo-cell grena">
+        <div class="lockup">
+          <span class="mark onwhite"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#D73E26" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#D73E26" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+          <span class="wordmark">retenza<span class="dot">.</span></span>
+        </div>
+        <div class="cap">Fond Grenadier</div>
+      </div>
+
+      <div class="logo-cell" style="align-items:center;justify-content:center">
+        <span class="mark lg"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+        <div class="cap" style="margin-top:18px;text-align:center;width:100%">App icon / favicon</div>
+      </div>
+
+      <div class="logo-cell" style="align-items:center;justify-content:center">
+        <span class="mark lg mono-ink"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+        <div class="cap" style="margin-top:18px;text-align:center;width:100%">Monochrome encre</div>
+      </div>
+
+      <div class="logo-cell" style="align-items:center;justify-content:center;background:var(--paper)">
+        <div class="wordmark" style="font-size:30px">retenza<span class="dot">.</span></div>
+        <div class="cap" style="margin-top:18px;text-align:center;width:100%">Wordmark seul</div>
+      </div>
+    </div>
+
+    <div class="construct">
+      <div class="panel">
+        <h4>Zone de protection</h4>
+        <div class="clearbox">
+          <span class="mark"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+        </div>
+        <p style="font-size:13px;color:var(--ink-60);margin-top:12px">Marge minimale autour du logo = hauteur du « R ». Rien ne doit entrer dans cette zone.</p>
+      </div>
+      <div class="panel">
+        <h4>À faire / à éviter</h4>
+        <div class="dont"><span class="ok">✓</span><span>Garder la tuile arrondie et le contraste fort (Grenadier sur blanc, ou inversé).</span></div>
+        <div class="dont"><span class="x">✕</span><span>Étirer, incliner ou changer la couleur du monogramme.</span></div>
+        <div class="dont"><span class="x">✕</span><span>Poser le logo Grenadier sur un fond rouge, orange ou photo chargée.</span></div>
+        <div class="dont"><span class="x">✕</span><span>Ajouter ombre portée ou dégradé sur le wordmark.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COULEURS -->
+<section class="block" id="couleurs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 — Couleurs</div>
+      <h2 class="sec-title">Grenadier & blanc, neutres chauds en appui</h2>
+      <p class="sec-desc">Le Grenadier est réservé à l'action et au résultat (boutons, chiffres clés, accents). Le blanc structure l'espace. Les neutres chauds portent le texte et les surfaces. Les couleurs de statut servent uniquement au scoring client.</p>
+    </div>
+
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#D73E26"></div><div class="info"><div class="nm">Grenadier</div><div class="hex">#D73E26 · primaire</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#A82C18"></div><div class="info"><div class="nm">Grenadier foncé</div><div class="hex">#A82C18 · survol / texte</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#F2774E"></div><div class="info"><div class="nm">Ember</div><div class="hex">#F2774E · dégradés / glow</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FBE4DA"></div><div class="info"><div class="nm">Ember clair</div><div class="hex">#FBE4DA · fonds doux</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;border-bottom:1px solid var(--line)"></div><div class="info"><div class="nm">Blanc</div><div class="hex">#FFFFFF · surface</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FBF8F6;border-bottom:1px solid var(--line)"></div><div class="info"><div class="nm">Papier</div><div class="hex">#FBF8F6 · fond</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#6E5B52"></div><div class="info"><div class="nm">Encre douce</div><div class="hex">#6E5B52 · texte 2nd</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#20140F"></div><div class="info"><div class="nm">Encre</div><div class="hex">#20140F · texte / fond</div></div></div>
+    </div>
+
+    <div class="panel" style="margin-top:18px">
+      <h4>Couleurs de statut — scoring client</h4>
+      <div class="legend">
+        <div class="leg"><span class="dotc" style="background:var(--vip)"></span><div><div class="lt">VIP · #D73E26</div><div class="ld">Meilleurs clients à chouchouter.</div></div></div>
+        <div class="leg"><span class="dotc" style="background:var(--risk)"></span><div><div class="lt">À risque · #E8902A</div><div class="ld">À réactiver avant qu'il soit trop tard.</div></div></div>
+        <div class="leg"><span class="dotc" style="background:var(--regular)"></span><div><div class="lt">Régulier · #3F7E78</div><div class="ld">Base fidèle à entretenir.</div></div></div>
+        <div class="leg"><span class="dotc" style="background:var(--lost)"></span><div><div class="lt">Perdu · #A99C95</div><div class="ld">Inactif, à reconquérir.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPO -->
+<section class="block" id="typo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03 — Typographie</div>
+      <h2 class="sec-title">Trois voix, un rôle chacune</h2>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">DISPLAY · Bricolage Grotesque · 700–800</div>
+      <div class="specimen-display">Croissance locale automatisée</div>
+      <div class="glyphset">Aa Bb Cc · 0123456789 · Retenza</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">TEXTE & INTERFACE · Inter · 400–600</div>
+      <div class="specimen-body">Chaque visite devient un contact identifiable. Le commerçant ne fait rien : la relance, la fidélité et l'upsell se déclenchent automatiquement selon le comportement client.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">DONNÉES & RÉSULTATS · Space Mono · 400–700</div>
+      <div class="specimen-mono">+600 € / mois · 5–10 % · +30 % retour</div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERFACES -->
+<section class="block" id="interfaces">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">04 — Interfaces</div>
+      <h2 class="sec-title">La charte appliquée au produit</h2>
+      <p class="sec-desc">Côté client : vitrine QR, carte Wallet, notification. Côté commerçant : le dashboard de résultats avec scoring intelligent.</p>
+    </div>
+
+    <div class="mocks">
+      <!-- client side : phone -->
+      <div class="mock-col">
+        <div>
+          <div class="mlabel">Carte fidélité · Wallet</div>
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="ph-status"><span>9:41</span><span>● ● ●</span></div>
+              <div class="ph-pad">
+                <div class="wallet">
+                  <div class="biz"><span class="nm">Café Lumière</span><span class="badge">RETENZA</span></div>
+                  <div class="pts"><span class="big">240</span> <span class="u">points</span></div>
+                  <div class="stamps">
+                    <span class="stamp on">✓</span><span class="stamp on">✓</span><span class="stamp on">✓</span>
+                    <span class="stamp on">✓</span><span class="stamp on">✓</span><span class="stamp">6</span>
+                  </div>
+                  <div class="foot"><span>10 tampons = 1 café offert</span><span>★ VIP</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mlabel">Notification intelligente</div>
+          <div class="push">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="body">
+              <div class="top"><span class="app">Café Lumière</span><span class="t">il y a 2 min</span></div>
+              <div class="msg">On ne vous a pas vu depuis 7 jours ☕ Revenez cette semaine : <b>‑10 %</b> sur votre commande.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- merchant side : dashboard -->
+      <div class="mock-col">
+        <div>
+          <div class="mlabel">Vitrine en magasin · acquisition QR</div>
+          <div class="vitrine">
+            <div class="topband"></div>
+            <h5>Scannez. Cumulez. Revenez.</h5>
+            <p>Ajoutez votre carte de fidélité en 5 secondes — directement dans votre Wallet.</p>
+            <div class="qr">
+              <svg viewBox="0 0 100 100" width="100%" height="100%" shape-rendering="crispEdges">
+                <rect width="100" height="100" fill="#fff"/>
+                <g fill="#20140F">
+                  <rect x="6" y="6" width="22" height="22"/><rect x="11" y="11" width="12" height="12" fill="#fff"/><rect x="15" y="15" width="4" height="4" fill="#20140F"/>
+                  <rect x="72" y="6" width="22" height="22"/><rect x="77" y="11" width="12" height="12" fill="#fff"/><rect x="81" y="15" width="4" height="4" fill="#20140F"/>
+                  <rect x="6" y="72" width="22" height="22"/><rect x="11" y="77" width="12" height="12" fill="#fff"/><rect x="15" y="81" width="4" height="4" fill="#20140F"/>
+                </g>
+                <g fill="#20140F">
+                  <rect x="36" y="6" width="5" height="5"/><rect x="46" y="6" width="5" height="5"/><rect x="56" y="6" width="5" height="5"/>
+                  <rect x="6" y="36" width="5" height="5"/><rect x="16" y="36" width="5" height="5"/><rect x="26" y="36" width="5" height="5"/>
+                  <rect x="40" y="40" width="6" height="6" fill="#D73E26"/><rect x="54" y="40" width="6" height="6"/><rect x="40" y="54" width="6" height="6"/><rect x="54" y="54" width="6" height="6" fill="#D73E26"/>
+                  <rect x="68" y="40" width="5" height="5"/><rect x="84" y="46" width="5" height="5"/><rect x="72" y="56" width="5" height="5"/>
+                  <rect x="36" y="68" width="5" height="5"/><rect x="50" y="72" width="5" height="5"/><rect x="62" y="68" width="5" height="5"/>
+                  <rect x="40" y="84" width="5" height="5"/><rect x="56" y="86" width="5" height="5"/><rect x="72" y="80" width="5" height="5"/><rect x="84" y="72" width="5" height="5"/><rect x="84" y="86" width="5" height="5"/>
+                </g>
+              </svg>
+            </div>
+            <div class="scanline">Powered by retenza.io</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mlabel">Dashboard commerçant</div>
+          <div class="dash">
+            <div class="dash-top">
+              <div class="left">
+                <span class="mark" style="width:30px;height:30px;border-radius:8px"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+                <strong style="font-family:var(--display);font-size:15px">Café Lumière</strong>
+              </div>
+              <div class="right"><span class="pill live">● 30 derniers jours</span></div>
+            </div>
+            <div class="dash-body">
+              <div class="kpis">
+                <div class="kpi"><div class="k">CA généré</div><div class="v">612 €</div><div class="d up">↑ +14 % vs M‑1</div></div>
+                <div class="kpi"><div class="k">Clients actifs</div><div class="v">348</div><div class="d up">↑ +22</div></div>
+                <div class="kpi"><div class="k">Taux de retour</div><div class="v">31 %</div><div class="d up">↑ +6 pts</div></div>
+                <div class="kpi"><div class="k">À risque</div><div class="v">27</div><div class="d flag">● à relancer</div></div>
+              </div>
+
+              <div class="dash-grid">
+                <div class="card">
+                  <h6>CA additionnel par semaine</h6>
+                  <div class="csub">Mesuré et traçable — commission 5–10 %</div>
+                  <div class="bars">
+                    <div class="bar"><span>118€</span><i style="height:48%"></i></div>
+                    <div class="bar"><span>142€</span><i style="height:62%"></i></div>
+                    <div class="bar"><span>96€</span><i style="height:40%"></i></div>
+                    <div class="bar peak"><span>256€</span><i style="height:100%"></i></div>
+                  </div>
+                  <div class="barlabels"><div>S1</div><div>S2</div><div>S3</div><div>S4</div></div>
+                </div>
+
+                <div class="card">
+                  <h6>Scoring client</h6>
+                  <div class="csub">Classification automatique par l'IA</div>
+                  <div class="score-row"><div class="who"><span class="avatar">SL</span><div><div class="nm">Sarah L.</div><div class="sub">14 visites · 210 €</div></div></div><span class="stat vip">VIP</span></div>
+                  <div class="score-row"><div class="who"><span class="avatar">KM</span><div><div class="nm">Karim M.</div><div class="sub">absent 12 j</div></div></div><span class="stat risk">À RISQUE</span></div>
+                  <div class="score-row"><div class="who"><span class="avatar">NT</span><div><div class="nm">Nora T.</div><div class="sub">6 visites · régulière</div></div></div><span class="stat reg">RÉGULIER</span></div>
+                  <div class="score-row"><div class="who"><span class="avatar">YB</span><div><div class="nm">Yanis B.</div><div class="sub">inactif 40 j</div></div></div><span class="stat lost">PERDU</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VOIX / PRINCIPES -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">05 — Ton & principes</div>
+      <h2 class="sec-title">Comment la marque parle</h2>
+    </div>
+    <div class="grid3">
+      <div class="ptile"><div class="n">01</div><h5>Direct, jamais technique</h5><p>On parle résultat, pas jargon. « +600 € ce mois‑ci », pas « optimisation du funnel ».</p></div>
+      <div class="ptile"><div class="n">02</div><h5>Le chiffre d'abord</h5><p>Chaque écran montre une donnée concrète et traçable. La preuve avant la promesse.</p></div>
+      <div class="ptile"><div class="n">03</div><h5>Le commerçant ne fait rien</h5><p>L'interface rassure : tout est automatisé. Verbes d'action, zéro effort demandé.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap ft-in">
+    <div>
+      <div class="lockup" style="margin-bottom:18px">
+        <span class="mark"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" width="100%" height="100%"><path d="M6 21V4.5C6 3.67 6.67 3 7.5 3H13.5C16.26 3 18 4.9 18 7.4C18 9.9 16.26 11.6 13.5 11.6H9.2" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 11.6L17.5 21" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+        <span class="wordmark">retenza<span class="dot">.</span></span>
+      </div>
+      <div class="claim">Vous ne payez que si vous gagnez de l'argent.</div>
+    </div>
+    <div class="meta">
+      www.retenza.io<br>
+      <a href="mailto:contact@retenza.io">contact@retenza.io</a><br>
+      @retenza
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Signature : compteur de CA qui monte
+  (function(){
+    var caEl = document.getElementById('ca');
+    var retEl = document.getElementById('ret');
+    var target = 612, retTarget = 108, start = null, dur = 1600;
+    function ease(t){return 1-Math.pow(1-t,3);}
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts-start)/dur,1), e = ease(p);
+      caEl.textContent = Math.round(target*e).toLocaleString('fr-FR');
+      retEl.textContent = Math.round(retTarget*e);
+      if(p<1) requestAnimationFrame(step);
+    }
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      caEl.textContent = target.toLocaleString('fr-FR'); retEl.textContent = retTarget;
+    } else { requestAnimationFrame(step); }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/* ============================================
+   RETENZA CONNECT — DESIGN SYSTEM
+   ============================================ */
+
+/* Font families loaded via Google Fonts in layout.tsx */
+:root {
+  /* Fonts */
+  --font-bricolage: 'Bricolage Grotesque', serif;
+  --font-inter: 'Inter', sans-serif;
+
+  /* Colors */
+  --color-grenadier: #D73E26;
+  --color-grenadier-deep: #A82C18;
+  --color-grenadier-light: #FF6B4A;
+  --color-ink: #0D0B0A;
+  --color-ink-80: rgba(13,11,10,0.8);
+  --color-ink-50: rgba(13,11,10,0.5);
+  --color-mink: #6B5D54;
+  --color-stone: #A89D96;
+  --color-pearl: #FAFAF8;
+  --color-alabaster: #F4EFE9;
+  --color-border: #EDE5DF;
+  --color-obsidian: #0D0B0A;
+  --color-charcoal: #181412;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 40px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-subtle: 0 4px 16px rgba(13,11,10,0.06);
+  --shadow-card: 0 12px 40px rgba(13,11,10,0.10);
+  --shadow-float: 0 24px 80px rgba(13,11,10,0.18);
+  --shadow-glow: 0 0 60px rgba(215,62,38,0.35);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-inter);
+  background: var(--color-pearl);
+  color: var(--color-ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   TYPOGRAPHY UTILITIES
+   ============================================ */
+
+.font-bricolage {
+  font-family: var(--font-bricolage);
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+/* ============================================
+   GRAIN TEXTURE
+   ============================================ */
+
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================
+   AURORA ANIMATION
+   ============================================ */
+
+@keyframes aurora-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.aurora {
+  animation: aurora-pulse 8s ease-in-out infinite;
+}
+
+/* ============================================
+   GLASSMORPHISM
+   ============================================ */
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-dark {
+  background: rgba(13, 11, 10, 0.6);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-tint {
+  background: rgba(215, 62, 38, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(215, 62, 38, 0.15);
+}
+
+/* ============================================
+   GRADIENT UTILITIES
+   ============================================ */
+
+.gradient-grenadier {
+  background: linear-gradient(135deg, var(--color-grenadier) 0%, var(--color-grenadier-deep) 100%);
+}
+
+.gradient-text-grenadier {
+  background: linear-gradient(135deg, #D73E26 0%, #FF6B4A 50%, #D73E26 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-obsidian); }
+::-webkit-scrollbar-thumb { background: rgba(215,62,38,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-grenadier); }
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ============================================
+   FLOATING ANIMATION
+   ============================================ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.float { animation: float 6s ease-in-out infinite; }
+.float-slow { animation: float 8s ease-in-out infinite; }
+.float-delay { animation: float 6s ease-in-out infinite 2s; }
+
+/* ============================================
+   MARQUEE ANIMATION
+   ============================================ */
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 20s linear infinite;
+  display: flex;
+}
+
+.marquee-track:hover { animation-play-state: paused; }

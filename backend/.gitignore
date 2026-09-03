@@ -1,0 +1,8 @@
+node_modules/
+uploads/
+.env
+*.log
+.DS_Store
+
+# Google Wallet Service Account Key (NEVER commit)
+config/google-wallet-key.json

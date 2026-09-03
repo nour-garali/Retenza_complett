@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retenza Connect — Interfaces</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       🎨 CHARTE GRAPHIQUE
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    :root {
+      --grenadier: #D73E26;
+      --grenadier-deep: #A82C18;
+      --ember: #F2774E;
+      --ember-soft: #FCE7DD;
+      --ink: #1B100C;
+      --ink-60: #6E5B52;
+      --ink-40: #9C8B82;
+      --line: #EDE5DF;
+      --bg: #F4EFEB;
+      --white: #FFFFFF;
+      --vip: #D73E26;
+      --risk: #E8902A;
+      --regular: #3F8E84;
+      --lost: #B0A39B;
+      
+      --display: 'Bricolage Grotesque', sans-serif;
+      --body: 'Inter', sans-serif;
+      --mono: 'Space Mono', monospace;
+      
+      --sh: 0 4px 14px rgba(27,16,12,.06);
+      --br-card: 16px;
+      --br-pill: 100px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--body); background-color: var(--bg); color: var(--ink); line-height: 1.5; padding-top: 60px; }
+    h1, h2, h3, h4, h5 { font-family: var(--display); letter-spacing: -0.03em; }
+    a { color: var(--grenadier); text-decoration: none; }
+    button { cursor: pointer; border: none; font-family: var(--body); }
+    input, select, textarea { font-family: var(--body); outline: none; }
+    
+    /* Global classes */
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+    .section-title { font-size: 14px; font-family: var(--mono); color: var(--ink-40); text-transform: uppercase; margin-bottom: 24px; letter-spacing: 0.04em; font-weight: 700; text-align: center; }
+    .btn-primary { background: var(--grenadier); color: var(--white); font-weight: 600; padding: 14px 24px; border-radius: 12px; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 12px rgba(215,62,38,0.2); }
+    .btn-primary:hover { background: var(--grenadier-deep); }
+    .card { background: var(--white); border-radius: var(--br-card); padding: 24px; box-shadow: var(--sh); border: 1px solid var(--line); }
+    
+    /* Navigation Sticky */
+    .sticky-nav { position: fixed; top: 0; left: 0; right: 0; background: var(--white); border-bottom: 1px solid var(--line); z-index: 1000; display: flex; justify-content: center; gap: 20px; padding: 16px; box-shadow: var(--sh); overflow-x: auto; white-space: nowrap; }
+    .sticky-nav a { font-size: 13px; font-weight: 600; color: var(--ink-60); padding: 6px 12px; border-radius: var(--br-pill); transition: background 0.2s; }
+    .sticky-nav a:hover { background: var(--bg); color: var(--ink); }
+
+    /* Logo Retenza */
+    .logo-mark { width: 32px; height: 32px; background: var(--grenadier); border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; }
+    .logo-mark svg { width: 18px; height: 18px; stroke: var(--white); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    .logo-text { font-family: var(--display); font-weight: 800; font-size: 22px; color: var(--ink); letter-spacing: -0.04em; display: inline-flex; align-items: baseline; gap: 8px; }
+    .logo-text span { color: var(--grenadier); }
+
+    /* Badges */
+    .badge { font-family: var(--body); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: var(--br-pill); text-transform: uppercase; }
+    .b-vip { background: var(--vip); color: var(--white); }
+    .b-risk { background: var(--risk); color: var(--white); }
+    .b-reg { background: var(--regular); color: var(--white); }
+    .b-lost { background: var(--lost); color: var(--white); }
+
+    /* Layout Split */
+    .split-layout { display: flex; min-height: 800px; border-radius: 24px; overflow: hidden; box-shadow: 0 12px 32px rgba(27,16,12,.08); border: 1px solid var(--line); background: var(--white); margin-bottom: 80px; }
+    .split-left { flex: 6; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+    .split-right { flex: 4; padding: 60px; display: flex; flex-direction: column; justify-content: center; color: var(--white); position: relative; overflow: hidden; }
+    .grad-bg { background: linear-gradient(135deg, var(--grenadier), var(--grenadier-deep)); }
+    
+    /* App Layout (Sidebar + Main) */
+    .app-layout { display: flex; height: 800px; border-radius: 24px; overflow: hidden; box-shadow: 0 12px 32px rgba(27,16,12,.08); border: 1px solid var(--line); background: var(--bg); margin-bottom: 80px; }
+    .sidebar { width: 260px; background: var(--ink); color: var(--white); display: flex; flex-direction: column; padding: 24px 16px; }
+    .sidebar .logo-text { color: var(--white); margin-bottom: 40px; padding: 0 12px; }
+    .nav-item { padding: 12px 16px; border-radius: 12px; font-weight: 500; font-size: 14px; color: var(--ink-40); display: flex; align-items: center; gap: 12px; margin-bottom: 4px; cursor: pointer; transition: 0.2s; }
+    .nav-item.active { background: rgba(255,255,255,0.1); color: var(--white); }
+    .nav-item:hover:not(.active) { color: var(--white); }
+    .nav-item svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
+    .sidebar-bottom { margin-top: auto; padding: 12px; display: flex; align-items: center; gap: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; }
+    .avatar { width: 36px; height: 36px; background: var(--grenadier); border-radius: 10px; display: grid; place-items: center; font-family: var(--display); font-weight: 700; }
+    
+    .main-content { flex: 1; padding: 32px 40px; overflow-y: auto; display: flex; flex-direction: column; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+    .search-bar { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; width: 300px; color: var(--ink-40); font-size: 14px; }
+    .search-bar svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 20px; }
+    .label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+    .input { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 14px; color: var(--ink); background: var(--white); transition: border-color 0.2s; }
+    .input:focus { border-color: var(--grenadier); }
+    
+    /* Stepper */
+    .stepper { display: flex; gap: 24px; margin-bottom: 40px; align-items: center; }
+    .step { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--ink-40); }
+    .step.active { color: var(--grenadier); font-weight: 600; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--white); border: 1px solid var(--line); display: grid; place-items: center; font-size: 12px; }
+    .step.active .step-num { background: var(--grenadier); color: var(--white); border-color: var(--grenadier); }
+    
+    /* KPIs */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: var(--white); padding: 20px; border-radius: var(--br-card); border: 1px solid var(--line); box-shadow: var(--sh); }
+    .kpi-title { font-size: 12px; color: var(--ink-60); font-weight: 500; margin-bottom: 8px; }
+    .kpi-val { font-family: var(--display); font-weight: 800; font-size: 28px; color: var(--ink); line-height: 1; margin-bottom: 6px; }
+    .kpi-sub { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--regular); }
+    
+    /* Tables */
+    .table-container { background: var(--white); border-radius: var(--br-card); border: 1px solid var(--line); overflow: hidden; box-shadow: var(--sh); }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { background: var(--bg); padding: 16px; font-size: 12px; font-weight: 600; color: var(--ink-60); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); }
+    td { padding: 16px; font-size: 14px; color: var(--ink); border-bottom: 1px solid var(--line); }
+    tr:last-child td { border-bottom: none; }
+    
+    /* Mobile Simulation */
+    .mobile-container { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin-bottom: 80px; }
+    .phone { width: 264px; height: 548px; background: var(--ink); border-radius: 40px; padding: 10px; box-shadow: 0 24px 48px rgba(0,0,0,0.2); flex: none; position: relative; }
+    .screen { background: var(--bg); height: 100%; border-radius: 32px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+    .island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 80px; height: 24px; background: #000; border-radius: 20px; z-index: 10; }
+    .status-bar { display: flex; justify-content: space-between; padding: 14px 20px 0; font-size: 11px; font-weight: 600; font-family: var(--body); }
+    .tab-bar { background: var(--white); border-top: 1px solid var(--line); display: flex; justify-content: space-around; padding: 12px 0 20px; font-size: 10px; font-weight: 500; color: var(--ink-40); margin-top: auto; }
+    .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .tab-item.active { color: var(--grenadier); font-weight: 600; }
+    
+    /* Helpers */
+    .flex-row { display: flex; gap: 16px; align-items: center; }
+    .mt-4 { margin-top: 16px; } .mb-4 { margin-bottom: 16px; }
+    .mt-8 { margin-top: 32px; } .mb-8 { margin-bottom: 32px; }
+    .text-mono { font-family: var(--mono); font-size: 12px; }
+    
+  </style>
+</head>
+<body>
+
+  <nav class="sticky-nav">
+    <a href="#landing">Inscription (0)</a>
+    <a href="#connexion">Connexion (1)</a>
+    <a href="#configuration">Configuration (2)</a>
+    <a href="#dashboard">Dashboard (3)</a>
+    <a href="#clients">Clients (4)</a>
+    <a href="#campagnes">Campagnes (5)</a>
+    <a href="#recompenses">Récompenses (6)</a>
+    <a href="#mobile">Mobile App</a>
+    <a href="#vitrine">Affiche Vitrine</a>
+  </nav>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 0 : LANDING / INSCRIPTION COMMERÇANT
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="landing">
+    <div class="section-title">PAGE 0 : LANDING / INSCRIPTION COMMERÇANT</div>
+    <div class="split-layout">
+      <div class="split-left">
+        <div class="logo-text mb-8">
+          <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          retenza<span>.</span>
+        </div>
+        <h1 style="font-size: 42px; line-height: 1.1; margin-bottom: 12px;">Lancez votre programme de fidélité en 5 minutes.</h1>
+        <p style="color: var(--ink-60); font-size: 16px; margin-bottom: 32px;">Aucun abonnement. Vous payez uniquement sur les résultats générés.</p>
+        
+        <form>
+          <div class="flex-row">
+            <div class="form-group" style="flex: 1;">
+              <label class="label">Nom du commerce</label>
+              <input type="text" class="input" placeholder="Ex : Boulangerie Martin">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label class="label">Secteur d'activité</label>
+              <select class="input" style="color: var(--ink-40);">
+                <option>Restauration</option>
+                <option>Beauté & Coiffure</option>
+                <option>Boulangerie & Pâtisserie</option>
+                <option>Prêt-à-porter</option>
+                <option>Pharmacie</option>
+                <option>Sport & Bien-être</option>
+                <option>Autre</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label">E-mail professionnel</label>
+            <input type="email" class="input" placeholder="contact@moncommerce.fr">
+          </div>
+          <div class="flex-row">
+            <div class="form-group" style="flex: 1;">
+              <label class="label">Téléphone</label>
+              <input type="tel" class="input" placeholder="+33 6 __ __ __ __">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label class="label">Mot de passe</label>
+              <input type="password" class="input" placeholder="••••••••">
+            </div>
+          </div>
+          <div class="form-group flex-row" style="align-items: flex-start; margin-top: 8px;">
+            <input type="checkbox" style="margin-top: 4px; accent-color: var(--grenadier);">
+            <span style="font-size: 12px; color: var(--ink-60);">J'accepte que mes données soient utilisées pour la gestion de mon programme de fidélité. (Obligatoire)</span>
+          </div>
+          
+          <button class="btn-primary mt-4" style="width: 100%; padding: 16px;">Créer mon espace commerçant</button>
+          <div style="text-align: center; margin-top: 16px; font-size: 13px;">
+            <a href="#connexion" style="color: var(--ink-60); font-weight: 500;">Déjà un compte ? <span style="color: var(--grenadier); font-weight: 600;">Se connecter</span></a>
+          </div>
+        </form>
+      </div>
+      
+      <div class="split-right grad-bg">
+        <h2 style="font-size: 38px; line-height: 1.1; margin-bottom: 40px;">Vos clients reviennent.<br>Automatiquement.</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 48px;">
+          <div class="flex-row">
+            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 12px; display: grid; place-items: center; font-size: 20px;">📲</div>
+            <span style="font-weight: 500; font-size: 16px;">QR Code unique généré en 30 secondes</span>
+          </div>
+          <div class="flex-row">
+            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 12px; display: grid; place-items: center; font-size: 20px;">🎁</div>
+            <span style="font-weight: 500; font-size: 16px;">Carte de fidélité dans le Wallet de vos clients</span>
+          </div>
+          <div class="flex-row">
+            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 12px; display: grid; place-items: center; font-size: 20px;">📊</div>
+            <span style="font-weight: 500; font-size: 16px;">Dashboard analytique en temps réel</span>
+          </div>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 24px; border-radius: var(--br-card); backdrop-filter: blur(10px); margin-bottom: 32px;">
+          <div style="font-family: var(--display); font-size: 48px; font-weight: 800; line-height: 1;">+31 %</div>
+          <div style="font-size: 14px; font-weight: 500; opacity: 0.9;">Taux de retour moyen sur la plateforme</div>
+        </div>
+        
+        <div class="flex-row" style="opacity: 0.7;">
+          <span style="font-family: var(--mono); font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,0.5); padding: 6px 12px; border-radius: 100px;"> Apple Wallet</span>
+          <span style="font-family: var(--mono); font-size: 12px; font-weight: 700; border: 1px solid rgba(255,255,255,0.5); padding: 6px 12px; border-radius: 100px;">Google Wallet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 1 : CONNEXION COMMERÇANT
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="connexion">
+    <div class="section-title">PAGE 1 : CONNEXION COMMERÇANT</div>
+    <div class="split-layout" style="min-height: 600px;">
+      <div class="split-left" style="flex: 1; padding: 80px;">
+        <div class="logo-text mb-8">
+          <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          retenza<span>.</span>
+        </div>
+        <h1 style="font-size: 36px; margin-bottom: 8px;">Pilotez votre croissance.</h1>
+        <p style="color: var(--ink-60); font-size: 15px; margin-bottom: 40px;">Pas d'abonnement — vous payez sur résultat.</p>
+        
+        <form>
+          <div class="form-group">
+            <label class="label">E-mail</label>
+            <input type="email" class="input" value="contact@moncommerce.fr">
+          </div>
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <label class="label" style="margin-bottom: 0;">Mot de passe</label>
+              <a href="#" style="font-size: 12px; color: var(--ink-40); font-weight: 500;">Mot de passe oublié ?</a>
+            </div>
+            <input type="password" class="input" value="••••••••••">
+          </div>
+          
+          <button class="btn-primary mt-4" style="width: 100%; padding: 16px;">Se connecter</button>
+          <div style="text-align: center; margin-top: 24px; font-size: 13px;">
+            <a href="#landing" style="color: var(--ink-60); font-weight: 500;">Pas encore de compte ? <span style="color: var(--grenadier); font-weight: 600;">Créer mon commerce</span></a>
+          </div>
+        </form>
+      </div>
+      
+      <div class="split-right grad-bg" style="flex: 1;">
+        <div style="font-family: var(--display); font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 60px;">
+          « Vous ne payez que si vous gagnez de l'argent. »
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 32px; border-radius: var(--br-card); backdrop-filter: blur(10px); margin-bottom: 40px;">
+          <div style="font-family: var(--display); font-size: 54px; font-weight: 800; line-height: 1; color: var(--ember-soft);">+612 €</div>
+          <div style="font-size: 15px; font-weight: 500; opacity: 0.9; margin-top: 8px;">CA additionnel moyen généré ce mois-ci</div>
+        </div>
+        
+        <p style="font-size: 14px; font-weight: 500; opacity: 0.8; line-height: 1.6;">
+          Acquisition · Fidélisation · Activation · Monétisation — tout automatisé.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 2 : ONBOARDING — CONFIGURATION
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="configuration">
+    <div class="section-title">PAGE 2 : ONBOARDING — CONFIGURATION</div>
+    <div class="card" style="max-width: 800px; margin: 0 auto; padding: 40px;">
+      
+      <div class="stepper">
+        <div class="step active">
+          <div class="step-num">1</div>
+          Identité visuelle
+        </div>
+        <div style="flex: 1; height: 1px; background: var(--line);"></div>
+        <div class="step">
+          <div class="step-num">2</div>
+          Programme de fidélité
+        </div>
+        <div style="flex: 1; height: 1px; background: var(--line);"></div>
+        <div class="step">
+          <div class="step-num">3</div>
+          QR Code prêt
+        </div>
+      </div>
+      
+      <h2 style="font-size: 24px; margin-bottom: 32px;">Identité visuelle de votre commerce</h2>
+      
+      <div style="border: 2px dashed var(--line); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 24px; background: var(--bg);">
+        <div style="width: 48px; height: 48px; background: var(--white); border-radius: 12px; display: inline-grid; place-items: center; margin-bottom: 12px; border: 1px solid var(--line);">📷</div>
+        <div style="font-weight: 600; font-size: 14px;">Glissez votre logo ici</div>
+        <div style="font-size: 12px; color: var(--ink-40);">PNG, JPG, SVG</div>
+      </div>
+      
+      <div class="flex-row mb-4">
+        <div class="form-group" style="flex: 1; margin: 0;">
+          <label class="label">Nom affiché aux clients</label>
+          <input type="text" class="input" placeholder="Votre commerce">
+        </div>
+        <div class="form-group" style="flex: 1; margin: 0;">
+          <label class="label">Catégorie</label>
+          <select class="input">
+            <option>Sélectionnez un secteur...</option>
+            <option>Restauration</option>
+            <option>Beauté & Coiffure</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="flex-row mb-4">
+        <div class="form-group" style="flex: 2; margin: 0;">
+          <label class="label">Adresse</label>
+          <input type="text" class="input" value="15 rue de la Paix, 75001 Paris">
+        </div>
+        <div class="form-group" style="flex: 1; margin: 0;">
+          <label class="label">Téléphone</label>
+          <input type="tel" class="input" value="+33 1 __ __ __ __">
+        </div>
+      </div>
+      
+      <div class="form-group mb-8">
+        <label class="label">Couleur principale de votre marque</label>
+        <div class="flex-row">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grenadier); border: 2px solid var(--ink);"></div>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #2F80ED; cursor: pointer;"></div>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #27AE60; cursor: pointer;"></div>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #F2C94C; cursor: pointer;"></div>
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #111111; cursor: pointer;"></div>
+          <span style="color: var(--ink-40); margin: 0 8px;">ou</span>
+          <input type="text" class="input" value="#D73E26" style="width: 100px; font-family: var(--mono); padding: 8px 12px;">
+        </div>
+      </div>
+      
+      <div class="form-group mb-8">
+        <label class="label">Horaires d'ouverture</label>
+        <div style="background: var(--bg); padding: 16px; border-radius: 12px; border: 1px solid var(--line);">
+          <div class="flex-row" style="margin-bottom: 8px; font-size: 13px;">
+            <span style="width: 80px; font-weight: 500;">Lundi</span>
+            <input type="time" class="input" value="09:00" style="padding: 6px 12px; width: 110px;">
+            <span style="color: var(--ink-40);">à</span>
+            <input type="time" class="input" value="19:00" style="padding: 6px 12px; width: 110px;">
+          </div>
+          <div class="flex-row" style="font-size: 13px;">
+            <span style="width: 80px; font-weight: 500;">Mardi</span>
+            <input type="time" class="input" value="09:00" style="padding: 6px 12px; width: 110px;">
+            <span style="color: var(--ink-40);">à</span>
+            <input type="time" class="input" value="19:00" style="padding: 6px 12px; width: 110px;">
+          </div>
+          <div style="color: var(--grenadier); font-size: 12px; font-weight: 600; margin-top: 12px; cursor: pointer;">+ Ajouter un jour</div>
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: flex-end;">
+        <button class="btn-primary">Étape suivante →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 3 : TABLEAU DE BORD PRINCIPAL
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="dashboard">
+    <div class="section-title">PAGE 3 : TABLEAU DE BORD PRINCIPAL</div>
+    
+    <div class="app-layout">
+      
+      <aside class="sidebar">
+        <div class="logo-text">
+          <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          retenza<span style="color: var(--grenadier);">.</span>
+        </div>
+        
+        <div class="nav-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Tableau de bord</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Clients</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Campagnes</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Récompenses</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Marketplace</div>
+        
+        <div class="sidebar-bottom">
+          <div class="avatar">MC</div>
+          <div style="flex: 1;">
+            <div style="font-size: 13px; font-weight: 600;">Mon Commerce</div>
+            <div style="font-size: 11px; color: var(--ink-40); font-family: var(--mono);">Plan résultat</div>
+          </div>
+        </div>
+      </aside>
+      
+      <main class="main-content">
+        <header class="topbar">
+          <div class="search-bar">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Rechercher un client, une campagne...
+          </div>
+          <div class="flex-row">
+            <div style="position: relative; cursor: pointer; color: var(--ink-60);">
+              <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span style="position: absolute; top: -4px; right: -4px; background: var(--grenadier); color: var(--white); font-size: 9px; font-weight: 700; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center;">3</span>
+            </div>
+            <div class="avatar" style="width: 32px; height: 32px; font-size: 12px; background: var(--ember-soft); color: var(--grenadier);">MC</div>
+          </div>
+        </header>
+        
+        <div class="flex-row" style="justify-content: space-between; margin-bottom: 24px;">
+          <div>
+            <h2 style="font-size: 26px; margin-bottom: 4px;">Bonjour 👋</h2>
+            <p style="color: var(--ink-60); font-size: 14px;">Voici vos performances des 30 derniers jours.</p>
+          </div>
+          <div class="flex-row">
+            <div style="background: var(--white); border: 1px solid var(--line); border-radius: 8px; display: flex; overflow: hidden; font-size: 12px; font-weight: 600;">
+              <div style="padding: 8px 12px; color: var(--ink-40); cursor: pointer;">7 jours</div>
+              <div style="padding: 8px 12px; background: var(--bg); color: var(--ink);">30 jours</div>
+            </div>
+            <button class="btn-primary" style="padding: 10px 16px; font-size: 13px;">+ Nouvelle campagne</button>
+          </div>
+        </div>
+        
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Clients enregistrés</div>
+            <div class="kpi-val">348</div>
+            <div class="kpi-sub" style="color: var(--regular);">↑ +22 ce mois</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Nouveaux ce mois</div>
+            <div class="kpi-val">67</div>
+            <div class="kpi-sub" style="color: var(--regular);">↑ +14 % vs M-1</div>
+          </div>
+          <div class="kpi-card" style="position: relative;">
+            <div class="kpi-title" style="display: flex; gap: 4px; align-items: center;">Taux de fidélisation <span style="font-size: 10px; background: var(--bg); border-radius: 50%; width: 14px; height: 14px; display: grid; place-items: center; cursor: help;">?</span></div>
+            <div class="kpi-val">31 %</div>
+            <div class="kpi-sub" style="color: var(--ink-40);">clients avec ≥2 visites</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Récompenses accordées</div>
+            <div class="kpi-val">12</div>
+            <div class="kpi-sub" style="color: var(--risk);">● 27 clients à relancer</div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 16px;">
+          <!-- Chart -->
+          <div class="card" style="flex: 2;">
+            <h3 style="font-size: 16px; margin-bottom: 24px;">Acquisition client / semaine</h3>
+            <div style="height: 180px; display: flex; align-items: flex-end; gap: 10px; position: relative; border-bottom: 1px dashed var(--line); border-left: 1px dashed var(--line); padding-left: 10px;">
+              <div style="position: absolute; top: 0; left: -25px; font-size: 10px; font-family: var(--mono); color: var(--ink-40);">50</div>
+              <div style="position: absolute; bottom: 50%; left: -25px; font-size: 10px; font-family: var(--mono); color: var(--ink-40);">25</div>
+              
+              <div style="flex: 1; height: 30%; background: var(--ember-soft); border-radius: 4px 4px 0 0;"></div>
+              <div style="flex: 1; height: 45%; background: var(--ember-soft); border-radius: 4px 4px 0 0;"></div>
+              <div style="flex: 1; height: 60%; background: var(--ember-soft); border-radius: 4px 4px 0 0;"></div>
+              <div style="flex: 1; height: 95%; background: var(--grenadier); border-radius: 4px 4px 0 0; position: relative;">
+                <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--grenadier);">47</div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--mono); font-size: 10px; color: var(--ink-40); padding-left: 10px;">
+              <span>S1</span><span>S2</span><span>S3</span><span>S4</span>
+            </div>
+          </div>
+          
+          <!-- Donut -->
+          <div class="card" style="flex: 1;">
+            <h3 style="font-size: 16px; margin-bottom: 24px;">Segmentation clients</h3>
+            <div class="flex-row" style="align-items: center;">
+              <!-- Simulation SVG Donut -->
+              <div style="position: relative; width: 120px; height: 120px;">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--bg)" stroke-width="4"/>
+                  <!-- VIP 22% -->
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--vip)" stroke-width="4" stroke-dasharray="22, 100"/>
+                  <!-- Reg 45% (offset 22) -->
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--regular)" stroke-width="4" stroke-dasharray="45, 100" stroke-dashoffset="-22"/>
+                  <!-- Risk 18% (offset 67) -->
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--risk)" stroke-width="4" stroke-dasharray="18, 100" stroke-dashoffset="-67"/>
+                  <!-- Lost 15% (offset 85) -->
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--lost)" stroke-width="4" stroke-dasharray="15, 100" stroke-dashoffset="-85"/>
+                </svg>
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                  <div style="font-family: var(--display); font-weight: 800; font-size: 18px; line-height: 1;">348</div>
+                  <div style="font-size: 10px; color: var(--ink-40);">clients</div>
+                </div>
+              </div>
+              
+              <div style="flex: 1; font-size: 12px; display: flex; flex-direction: column; gap: 8px;">
+                <div class="flex-row" style="gap: 8px; justify-content: space-between;"><div class="flex-row" style="gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--vip);"></div>VIP</div><b>22%</b></div>
+                <div class="flex-row" style="gap: 8px; justify-content: space-between;"><div class="flex-row" style="gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--regular);"></div>Régulier</div><b>45%</b></div>
+                <div class="flex-row" style="gap: 8px; justify-content: space-between;"><div class="flex-row" style="gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--risk);"></div>À risque</div><b>18%</b></div>
+                <div class="flex-row" style="gap: 8px; justify-content: space-between;"><div class="flex-row" style="gap:6px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--lost);"></div>Perdu</div><b>15%</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 4 : GESTION DES CLIENTS
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="clients">
+    <div class="section-title">PAGE 4 : GESTION DES CLIENTS</div>
+    
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="logo-text">
+          <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          retenza<span style="color: var(--grenadier);">.</span>
+        </div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Tableau de bord</div>
+        <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Clients</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Campagnes</div>
+      </aside>
+      
+      <main class="main-content">
+        <div class="flex-row" style="justify-content: space-between; margin-bottom: 32px;">
+          <div>
+            <h2 style="font-size: 26px; margin-bottom: 4px;">Ma clientèle</h2>
+            <p style="color: var(--ink-60); font-size: 14px;">348 clients inscrits au total</p>
+          </div>
+        </div>
+        
+        <div class="flex-row mb-4" style="gap: 10px;">
+          <div style="padding: 6px 14px; border: 1px solid var(--line); border-radius: 100px; font-size: 13px; font-weight: 500; background: var(--white); cursor: pointer;">Tous</div>
+          <div style="padding: 6px 14px; border: 1px solid var(--line); border-radius: 100px; font-size: 13px; font-weight: 500; background: var(--white); cursor: pointer;">VIP</div>
+          <div style="padding: 6px 14px; border: 1px solid var(--risk); border-radius: 100px; font-size: 13px; font-weight: 600; background: rgba(232, 144, 42, 0.1); color: var(--risk); cursor: pointer;">À risque ✓</div>
+          <div style="padding: 6px 14px; border: 1px solid var(--line); border-radius: 100px; font-size: 13px; font-weight: 500; background: var(--white); cursor: pointer;">Régulier</div>
+          <div style="padding: 6px 14px; border: 1px solid var(--line); border-radius: 100px; font-size: 13px; font-weight: 500; background: var(--white); cursor: pointer;">Perdu</div>
+        </div>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Visites</th>
+                <th>CA total</th>
+                <th>Dernière visite</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="flex-row">
+                    <div class="avatar" style="background: var(--ember-soft); color: var(--grenadier);">SL</div>
+                    <div>
+                      <div style="font-weight: 600;">Sarah L.</div>
+                      <div class="text-mono" style="color: var(--ink-40);">sa····@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="font-weight: 600;">14</td>
+                <td class="text-mono">210 €</td>
+                <td>hier</td>
+                <td><span class="badge b-vip">VIP</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex-row">
+                    <div class="avatar" style="background: var(--ember-soft); color: var(--grenadier);">KM</div>
+                    <div>
+                      <div style="font-weight: 600;">Karim M.</div>
+                      <div class="text-mono" style="color: var(--ink-40);">+33 6 12 ·· ·· 88</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="font-weight: 600;">9</td>
+                <td class="text-mono">128 €</td>
+                <td>il y a 12 j</td>
+                <td><span class="badge b-risk">À RISQUE</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex-row">
+                    <div class="avatar" style="background: var(--ember-soft); color: var(--grenadier);">NT</div>
+                    <div>
+                      <div style="font-weight: 600;">Nora T.</div>
+                      <div class="text-mono" style="color: var(--ink-40);">no····@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="font-weight: 600;">6</td>
+                <td class="text-mono">74 €</td>
+                <td>il y a 3 j</td>
+                <td><span class="badge b-reg">RÉGULIER</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex-row">
+                    <div class="avatar" style="background: var(--ember-soft); color: var(--grenadier);">YB</div>
+                    <div>
+                      <div style="font-weight: 600;">Yanis B.</div>
+                      <div class="text-mono" style="color: var(--ink-40);">ya····@email.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="font-weight: 600;">2</td>
+                <td class="text-mono">22 €</td>
+                <td>il y a 40 j</td>
+                <td><span class="badge b-lost">PERDU</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex-row">
+                    <div class="avatar" style="background: var(--ember-soft); color: var(--grenadier);">EM</div>
+                    <div>
+                      <div style="font-weight: 600;">Élise M.</div>
+                      <div class="text-mono" style="color: var(--ink-40);">+33 7 88 ·· ·· 21</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="font-weight: 600;">11</td>
+                <td class="text-mono">163 €</td>
+                <td>avant-hier</td>
+                <td><span class="badge b-vip">VIP</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 5 : CRÉER UNE CAMPAGNE
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="campagnes">
+    <div class="section-title">PAGE 5 : CRÉER UNE CAMPAGNE</div>
+    
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="logo-text">
+          <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          retenza<span style="color: var(--grenadier);">.</span>
+        </div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect></svg> Tableau de bord</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"></circle></svg> Clients</div>
+        <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Campagnes</div>
+      </aside>
+      
+      <main class="main-content">
+        <div class="flex-row" style="justify-content: space-between; margin-bottom: 32px;">
+          <div>
+            <h2 style="font-size: 26px; margin-bottom: 4px;">Nouvelle campagne</h2>
+            <p style="color: var(--ink-60); font-size: 14px;">Configurez une fois, Retenza relance tout seul.</p>
+          </div>
+          <button class="btn-primary">Activer la campagne</button>
+        </div>
+        
+        <div style="display: flex; gap: 24px;">
+          <!-- Left: Builder -->
+          <div class="card" style="flex: 6;">
+            <div class="form-group">
+              <label class="label">Nom de la campagne</label>
+              <input type="text" class="input" value="Relance clients absents">
+            </div>
+            
+            <div class="form-group mt-4">
+              <label class="label">Cible</label>
+              <div class="flex-row" style="flex-wrap: wrap;">
+                <div style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--ink-60);">VIP</div>
+                <div style="padding: 6px 12px; border: 1px solid var(--grenadier); background: var(--ember-soft); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--grenadier);">À risque ✓</div>
+                <div style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--ink-60);">Régulier</div>
+                <div style="padding: 6px 12px; border: 1px solid var(--grenadier); background: var(--ember-soft); border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--grenadier);">Perdu ✓</div>
+              </div>
+            </div>
+            
+            <div class="form-group mt-4">
+              <label class="label">Déclencheur automatique</label>
+              <div class="flex-row" style="flex-wrap: wrap;">
+                <div style="padding: 6px 12px; border: 2px solid var(--ink); border-radius: 8px; font-size: 13px; font-weight: 600;">Absent 7 jours ✓</div>
+                <div style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--ink-60);">Anniversaire</div>
+                <div style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--ink-60);">Après 1re visite</div>
+                <div style="padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--ink-60);">Solde de points</div>
+              </div>
+            </div>
+            
+            <div class="form-group mt-4">
+              <label class="label">Message push</label>
+              <textarea class="input" style="height: 100px; resize: none;">On ne vous a pas vu depuis un moment 👋 
+Revenez cette semaine et profitez de -10 % sur votre commande.</textarea>
+            </div>
+            
+            <div class="flex-row mt-4" style="padding: 16px; background: var(--bg); border-radius: 12px; border: 1px solid var(--line);">
+              <div style="width: 44px; height: 24px; background: var(--grenadier); border-radius: 12px; position: relative; cursor: pointer;">
+                <div style="position: absolute; right: 2px; top: 2px; width: 20px; height: 20px; background: var(--white); border-radius: 50%;"></div>
+              </div>
+              <div>
+                <div style="font-size: 14px; font-weight: 600;">Optimisation horaire par l'IA</div>
+                <div style="font-size: 12px; color: var(--ink-60);">Laisse Retenza choisir le meilleur moment pour chaque client.</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Preview & AI -->
+          <div style="flex: 4; display: flex; flex-direction: column; gap: 20px;">
+            <div class="card" style="background: var(--bg);">
+              <h3 style="font-size: 14px; margin-bottom: 16px; color: var(--ink-60);">Aperçu notification</h3>
+              <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <div class="flex-row" style="margin-bottom: 8px;">
+                  <div style="width: 20px; height: 20px; background: var(--grenadier); border-radius: 4px;"></div>
+                  <div style="font-size: 12px; font-weight: 600; color: var(--ink-60);">Mon Commerce · maintenant</div>
+                </div>
+                <div style="font-size: 14px; font-weight: 500; line-height: 1.4;">
+                  On ne vous a pas vu depuis un moment 👋 -10 % cette semaine.
+                </div>
+              </div>
+            </div>
+            
+            <div class="card" style="background: var(--ink); color: var(--white); border: none;">
+              <div style="font-size: 20px; margin-bottom: 12px; color: #F2C94C;">✦ Suggestion IA</div>
+              <p style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.9);">
+                Vos clients « à risque » répondent 2× mieux le <strong>jeudi à 17h</strong>. Retenza enverra automatiquement à ce créneau.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PAGE 6 : RÉCOMPENSES & MARKETPLACE
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="recompenses">
+    <div class="section-title">PAGE 6 : RÉCOMPENSES & MARKETPLACE</div>
+    
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="logo-text">
+          <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          retenza<span style="color: var(--grenadier);">.</span>
+        </div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect></svg> Tableau de bord</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Campagnes</div>
+        <div class="nav-item active"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Récompenses</div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg> Marketplace</div>
+      </aside>
+      
+      <main class="main-content">
+        <!-- Section 1 -->
+        <div class="flex-row" style="justify-content: space-between; margin-bottom: 24px;">
+          <h2 style="font-size: 20px;">Mécaniques de fidélité</h2>
+          <button class="btn-primary" style="padding: 8px 16px; background: var(--bg); color: var(--ink); border: 1px solid var(--line); box-shadow: none;">Modifier</button>
+        </div>
+        
+        <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 48px;">
+          <div class="card">
+            <div class="flex-row" style="justify-content: space-between; margin-bottom: 16px;">
+              <div style="font-size: 24px;">⭐</div>
+              <div style="width: 36px; height: 20px; background: var(--grenadier); border-radius: 10px; position: relative;"><div style="position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; background: var(--white); border-radius: 50%;"></div></div>
+            </div>
+            <h4 style="font-size: 16px; margin-bottom: 4px;">Points</h4>
+            <p style="font-size: 13px; color: var(--ink-60);">1 € = 1 point. 100 pts = récompense.</p>
+          </div>
+          
+          <div class="card">
+            <div class="flex-row" style="justify-content: space-between; margin-bottom: 16px;">
+              <div style="font-size: 24px;">🎟️</div>
+              <div style="width: 36px; height: 20px; background: var(--grenadier); border-radius: 10px; position: relative;"><div style="position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; background: var(--white); border-radius: 50%;"></div></div>
+            </div>
+            <h4 style="font-size: 16px; margin-bottom: 4px;">Tampons</h4>
+            <p style="font-size: 13px; color: var(--ink-60);">N tampons = 1 produit offert. Automatique au scan.</p>
+          </div>
+          
+          <div class="card">
+            <div class="flex-row" style="justify-content: space-between; margin-bottom: 16px;">
+              <div style="font-size: 24px;">💸</div>
+              <div style="width: 36px; height: 20px; background: var(--grenadier); border-radius: 10px; position: relative;"><div style="position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; background: var(--white); border-radius: 50%;"></div></div>
+            </div>
+            <h4 style="font-size: 16px; margin-bottom: 4px;">Cashback</h4>
+            <p style="font-size: 13px; color: var(--ink-60);">X % du montant crédité sur la prochaine visite.</p>
+          </div>
+        </div>
+        
+        <!-- Section 2 -->
+        <div class="flex-row" style="margin-bottom: 16px; gap: 12px;">
+          <h2 style="font-size: 20px;">Marketplace locale</h2>
+          <span style="background: #E8F5E9; color: #2E7D32; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 100px; text-transform: uppercase;">Bientôt</span>
+        </div>
+        <p style="color: var(--ink-60); font-size: 14px; margin-bottom: 24px; max-width: 600px;">
+          Recommandez des commerces voisins complémentaires et partagez les bénéfices mutuellement.
+        </p>
+        
+        <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="card">
+            <div style="font-size: 24px; margin-bottom: 12px;">💇</div>
+            <h4 style="font-size: 15px; margin-bottom: 4px;">Commerce Beauté</h4>
+            <div style="font-size: 12px; color: var(--ink-40); margin-bottom: 12px;">Coiffure · 200m</div>
+            <p style="font-size: 13px; font-weight: 500; color: var(--regular);">5 % partagés par client envoyé</p>
+          </div>
+          
+          <div class="card">
+            <div style="font-size: 24px; margin-bottom: 12px;">🥖</div>
+            <h4 style="font-size: 15px; margin-bottom: 4px;">Commerce Alimentaire</h4>
+            <div style="font-size: 12px; color: var(--ink-40); margin-bottom: 12px;">Boulangerie · 150m</div>
+            <p style="font-size: 13px; font-weight: 500; color: var(--regular);">Offre croisée partagée</p>
+          </div>
+          
+          <div class="card">
+            <div style="font-size: 24px; margin-bottom: 12px;">📚</div>
+            <h4 style="font-size: 15px; margin-bottom: 4px;">Commerce Culture</h4>
+            <div style="font-size: 12px; color: var(--ink-40); margin-bottom: 12px;">Librairie · 320m</div>
+            <p style="font-size: 13px; font-weight: 500; color: var(--regular);">Échange clients complémentaires</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       APPLICATION MOBILE CLIENT
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="mobile" style="max-width: 1600px;">
+    <div class="section-title">APPLICATION MOBILE CLIENT (5 ÉCRANS)</div>
+    
+    <div class="mobile-container">
+      
+      <!-- ÉCRAN 1 : Ajout via QR -->
+      <div class="phone">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="status-bar"><span>9:41</span><span>5G</span></div>
+          
+          <div style="flex: 1; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <div style="width: 50px; height: 6px; background: var(--grenadier); border-radius: 10px; margin-bottom: 24px;"></div>
+            <h3 style="font-size: 24px; margin-bottom: 8px;">Ajoutez votre carte</h3>
+            <p style="font-size: 14px; color: var(--ink-60); margin-bottom: 32px;">Scannée en magasin — votre fidélité commence maintenant.</p>
+            
+            <div style="background: var(--white); padding: 20px; border-radius: 18px; box-shadow: var(--sh); margin-bottom: 24px; border: 1px solid var(--line);">
+              <!-- Faux QR SVG -->
+              <svg width="140" height="140" viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="#fff"/>
+                <path d="M10,10 h20 v20 h-20 z M15,15 h10 v10 h-10 z" fill="#000"/>
+                <path d="M70,10 h20 v20 h-20 z M75,15 h10 v10 h-10 z" fill="#000"/>
+                <path d="M10,70 h20 v20 h-20 z M15,75 h10 v10 h-10 z" fill="#000"/>
+                <rect x="40" y="40" width="20" height="20" fill="#000"/>
+                <!-- 2 pixels grenadier -->
+                <rect x="45" y="45" width="10" height="10" fill="var(--grenadier)"/>
+                <path d="M10,40 h10 v10 h-10 z M70,40 h20 v10 h-20 z M40,10 h20 v10 h-20 z M40,80 h20 v10 h-20 z" fill="#000"/>
+              </svg>
+            </div>
+            
+            <div style="font-family: var(--display); font-size: 18px; font-weight: 700; margin-bottom: 8px;">☕ Café Lumière</div>
+            <div class="text-mono" style="color: var(--grenadier); font-size: 10px;">Powered by retenza.io</div>
+          </div>
+          
+          <div class="tab-bar">
+            <div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>Carte</div>
+            <div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>Cadeaux</div>
+            <div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profil</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ÉCRAN 2 : Inscription -->
+      <div class="phone">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="status-bar"><span>9:41</span><span>5G</span></div>
+          
+          <div style="flex: 1; padding: 24px; padding-top: 40px;">
+            <div style="width: 60px; height: 60px; background: var(--grenadier); border-radius: 18px; display: grid; place-items: center; box-shadow: 0 8px 16px rgba(215,62,38,0.3); margin-bottom: 24px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            
+            <h3 style="font-size: 22px; margin-bottom: 8px;">Bienvenue chez [Nom du commerce]</h3>
+            <p style="font-size: 13px; color: var(--ink-60); margin-bottom: 32px;">Une fois, et vos points sont à vous pour toujours.</p>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="label" style="font-size: 11px;">Prénom</label>
+              <input type="text" class="input" value="Sarah" style="padding: 10px 14px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="label" style="font-size: 11px;">Téléphone</label>
+              <input type="tel" class="input" value="+33 6 12 ·· ·· 04" style="padding: 10px 14px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 24px;">
+              <label class="label" style="font-size: 11px;">E-mail</label>
+              <input type="email" class="input" placeholder="sarah@email.com" style="padding: 10px 14px;">
+            </div>
+            
+            <button class="btn-primary" style="width: 100%;">Activer ma carte</button>
+            <p style="font-size: 10px; color: var(--ink-40); text-align: center; margin-top: 16px;">Ajoutée à Apple / Google Wallet automatiquement.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ÉCRAN 3 : Ma carte -->
+      <div class="phone">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="status-bar"><span>9:41</span><span>5G</span></div>
+          
+          <div style="flex: 1; padding: 20px; overflow-y: auto;">
+            <!-- Wallet Card -->
+            <div style="background: linear-gradient(135deg, var(--grenadier), var(--grenadier-deep)); border-radius: 20px; padding: 20px; color: var(--white); box-shadow: 0 12px 24px rgba(215,62,38,0.3); position: relative; overflow: hidden; margin-top: 20px; margin-bottom: 24px;">
+              <div style="position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+              
+              <div class="flex-row" style="justify-content: space-between; position: relative;">
+                <div style="font-family: var(--display); font-weight: 700; font-size: 14px;">[Nom commerce]</div>
+                <div style="font-family: var(--mono); font-size: 9px; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 100px;">RETENZA</div>
+              </div>
+              
+              <div style="margin-top: 24px; position: relative;">
+                <div style="font-family: var(--display); font-size: 38px; font-weight: 800; line-height: 1;">240</div>
+                <div style="font-size: 11px; opacity: 0.9;">points · 7/10 tampons</div>
+              </div>
+              
+              <div style="margin-top: 20px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 100px; overflow: hidden; position: relative;">
+                <div style="width: 70%; height: 100%; background: var(--white); border-radius: 100px;"></div>
+              </div>
+              
+              <div class="flex-row" style="justify-content: space-between; margin-top: 8px; font-size: 10px; opacity: 0.9; position: relative;">
+                <div>Plus que 3 tampons</div>
+                <div style="font-weight: 700;">★ VIP</div>
+              </div>
+            </div>
+            
+            <h4 style="font-size: 14px; margin-bottom: 12px;">Activité récente</h4>
+            <div style="background: var(--white); border-radius: 16px; padding: 12px; border: 1px solid var(--line);">
+              <div class="flex-row" style="justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line);">
+                <div>
+                  <div style="font-size: 13px; font-weight: 600;">Achat 1</div>
+                  <div style="font-size: 11px; color: var(--ink-40);">Aujourd'hui 9:12</div>
+                </div>
+                <div style="font-weight: 600; color: var(--regular); font-size: 13px;">+12 pts</div>
+              </div>
+              <div class="flex-row" style="justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line);">
+                <div>
+                  <div style="font-size: 13px; font-weight: 600;">Offre -10%</div>
+                  <div style="font-size: 11px; color: var(--ink-40);">Hier</div>
+                </div>
+                <div style="font-weight: 600; color: var(--ink); font-size: 13px;">-1,20 €</div>
+              </div>
+              <div class="flex-row" style="justify-content: space-between; padding: 12px 0;">
+                <div>
+                  <div style="font-size: 13px; font-weight: 600;">Achat 2</div>
+                  <div style="font-size: 11px; color: var(--ink-40);">Lundi 8:40</div>
+                </div>
+                <div style="font-weight: 600; color: var(--regular); font-size: 13px;">+6 pts</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="tab-bar">
+            <div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>Carte</div>
+            <div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>Cadeaux</div>
+            <div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profil</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ÉCRAN 4 : Cadeaux -->
+      <div class="phone">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="status-bar"><span>9:41</span><span>5G</span></div>
+          
+          <div style="flex: 1; padding: 20px; overflow-y: auto;">
+            <div style="background: var(--ink); border-radius: 16px; padding: 20px; color: var(--white); text-align: center; margin-top: 20px; margin-bottom: 24px;">
+              <div style="font-size: 32px; margin-bottom: 8px;">🎁</div>
+              <h3 style="font-size: 18px; margin-bottom: 4px;">240 points à dépenser</h3>
+              <p style="font-size: 11px; opacity: 0.8;">Débloquez vos récompenses</p>
+            </div>
+            
+            <div style="background: var(--white); border-radius: 14px; padding: 12px; border: 1px solid var(--line); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; box-shadow: var(--sh);">
+              <div style="width: 40px; height: 40px; background: var(--ember-soft); border-radius: 10px; display: grid; place-items: center; font-size: 18px;">☕</div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 600;">Récompense 1</div>
+                <div style="font-size: 11px; color: var(--ink-40);">Disponible — 100 pts</div>
+              </div>
+              <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; border-radius: 100px;">Échanger</button>
+            </div>
+            
+            <div style="background: var(--white); border-radius: 14px; padding: 12px; border: 1px solid var(--line); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; box-shadow: var(--sh);">
+              <div style="width: 40px; height: 40px; background: var(--ember-soft); border-radius: 10px; display: grid; place-items: center; font-size: 18px;">🍰</div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 600;">Récompense 2</div>
+                <div style="font-size: 11px; color: var(--ink-40);">Disponible — 150 pts</div>
+              </div>
+              <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; border-radius: 100px;">Échanger</button>
+            </div>
+            
+            <div style="background: var(--white); border-radius: 14px; padding: 12px; border: 1px solid var(--line); display: flex; align-items: center; gap: 12px; opacity: 0.6;">
+              <div style="width: 40px; height: 40px; background: var(--bg); border-radius: 10px; display: grid; place-items: center; font-size: 18px;">🛍️</div>
+              <div style="flex: 1;">
+                <div style="font-size: 13px; font-weight: 600;">Récompense 3</div>
+                <div style="font-size: 11px; color: var(--ink-40);">Verrouillée — 300 pts</div>
+              </div>
+              <button style="padding: 6px 12px; font-size: 11px; border-radius: 100px; background: var(--line); color: var(--ink-40); font-weight: 600;">Bientôt</button>
+            </div>
+          </div>
+          
+          <div class="tab-bar">
+            <div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>Carte</div>
+            <div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>Cadeaux</div>
+            <div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profil</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ÉCRAN 5 : Lockscreen -->
+      <div class="phone">
+        <div class="screen" style="background: linear-gradient(160deg, #2A1C16, #110B08); color: var(--white);">
+          <div class="island"></div>
+          
+          <div style="text-align: center; margin-top: 60px;">
+            <div style="font-family: var(--display); font-size: 52px; font-weight: 800; line-height: 1;">9:41</div>
+            <div style="font-size: 13px; opacity: 0.7; margin-top: 4px;">mercredi 17 juin</div>
+          </div>
+          
+          <div style="padding: 20px; margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+            
+            <div style="background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-radius: 16px; padding: 12px; color: var(--ink);">
+              <div class="flex-row" style="margin-bottom: 6px;">
+                <div style="width: 20px; height: 20px; background: var(--grenadier); border-radius: 6px;"></div>
+                <div style="font-size: 12px; font-weight: 600; color: var(--ink-60);">Mon Commerce · maintenant</div>
+              </div>
+              <div style="font-size: 13px; font-weight: 500; line-height: 1.4;">
+                On ne vous a pas vu depuis un moment 👋 -10 % cette semaine.
+              </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-radius: 16px; padding: 12px; color: var(--ink);">
+              <div class="flex-row" style="margin-bottom: 6px;">
+                <div style="width: 20px; height: 20px; background: var(--grenadier); border-radius: 6px;"></div>
+                <div style="font-size: 12px; font-weight: 600; color: var(--ink-60);">Mon Commerce · 1h</div>
+              </div>
+              <div style="font-size: 13px; font-weight: 500; line-height: 1.4;">
+                Plus que 1 tampon avant votre récompense 🎉
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       VITRINE EN MAGASIN
+       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="container" id="vitrine">
+    <div class="section-title">VITRINE EN MAGASIN (AFFICHE PHYSIQUE)</div>
+    
+    <div style="max-width: 400px; margin: 0 auto; background: var(--white); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid var(--line); position: relative; padding-bottom: 40px;">
+      
+      <div style="height: 12px; background: var(--grenadier); width: 100%;"></div>
+      
+      <div style="padding: 32px 32px 0;">
+        <div class="logo-mark" style="width: 24px; height: 24px; border-radius: 6px; margin-bottom: 32px;"><svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        
+        <h2 style="font-size: 32px; line-height: 1.1; margin-bottom: 12px; text-align: center;">Scannez.<br>Cumulez.<br>Revenez.</h2>
+        <p style="text-align: center; color: var(--ink-60); font-size: 14px; margin-bottom: 32px;">Votre carte de fidélité en 5 secondes, dans votre Wallet.</p>
+        
+        <div style="background: var(--white); border: 1px solid var(--line); padding: 20px; border-radius: 20px; box-shadow: var(--sh); width: 220px; height: 220px; margin: 0 auto 24px; display: grid; place-items: center;">
+          <svg width="180" height="180" viewBox="0 0 100 100">
+            <rect width="100" height="100" fill="#fff"/>
+            <path d="M10,10 h20 v20 h-20 z M15,15 h10 v10 h-10 z" fill="#000"/>
+            <path d="M70,10 h20 v20 h-20 z M75,15 h10 v10 h-10 z" fill="#000"/>
+            <path d="M10,70 h20 v20 h-20 z M15,75 h10 v10 h-10 z" fill="#000"/>
+            <rect x="40" y="40" width="20" height="20" fill="#000"/>
+            <rect x="45" y="45" width="10" height="10" fill="var(--grenadier)"/>
+            <path d="M10,40 h10 v10 h-10 z M70,40 h20 v10 h-20 z M40,10 h20 v10 h-20 z M40,80 h20 v10 h-20 z" fill="#000"/>
+          </svg>
+        </div>
+        
+        <div class="flex-row" style="justify-content: center; gap: 12px; margin-bottom: 40px;">
+          <span style="font-family: var(--body); font-size: 11px; font-weight: 600; border: 1px solid var(--line); padding: 6px 12px; border-radius: 100px;"> Apple Wallet</span>
+          <span style="font-family: var(--body); font-size: 11px; font-weight: 600; border: 1px solid var(--line); padding: 6px 12px; border-radius: 100px;">Google Wallet</span>
+        </div>
+        
+        <div style="text-align: center;">
+          <div style="font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 6px;">[Nom du commerce]</div>
+          <div class="text-mono" style="color: var(--grenadier);">www.retenza.io</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div style="height: 100px;"></div>
+
+</body>
+</html>
