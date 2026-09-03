@@ -682,49 +682,62 @@ export default function ParametresAvancesPage() {
               </div>
 
               {openSections.boutique_defaut && (
-                <div className="p-6 md:p-8 border-t border-[#EEE5DF] bg-white">
-                  <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <div className="p-6 md:p-7 space-y-5 border-t border-[#EEE5DF] bg-slate-50/30">
+                  {/* État actuel (discret) */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold text-[#7A6E68] uppercase tracking-wider">Boutique enregistrée :</span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#EEE5DF] text-[#1A1A1A] text-[11px] font-semibold rounded-lg shadow-2xs">
+                      <Check className="w-3.5 h-3.5 text-emerald-500" />
+                      {persistedCommerceId === "__all__" ? "Toutes les boutiques" : (commerces.find(c => c.id === persistedCommerceId)?.label || persistedCommerceId)}
+                    </span>
+                  </div>
+
+                  {/* Formulaire d'action (carte premium) */}
+                  <div className="relative rounded-2xl border border-[#EEE5DF] p-5 md:p-6 bg-gradient-to-br from-[#FDF3EE] to-white shadow-2xs overflow-hidden group">
+                    {/* Reflet interne subtil */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-transparent pointer-events-none rounded-2xl" />
                     
-                    <div className="relative flex-1 w-full max-w-2xl">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8462F] pointer-events-none">
-                        <Store className="w-5 h-5" />
+                    <div className="relative flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                      <div className="flex-1 relative">
+                        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#B0A49C] pointer-events-none">
+                          <Store className="w-4.5 h-4.5" />
+                        </div>
+                        <select
+                          value={defaultCommerceId}
+                          onChange={(e) => setDefaultCommerceId(e.target.value)}
+                          className="w-full bg-white border border-[#EEE5DF] pl-[38px] pr-10 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] focus:ring-4 focus:ring-[#E8462F]/10 transition-all shadow-sm appearance-none cursor-pointer"
+                        >
+                          <option value="__all__">Toutes les boutiques</option>
+                          {commerces.map((c) => (
+                            <option key={c.id} value={c.id}>{c.label}</option>
+                          ))}
+                        </select>
+                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#B0A49C] pointer-events-none">
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
                       </div>
-                      <select
-                        value={defaultCommerceId}
-                        onChange={(e) => setDefaultCommerceId(e.target.value)}
-                        className="w-full bg-white border border-[#EEE5DF] pl-[44px] pr-10 py-3 rounded-xl text-sm font-medium text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-colors appearance-none cursor-pointer shadow-xs"
+                      
+                      <button
+                        onClick={handleSaveDefaultCommerce}
+                        className={`flex items-center justify-center gap-2 px-6 py-2.5 text-[13px] font-bold rounded-xl transition-all duration-200 shrink-0 w-full sm:w-auto min-w-[150px] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
+                          defaultCommerceSaved
+                            ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/25"
+                            : "bg-[#E8462F] hover:bg-[#D73E26] text-white shadow-[#E8462F]/25"
+                        }`}
                       >
-                        <option value="__all__">Toutes les boutiques</option>
-                        {commerces.map((c) => (
-                          <option key={c.id} value={c.id}>{c.label}</option>
-                        ))}
-                      </select>
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A1A] pointer-events-none">
-                        <ChevronDown className="w-4 h-4" />
-                      </div>
+                        {defaultCommerceSaved ? (
+                          <>
+                            <Check className="w-4 h-4" />
+                            Enregistré
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-4 h-4" />
+                            Enregistrer
+                          </>
+                        )}
+                      </button>
                     </div>
-                    
-                    <button
-                      onClick={handleSaveDefaultCommerce}
-                      className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-xl transition-all shrink-0 w-full sm:w-auto shadow-xs ${
-                        defaultCommerceSaved
-                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                          : "bg-[#E8462F] hover:bg-[#D73E26] text-white"
-                      }`}
-                    >
-                      {defaultCommerceSaved ? (
-                        <>
-                          <Check className="w-4.5 h-4.5" />
-                          Enregistré
-                        </>
-                      ) : (
-                        <>
-                          <Save className="w-4.5 h-4.5" />
-                          Enregistrer
-                        </>
-                      )}
-                    </button>
-                    
                   </div>
                 </div>
               )}
