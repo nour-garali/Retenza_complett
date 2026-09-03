@@ -650,48 +650,67 @@ export default function ParametresAvancesPage() {
           
           {/* ── SECTION 0 : Boutique par défaut ── */}
           {showSection("all") && (
-            <div className="bg-white rounded-2xl border border-[#EEE5DF] shadow-2xs overflow-hidden p-6 md:p-7">
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-1.5">
+            <div id="section-boutique_defaut" className="bg-white rounded-2xl border border-[#EEE5DF] shadow-2xs overflow-hidden transition-all duration-200">
+              <div
+                onClick={() => toggleSectionOpen("boutique_defaut")}
+                className="p-4 md:px-7 md:py-4.5 flex items-center justify-between gap-4 cursor-pointer hover:bg-[#FAF5F1]/50 transition-colors select-none"
+              >
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#FDECEA] border border-[#F9D5CE] flex items-center justify-center shrink-0">
                     <Store className="w-5 h-5 text-[#E8462F]" />
-                    <h2 className="text-sm font-extrabold text-[#1A1A1A]">Boutique par défaut</h2>
                   </div>
-                  <p className="text-xs text-[#7A6E68] leading-relaxed max-w-xl">
-                    Choisissez la boutique qui s'affichera automatiquement à l'ouverture du Dashboard, des Statistiques et de l'IA.
-                  </p>
+                  <div className="flex flex-col justify-center min-w-0">
+                    <h2 className="text-sm font-extrabold text-[#1A1A1A]">Boutique par défaut</h2>
+                    <p className="text-xs text-[#7A6E68] mt-0.5 truncate">
+                      Boutique affichée à l'ouverture du Dashboard, des Statistiques et de l'IA
+                    </p>
+                  </div>
                 </div>
-                
-                <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-                  <select
-                    value={defaultCommerceId}
-                    onChange={(e) => setDefaultCommerceId(e.target.value)}
-                    className="bg-white border border-[#EEE5DF] px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-all min-w-[200px]"
-                  >
-                    <option value="__all__">Toutes les boutiques</option>
-                    {commerces.map((c) => (
-                      <option key={c.id} value={c.id}>{c.label}</option>
-                    ))}
-                  </select>
-                  
+                <div className="flex items-center gap-3 shrink-0 self-center">
                   <button
-                    onClick={handleSaveDefaultCommerce}
-                    className="flex items-center gap-1.5 px-4 py-2.5 bg-[#E8462F] hover:bg-[#D73E26] text-white text-[13px] font-bold rounded-xl transition-all shadow-sm w-full sm:w-auto justify-center"
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); toggleSectionOpen("boutique_defaut"); }}
+                    className="w-8 h-8 rounded-xl bg-[#FAF5F1] border border-[#EEE5DF] flex items-center justify-center text-[#7A6E68] hover:bg-[#F3ECE6] hover:text-[#1A1A1A] transition-colors shrink-0"
+                    title={openSections.boutique_defaut ? "Fermer la section" : "Ouvrir la section"}
                   >
-                    {defaultCommerceSaved ? (
-                      <>
-                        <Check className="w-4 h-4" />
-                        Enregistré
-                      </>
-                    ) : (
-                      <>
-                        <Save className="w-4 h-4" />
-                        Enregistrer
-                      </>
-                    )}
+                    {openSections.boutique_defaut ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
+
+              {openSections.boutique_defaut && (
+                <div className="p-6 md:p-7 space-y-6 border-t border-[#EEE5DF]">
+                  <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                    <select
+                      value={defaultCommerceId}
+                      onChange={(e) => setDefaultCommerceId(e.target.value)}
+                      className="bg-white border border-[#EEE5DF] px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-all min-w-[200px]"
+                    >
+                      <option value="__all__">Toutes les boutiques</option>
+                      {commerces.map((c) => (
+                        <option key={c.id} value={c.id}>{c.label}</option>
+                      ))}
+                    </select>
+                    
+                    <button
+                      onClick={handleSaveDefaultCommerce}
+                      className="flex items-center gap-1.5 px-4 py-2.5 bg-[#E8462F] hover:bg-[#D73E26] text-white text-[13px] font-bold rounded-xl transition-all shadow-sm w-full sm:w-auto justify-center"
+                    >
+                      {defaultCommerceSaved ? (
+                        <>
+                          <Check className="w-4 h-4" />
+                          Enregistré
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4" />
+                          Enregistrer
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
