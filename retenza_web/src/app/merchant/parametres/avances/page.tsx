@@ -683,17 +683,13 @@ export default function ParametresAvancesPage() {
 
               {openSections.boutique_defaut && (
                 <div className="p-6 md:p-7 space-y-6 border-t border-[#EEE5DF]">
-                  <div className="bg-[#FAF5F1] rounded-xl border border-[#EEE5DF] p-5">
-                    <div className="flex flex-col gap-4 max-w-xl">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[11px] font-bold text-[#7A6E68] uppercase tracking-wider">Actuellement :</span>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#EEE5DF] text-[#E8462F] text-xs font-bold rounded-lg shadow-xs">
-                          <Check className="w-3.5 h-3.5" />
-                          {persistedCommerceId === "__all__" ? "Toutes les boutiques" : (commerces.find(c => c.id === persistedCommerceId)?.label || persistedCommerceId)}
-                        </span>
-                      </div>
+                  <div className="bg-[#FAF5F1] rounded-xl border border-[#EEE5DF] p-5 md:p-6">
+                    <div className="flex flex-col gap-3.5">
+                      <p className="text-[13px] font-medium text-[#7A6E68]">
+                        Boutique actuellement enregistrée : <span className="text-[#1A1A1A] font-extrabold">{persistedCommerceId === "__all__" ? "Toutes les boutiques" : (commerces.find(c => c.id === persistedCommerceId)?.label || persistedCommerceId)}</span>
+                      </p>
                       
-                      <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3 w-full">
                         <select
                           value={defaultCommerceId}
                           onChange={(e) => setDefaultCommerceId(e.target.value)}
@@ -707,7 +703,7 @@ export default function ParametresAvancesPage() {
                         
                         <button
                           onClick={handleSaveDefaultCommerce}
-                          className={`flex items-center justify-center gap-2 px-5 py-2.5 text-[13px] font-bold rounded-xl transition-all shadow-sm shrink-0 w-full sm:w-auto ${
+                          className={`flex items-center justify-center gap-2 px-6 py-2.5 text-[13px] font-bold rounded-xl transition-all shadow-sm shrink-0 w-full sm:w-auto min-w-[140px] ${
                             defaultCommerceSaved
                               ? "bg-emerald-500 hover:bg-emerald-600 text-white"
                               : "bg-[#E8462F] hover:bg-[#D73E26] text-white"
