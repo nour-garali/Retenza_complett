@@ -18,12 +18,16 @@ export default function HeuresCreuses() {
 
   // Charger la liste des commerces, puis s'assurer qu'on sélectionne un commerce valide (commerce_local_1 en priorité)
   useEffect(() => {
+    // Load default commerce preference
+    const saved = localStorage.getItem("ratenza_commerce_id");
+    if (saved) setId(saved);
+  
     fetch("http://localhost:5000/api/commerces")
       .then((r) => r.json())
       .then((d) => {
         const list: { id: string; label: string }[] = Array.isArray(d) ? d : [];
         setCommerces(list);
-        if (list.length > 0 && !list.some(c => c.id === id)) {
+        if (!saved && list.length > 0 && !list.some(c => c.id === id)) {
           const target = list.find(c => c.id === "commerce_local_1") || list[0];
           setId(target.id);
         }

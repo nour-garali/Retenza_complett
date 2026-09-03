@@ -159,6 +159,8 @@ function Toggle({
 export default function ParametresAvancesPage() {
   const [commerces, setCommerces] = useState<Commerce[]>([]);
   const [selectedCommerce, setSelectedCommerce] = useState<string>("commerce_local_1");
+  const [defaultCommerceId, setDefaultCommerceId] = useState<string>("__all__");
+  const [defaultCommerceSaved, setDefaultCommerceSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [pageLoading, setPageLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -267,6 +269,12 @@ export default function ParametresAvancesPage() {
         if (list.length > 0) setSelectedCommerce(list[0].id);
       })
       .catch(() => setCommerces([]));
+      
+    // Load default commerce preference for settings view
+    const saved = localStorage.getItem("ratenza_commerce_id");
+    if (saved) {
+      setDefaultCommerceId(saved);
+    }
   }, []);
 
   // Load settings when selected commerce changes
@@ -464,6 +472,12 @@ export default function ParametresAvancesPage() {
     );
   };
 
+  const handleSaveDefaultCommerce = () => {
+    localStorage.setItem("ratenza_commerce_id", defaultCommerceId);
+    setDefaultCommerceSaved(true);
+    setTimeout(() => setDefaultCommerceSaved(false), 3000);
+  };
+
   // Save all settings
   const handleSaveAll = async () => {
     setSaving(true);
@@ -633,6 +647,53 @@ export default function ParametresAvancesPage() {
           </div>
         ) : (
           <div className="space-y-4 md:space-y-5">
+          
+          {/* ── SECTION 0 : Boutique par défaut ── */}
+          {showSection("all") && (
+            <div className="bg-white rounded-2xl border border-[#EEE5DF] shadow-2xs overflow-hidden p-6 md:p-7">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Store className="w-5 h-5 text-[#E8462F]" />
+                    <h2 className="text-sm font-extrabold text-[#1A1A1A]">Boutique par défaut</h2>
+                  </div>
+                  <p className="text-xs text-[#7A6E68] leading-relaxed max-w-xl">
+                    Choisissez la boutique qui s'affichera automatiquement à l'ouverture du Dashboard, des Statistiques et de l'IA.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                  <select
+                    value={defaultCommerceId}
+                    onChange={(e) => setDefaultCommerceId(e.target.value)}
+                    className="bg-white border border-[#EEE5DF] px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-all min-w-[200px]"
+                  >
+                    <option value="__all__">Toutes les boutiques</option>
+                    {commerces.map((c) => (
+                      <option key={c.id} value={c.id}>{c.label}</option>
+                    ))}
+                  </select>
+                  
+                  <button
+                    onClick={handleSaveDefaultCommerce}
+                    className="flex items-center gap-1.5 px-4 py-2.5 bg-[#E8462F] hover:bg-[#D73E26] text-white text-[13px] font-bold rounded-xl transition-all shadow-sm w-full sm:w-auto justify-center"
+                  >
+                    {defaultCommerceSaved ? (
+                      <>
+                        <Check className="w-4 h-4" />
+                        Enregistré
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        Enregistrer
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* ── SECTION 1 : SmartAutomation & Règles IA (SECTION HÉRO PRINCIPALE) ── */}
           {showSection("smart_automation") && (

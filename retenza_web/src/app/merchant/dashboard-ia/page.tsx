@@ -456,9 +456,6 @@ function DashboardContent() {
   // Handle selector change
   const handleCommerceSelect = (id: string) => {
     setSelectedCommerce(id);
-    if (id !== "__all__") {
-      localStorage.setItem("ratenza_commerce_id", id);
-    }
   };
 
   // Launch IA recommended campaign from Tab 3

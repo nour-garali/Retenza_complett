@@ -177,7 +177,6 @@ function ClientsContent() {
 
   const handleCommerceSelect = (id: string) => {
     setSelectedCommerce(id);
-    localStorage.setItem("ratenza_commerce_id", id);
   };
 
   useEffect(() => {
