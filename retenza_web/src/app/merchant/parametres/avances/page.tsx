@@ -160,6 +160,7 @@ export default function ParametresAvancesPage() {
   const [commerces, setCommerces] = useState<Commerce[]>([]);
   const [selectedCommerce, setSelectedCommerce] = useState<string>("commerce_local_1");
   const [defaultCommerceId, setDefaultCommerceId] = useState<string>("__all__");
+  const [persistedCommerceId, setPersistedCommerceId] = useState<string>("__all__");
   const [defaultCommerceSaved, setDefaultCommerceSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [pageLoading, setPageLoading] = useState(true);
@@ -274,6 +275,7 @@ export default function ParametresAvancesPage() {
     const saved = localStorage.getItem("ratenza_commerce_id");
     if (saved) {
       setDefaultCommerceId(saved);
+      setPersistedCommerceId(saved);
     }
   }, []);
 
@@ -474,6 +476,7 @@ export default function ParametresAvancesPage() {
 
   const handleSaveDefaultCommerce = () => {
     localStorage.setItem("ratenza_commerce_id", defaultCommerceId);
+    setPersistedCommerceId(defaultCommerceId);
     setDefaultCommerceSaved(true);
     setTimeout(() => setDefaultCommerceSaved(false), 3000);
   };
@@ -680,34 +683,50 @@ export default function ParametresAvancesPage() {
 
               {openSections.boutique_defaut && (
                 <div className="p-6 md:p-7 space-y-6 border-t border-[#EEE5DF]">
-                  <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-                    <select
-                      value={defaultCommerceId}
-                      onChange={(e) => setDefaultCommerceId(e.target.value)}
-                      className="bg-white border border-[#EEE5DF] px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-all min-w-[200px]"
-                    >
-                      <option value="__all__">Toutes les boutiques</option>
-                      {commerces.map((c) => (
-                        <option key={c.id} value={c.id}>{c.label}</option>
-                      ))}
-                    </select>
-                    
-                    <button
-                      onClick={handleSaveDefaultCommerce}
-                      className="flex items-center gap-1.5 px-4 py-2.5 bg-[#E8462F] hover:bg-[#D73E26] text-white text-[13px] font-bold rounded-xl transition-all shadow-sm w-full sm:w-auto justify-center"
-                    >
-                      {defaultCommerceSaved ? (
-                        <>
-                          <Check className="w-4 h-4" />
-                          Enregistré
-                        </>
-                      ) : (
-                        <>
-                          <Save className="w-4 h-4" />
-                          Enregistrer
-                        </>
-                      )}
-                    </button>
+                  <div className="bg-[#FAF5F1] rounded-xl border border-[#EEE5DF] p-5">
+                    <div className="flex flex-col gap-4 max-w-xl">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[11px] font-bold text-[#7A6E68] uppercase tracking-wider">Actuellement :</span>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#EEE5DF] text-[#E8462F] text-xs font-bold rounded-lg shadow-xs">
+                          <Check className="w-3.5 h-3.5" />
+                          {persistedCommerceId === "__all__" ? "Toutes les boutiques" : (commerces.find(c => c.id === persistedCommerceId)?.label || persistedCommerceId)}
+                        </span>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <select
+                          value={defaultCommerceId}
+                          onChange={(e) => setDefaultCommerceId(e.target.value)}
+                          className="flex-1 bg-white border border-[#EEE5DF] px-4 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-all shadow-sm"
+                        >
+                          <option value="__all__">Toutes les boutiques</option>
+                          {commerces.map((c) => (
+                            <option key={c.id} value={c.id}>{c.label}</option>
+                          ))}
+                        </select>
+                        
+                        <button
+                          onClick={handleSaveDefaultCommerce}
+                          className={`flex items-center justify-center gap-2 px-5 py-2.5 text-[13px] font-bold rounded-xl transition-all shadow-sm shrink-0 w-full sm:w-auto ${
+                            defaultCommerceSaved
+                              ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                              : "bg-[#E8462F] hover:bg-[#D73E26] text-white"
+                          }`}
+                        >
+                          {defaultCommerceSaved ? (
+                            <>
+                              <Check className="w-4 h-4" />
+                              Enregistré
+                            </>
+                          ) : (
+                            <>
+                              <Save className="w-4 h-4" />
+                              Enregistrer
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
