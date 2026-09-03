@@ -217,7 +217,7 @@ export default function MarketplacePage() {
       <div className="flex items-end justify-between mb-8 pt-2">
         <div>
           <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C]">Marketplace</h1>
-          <p className="text-[13px] text-[#5D534F] mt-0.5">Étendez les capacités de Retenza avec des modules et intégrations.</p>
+          <p className="text-[13px] text-[#5D534F] mt-0.5">Modules et intégrations pour votre boutique.</p>
         </div>
         <div className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
           <Zap className="w-3.5 h-3.5 text-[#D73E26]" />

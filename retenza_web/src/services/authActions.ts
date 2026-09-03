@@ -66,9 +66,11 @@ export async function registerClientAction(payload: any): Promise<ActionResponse
       return { success: false, message: data.message || 'Erreur lors de l\'inscription' };
     }
 
-    if (data.data?.token) {
-      await setSessionCookie(data.data.token);
-      return { success: true, message: 'Inscription réussie' };
+    if (data.success) {
+      if (data.data?.token) {
+        await setSessionCookie(data.data.token);
+      }
+      return { success: true, message: data.message || 'Inscription réussie', data: data.data };
     }
 
     return { success: false, message: 'Erreur inattendue lors de l\'inscription' };
@@ -112,6 +114,12 @@ export async function checkPartnershipEmailAction(email: string): Promise<Action
       { method: 'GET', cache: 'no-store' }
     );
     const data = await res.json();
+    
+    // Fallback in case of unexpected API response (like 404 Route introuvable)
+    if (data.error || typeof data.available === 'undefined') {
+      return { success: true, available: true, message: '' };
+    }
+
     return {
       success: true,
       available: data.available,
@@ -261,5 +269,21 @@ export async function completeOnboardingAction(payload: Record<string, unknown>)
     return { success: data.success, message: data.message };
   } catch {
     return { success: false, message: 'Erreur réseau. Veuillez réessayer.' };
+  }
+}
+
+// --- CHECK EMAIL VERIFICATION STATUS ---
+export async function checkVerificationStatusAction(userId: string) {
+  try {
+    const res = await fetch(`${API_URL}/auth/check-verification/${userId}`, {
+      cache: 'no-store',
+    });
+    const data = await res.json();
+    if (data.success && data.verified && data.data?.token) {
+      await setSessionCookie(data.data.token);
+    }
+    return data;
+  } catch (error) {
+    return { success: false };
   }
 }

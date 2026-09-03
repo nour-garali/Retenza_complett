@@ -252,3 +252,24 @@ export async function loginWithOtp(
     return { success: false, message: 'Erreur lors de la connexion.' };
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Wallet Pass
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function generateWalletPass(
+  { cardPublicId, provider }: { cardPublicId: string; provider: string }
+): Promise<{ addUrl?: string; error?: string }> {
+  try {
+    const res = await publicFetch<{ url?: string }>(
+      `/wallet/generate?card_id=${encodeURIComponent(cardPublicId)}&provider=${encodeURIComponent(provider)}`,
+      { method: 'GET' }
+    );
+    if (res && res.data?.url) {
+      return { addUrl: res.data.url };
+    }
+    return { error: 'Impossible de générer le pass.' };
+  } catch {
+    return { error: 'Erreur lors de la génération du pass.' };
+  }
+}

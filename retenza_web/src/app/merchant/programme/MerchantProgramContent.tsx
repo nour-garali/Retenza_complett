@@ -93,7 +93,7 @@ export default function MerchantProgramContent({ initialProgram }: { initialProg
       <div className="flex items-end justify-between mb-8 pt-2">
         <div>
           <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C]">Programme de fidélité</h1>
-          <p className="text-[13px] text-[#5D534F] mt-0.5">Configurez les règles de récompense pour vos clients.</p>
+          <p className="text-[13px] text-[#5D534F] mt-0.5">Configurez les règles de récompense.</p>
         </div>
         <button
           onClick={handleSave}

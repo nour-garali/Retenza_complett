@@ -1,9 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, getCommerceName } from '@/types/user';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus, Coins, Users, RefreshCw, AlertTriangle } from 'lucide-react';
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Sector
+} from 'recharts';
 
 interface MerchantHomeContentProps {
   user: User | null;
@@ -11,127 +15,6 @@ interface MerchantHomeContentProps {
 }
 
 type Period = '7j' | '30j' | '12m';
-
-/* ──────────────────────────────────────
-   Mini sparkline — pure SVG
-────────────────────────────────────── */
-function SparkUp({ color }: { color: string }) {
-  return (
-    <svg width="72" height="28" viewBox="0 0 72 28" fill="none">
-      <path
-        d="M2,22 C12,20 18,16 28,12 C38,8 48,6 70,4"
-        stroke={color} strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-    </svg>
-  );
-}
-function SparkDown({ color }: { color: string }) {
-  return (
-    <svg width="72" height="28" viewBox="0 0 72 28" fill="none">
-      <path
-        d="M2,6 C12,8 22,12 34,16 C46,20 56,22 70,24"
-        stroke={color} strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-    </svg>
-  );
-}
-
-/* ──────────────────────────────────────
-   Area chart — pure SVG (matching image)
-────────────────────────────────────── */
-function AreaChart() {
-  return (
-    <svg viewBox="0 0 600 200" className="w-full" height="200" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#D73E26" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="#D73E26" stopOpacity="0.01" />
-        </linearGradient>
-      </defs>
-      {/* Area fill */}
-      <path
-        d="M0,155 C40,150 70,160 120,145 C170,130 190,155 240,138 C290,120 320,100 370,80 C420,60 470,42 520,22 C545,12 570,8 600,5 L600,200 L0,200 Z"
-        fill="url(#grad)"
-      />
-      {/* Line */}
-      <path
-        d="M0,155 C40,150 70,160 120,145 C170,130 190,155 240,138 C290,120 320,100 370,80 C420,60 470,42 520,22 C545,12 570,8 600,5"
-        stroke="#D73E26" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-/* ──────────────────────────────────────
-   Donut chart — pure SVG
-────────────────────────────────────── */
-function DonutChart({ total }: { total: number }) {
-  const r = 54;
-  const cx = 66;
-  const cy = 66;
-  const circ = 2 * Math.PI * r; // ~339.3
-
-  const segments = [
-    { pct: 28, color: '#D73E26' }, // VIP
-    { pct: 12, color: '#F59E0B' }, // À risque
-    { pct: 42, color: '#7D9B4E' }, // Régulier
-    { pct: 18, color: '#9CA3AF' }, // Perdu
-  ];
-
-  let cumulative = 0;
-  const arcs = segments.map((seg, i) => {
-    const dash = (seg.pct / 100) * circ;
-    const gap = circ - dash;
-    const rotation = (cumulative / 100) * 360 - 90;
-    cumulative += seg.pct;
-    return (
-      <circle
-        key={i}
-        cx={cx} cy={cy} r={r}
-        fill="none"
-        stroke={seg.color}
-        strokeWidth="18"
-        strokeDasharray={`${dash} ${gap}`}
-        strokeDashoffset="0"
-        style={{ transform: `rotate(${rotation}deg)`, transformOrigin: `${cx}px ${cy}px` }}
-      />
-    );
-  });
-
-  const legend = [
-    { label: 'VIP', pct: 28, color: '#D73E26' },
-    { label: 'À risque', pct: 12, color: '#F59E0B' },
-    { label: 'Régulier', pct: 42, color: '#7D9B4E' },
-    { label: 'Perdu', pct: 18, color: '#9CA3AF' },
-  ];
-
-  return (
-    <div className="flex items-center gap-5 justify-center">
-      {/* Donut */}
-      <div className="relative shrink-0" style={{ width: 132, height: 132 }}>
-        <svg width="132" height="132" viewBox="0 0 132 132">
-          <circle cx={cx} cy={cy} r={r} fill="none" stroke="#F3F4F6" strokeWidth="18" />
-          {arcs}
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-bricolage font-bold text-[22px] text-[#1B100C] leading-none">{total}</span>
-          <span className="text-[11px] text-[#9C8B82] font-medium mt-0.5">clients</span>
-        </div>
-      </div>
-
-      {/* Legend */}
-      <div className="space-y-3">
-        {legend.map((l) => (
-          <div key={l.label} className="flex items-center gap-3 min-w-[110px]">
-            <div className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: l.color }} />
-            <span className="text-[13px] text-[#5D534F] flex-1">{l.label}</span>
-            <span className="text-[13px] font-bold text-[#1B100C]">{l.pct} %</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 /* ──────────────────────────────────────
    PERIOD LABEL MAP
@@ -143,19 +26,105 @@ const PERIOD_LABELS: Record<Period, string> = {
 };
 
 /* ──────────────────────────────────────
+   DUMMY DATA FOR CHARTS
+────────────────────────────────────── */
+const sparkDataUp = Array.from({ length: 7 }).map((_, i) => ({ value: 10 + Math.random() * 20 + i * 5 }));
+const sparkDataDown = Array.from({ length: 7 }).map((_, i) => ({ value: 40 + Math.random() * 10 - i * 4 }));
+
+const areaData = [
+  { name: 'S1', value: 120 },
+  { name: 'S2', value: 240 },
+  { name: 'S3', value: 370 },
+  { name: 'S4', value: 520 },
+  { name: 'S5', value: 600 },
+];
+
+const donutData = [
+  { name: 'VIP', value: 28, color: '#dc2626' },
+  { name: 'À risque', value: 12, color: '#F59E0B' },
+  { name: 'Régulier', value: 42, color: '#7D9B4E' },
+  { name: 'Perdu', value: 18, color: '#9CA3AF' },
+];
+
+/* ──────────────────────────────────────
+   CUSTOM COMPONENTS
+────────────────────────────────────── */
+function SparklineArea({ color, data }: { color: string, data: any[] }) {
+  return (
+    <div style={{ width: 80, height: 36 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id={`color-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color} stopOpacity={0.15} />
+              <stop offset="95%" stopColor={color} stopOpacity={0.01} />
+            </linearGradient>
+          </defs>
+          <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2.5} fill={`url(#color-${color.replace('#', '')})`} isAnimationActive={true} animationDuration={600} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+const CustomAreaTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-3 rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gray-100 text-[13px] animate-in fade-in duration-200">
+        <p className="font-semibold text-[#5D534F] mb-1">Semaine : {label}</p>
+        <p className="font-bold text-[#dc2626] text-[15px]">{payload[0].value} € additionnels</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+const CustomPieTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-2.5 rounded-lg shadow-lg border border-gray-100 text-[13px] flex items-center gap-2.5 animate-in fade-in duration-200">
+        <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: payload[0].payload.color }} />
+        <p className="font-bold text-[#1B100C]">{payload[0].name}</p>
+        <p className="text-[#5D534F] font-semibold">{payload[0].value} %</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+const renderActiveShape = (props: any) => {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 6}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        className="transition-all duration-300 drop-shadow-md"
+      />
+    </g>
+  );
+};
+
+
+/* ──────────────────────────────────────
    MAIN COMPONENT
 ────────────────────────────────────── */
 export default function MerchantHomeContent({ user, stats }: MerchantHomeContentProps) {
   const router = useRouter();
   const [period, setPeriod] = useState<Period>('30j');
   const [isChanging, setIsChanging] = useState(false);
+  const [activePieIndex, setActivePieIndex] = useState<number | undefined>(undefined);
 
   const commerceName = getCommerceName((user as any)?.commerce) || user?.firstName || 'Mon Commerce';
 
-  // ─── Stats computed per period ────────────────────────────────────────────
+  // ─── Stats computed per period ───
   const hasStats = stats && Object.keys(stats).length > 0;
 
-  // ─── Demo Data if API is empty ───
   const demoTotalClients = 1250;
   const demoAtRisk = 150;
   const demoLoyaltyRate = 42;
@@ -167,23 +136,19 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
   const loyaltyRate  = hasStats ? (stats?.loyaltyRate ?? 0) : demoLoyaltyRate;
   const totalRevenue = hasStats ? (stats?.totalRevenue ?? 0) : demoTotalRevenue;
 
-  // Period-aware new clients
   const demoNewClientsForPeriod = period === '7j' ? 45 : period === '30j' ? 180 : demoTotalClients;
-
   const newClientsForPeriod = hasStats ? (
     period === '7j'  ? (rawClients.newLast7Days  ?? stats?.clientsThisWeek ?? 0) :
     period === '30j' ? (rawClients.newLast30Days ?? stats?.clientsThisWeek ?? 0) :
-                       (rawClients.total         ?? 0) // 12m → total
+                       (rawClients.total         ?? 0)
   ) : demoNewClientsForPeriod;
 
-  // Visual "trend" text that changes with period
   const periodClientTrend = `+${newClientsForPeriod} ce${period === '7j' ? 'tte sem.' : period === '30j' ? ' mois' : 't an'}`;
 
-  // Simulate brief loading state when switching period (visual feedback)
   const handlePeriodChange = (p: Period) => {
     setIsChanging(true);
     setPeriod(p);
-    setTimeout(() => setIsChanging(false), 400);
+    setTimeout(() => setIsChanging(false), 300);
   };
 
   /* Stat cards */
@@ -192,33 +157,33 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
       label: 'CA généré par Retenza',
       value: `${totalRevenue} €`,
       trend: '+14 %',
-      trendClass: 'text-[#7D9B4E]',
-      arrow: '↑',
-      spark: <SparkUp color="#7D9B4E" />,
+      trendIsPositive: true,
+      icon: <Coins className="w-5 h-5 text-[#dc2626]" strokeWidth={2} />,
+      sparkData: sparkDataUp,
     },
     {
       label: 'Clients actifs',
       value: `${totalClients}`,
       trend: periodClientTrend,
-      trendClass: 'text-[#7D9B4E]',
-      arrow: '↑',
-      spark: <SparkUp color="#7D9B4E" />,
+      trendIsPositive: true,
+      icon: <Users className="w-5 h-5 text-[#dc2626]" strokeWidth={2} />,
+      sparkData: sparkDataUp,
     },
     {
       label: 'Taux de retour',
       value: `${loyaltyRate} %`,
       trend: '+6 pts',
-      trendClass: 'text-[#7D9B4E]',
-      arrow: '↑',
-      spark: <SparkUp color="#7D9B4E" />,
+      trendIsPositive: true,
+      icon: <RefreshCw className="w-5 h-5 text-[#dc2626]" strokeWidth={2} />,
+      sparkData: sparkDataUp,
     },
     {
       label: 'Clients à risque',
       value: `${atRisk}`,
       trend: 'à relancer',
-      trendClass: 'text-[#D73E26]',
-      arrow: '●',
-      spark: <SparkDown color="#D73E26" />,
+      trendIsPositive: false,
+      icon: <AlertTriangle className="w-5 h-5 text-[#dc2626]" strokeWidth={2} />,
+      sparkData: sparkDataDown,
     },
   ];
 
@@ -231,9 +196,9 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
           <h1 className="font-bricolage font-bold text-[24px] text-[#1B100C] leading-snug">
             Bonjour, {commerceName} 👋
           </h1>
-          <p className="text-[13px] text-[#9C8B82] mt-0.5">
+          <p className="text-[13px] text-[#9C8B82] mt-1">
             Vos résultats sur les{' '}
-            <span className="text-[#D73E26] font-semibold underline underline-offset-2">
+            <span className="text-[#dc2626] font-semibold underline underline-offset-2">
               {PERIOD_LABELS[period]}
             </span>.
           </p>
@@ -255,7 +220,7 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
           ))}
           <button
             onClick={() => router.push('/merchant/campagnes/nouvelle')}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#D73E26] hover:bg-[#C0321C] active:scale-95 text-white text-[13px] font-semibold transition-all shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#dc2626] hover:bg-[#b91c1c] active:scale-95 text-white text-[13px] font-semibold transition-all shadow-sm ml-1"
           >
             <Plus className="w-3.5 h-3.5" strokeWidth={2.5} /> Campagne
           </button>
@@ -267,21 +232,28 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
         {cards.map((c) => (
           <div
             key={c.label}
-            className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm"
+            className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 relative flex flex-col justify-between"
           >
-            <p className="text-[12px] font-semibold text-[#9C8B82] mb-3 leading-snug">{c.label}</p>
-            <p className="font-bricolage font-bold text-[32px] text-[#1B100C] leading-none mb-4">
+            <div className="flex justify-between items-start mb-1">
+              <p className="text-[13px] font-semibold text-[#9C8B82] leading-snug pr-6">{c.label}</p>
+              <div className="absolute top-5 right-5 opacity-90">
+                {c.icon}
+              </div>
+            </div>
+            
+            <p className="font-bricolage font-medium text-[32px] text-[#1B100C] leading-none mb-4 tracking-tight mt-1">
               {c.value}
             </p>
-            <div className="flex items-center justify-between">
-              <span className={`text-[12px] font-semibold flex items-center gap-1 ${c.trendClass}`}>
-                {c.arrow === '●'
-                  ? <span className="w-2 h-2 rounded-full bg-[#D73E26] inline-block" />
-                  : <span>{c.arrow}</span>
-                }
+            
+            <div className="flex items-center justify-between mt-auto">
+              <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full border ${
+                c.trendIsPositive 
+                  ? 'bg-[#EEF3E8] text-[#4d632c] border-[#d8e3cc]' 
+                  : 'bg-[#FCE7E7] text-[#992222] border-[#f5cdcd]'
+              }`}>
                 {c.trend}
               </span>
-              {c.spark}
+              <SparklineArea color={c.trendIsPositive ? '#7D9B4E' : '#dc2626'} data={c.sparkData} />
             </div>
           </div>
         ))}
@@ -291,37 +263,109 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         {/* Area chart card */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-          <div className="flex items-start justify-between mb-1">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-[0_1px_4px_rgba(0,0,0,0.06)] flex flex-col">
+          <div className="flex items-start justify-between mb-2">
             <div>
-              <h2 className="font-bricolage font-bold text-[16px] text-[#1B100C]">CA additionnel généré</h2>
-              <p className="text-[12px] text-[#9C8B82] mt-0.5">Mesuré et traçable — commission 5 à 10 %.</p>
+              <h2 className="font-bricolage font-bold text-[18px] text-[#1B100C]">CA additionnel généré</h2>
+              <p className="text-[13px] text-[#9C8B82] mt-1">Mesuré et traçable — commission 5 à 10 %.</p>
             </div>
-            <span className="px-3 py-1 rounded-full bg-[#EEF3E8] text-[#7D9B4E] text-[11px] font-bold border border-[#c9dbb2] shrink-0 ml-2">
+            <span className="px-3.5 py-1.5 rounded-full bg-[#EEF3E8] text-[#4d632c] text-[12px] font-bold border border-[#d8e3cc] shrink-0 shadow-sm">
               +30 % de retour
             </span>
           </div>
 
-          {/* Chart area */}
-          <div className="mt-4 -mx-2">
-            <AreaChart />
-          </div>
-
-          {/* Chart legend */}
-          <div className="flex items-center gap-2 mt-3 ml-1">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#D73E26] shrink-0" />
-            <span className="text-[11px] text-[#9C8B82]">
-              CA additionnel hebdo&nbsp;&nbsp;S1 · S2 · S3 · S4
-            </span>
+          <div className="flex-1 mt-6 -mx-2 min-h-[220px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={areaData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#dc2626" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#dc2626" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9C8B82' }} axisLine={false} tickLine={false} dy={10} />
+                <YAxis tick={{ fontSize: 11, fill: '#9C8B82' }} axisLine={false} tickLine={false} dx={-10} />
+                <RechartsTooltip content={<CustomAreaTooltip />} cursor={{ stroke: 'rgba(220,38,38,0.05)', strokeWidth: 32 }} />
+                <Area 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#dc2626" 
+                  strokeWidth={3}
+                  fillOpacity={1} 
+                  fill="url(#colorValue)" 
+                  activeDot={{ r: 6, fill: "#dc2626", stroke: "#fff", strokeWidth: 2 }}
+                  dot={{ r: 4, fill: "#dc2626", stroke: "#fff", strokeWidth: 1.5 }}
+                  animationDuration={800}
+                  animationEasing="ease-out"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
         {/* Donut card */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col">
-          <h2 className="font-bricolage font-bold text-[16px] text-[#1B100C] mb-0.5">Répartition clients</h2>
-          <p className="text-[12px] text-[#9C8B82] mb-6">Scoring automatique par l'IA.</p>
-          <div className="flex-1 flex items-center justify-center">
-            <DonutChart total={totalClients} />
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-[0_1px_4px_rgba(0,0,0,0.06)] flex flex-col relative h-full min-h-[300px]">
+          <h2 className="font-bricolage font-bold text-[18px] text-[#1B100C] mb-0.5">Répartition clients</h2>
+          <p className="text-[13px] text-[#9C8B82] mb-6">Scoring automatique par l'IA.</p>
+          
+          <div className="flex-1 flex items-center justify-between gap-2 px-1">
+            <div className="relative w-[150px] h-[150px] shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={donutData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius="65%"
+                    outerRadius="95%"
+                    paddingAngle={3}
+                    dataKey="value"
+                    onMouseEnter={(_, index) => setActivePieIndex(index)}
+                    onMouseLeave={() => setActivePieIndex(undefined)}
+                    // @ts-ignore
+                    activeIndex={activePieIndex}
+                    activeShape={renderActiveShape}
+                    isAnimationActive={true}
+                    animationDuration={800}
+                    animationEasing="ease-out"
+                    stroke="none"
+                  >
+                    {donutData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip content={<CustomPieTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="font-bricolage font-bold text-[30px] text-[#1B100C] leading-none mt-1">{totalClients}</span>
+                <span className="text-[12px] text-[#9C8B82] font-semibold mt-1">clients</span>
+              </div>
+            </div>
+            
+            <div className="flex flex-col justify-center gap-1.5 min-w-[110px]">
+              {donutData.map((entry, index) => (
+                <div
+                  key={entry.name}
+                  className={`flex items-center justify-between transition-all duration-200 px-2 py-1.5 rounded-lg cursor-default ${
+                    activePieIndex === index ? 'bg-gray-50 scale-105 shadow-sm' : 'bg-transparent'
+                  }`}
+                  onMouseEnter={() => setActivePieIndex(index)}
+                  onMouseLeave={() => setActivePieIndex(undefined)}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-2.5 h-2.5 rounded-[3px] shrink-0" style={{ backgroundColor: entry.color }} />
+                    <span className={`text-[13px] transition-colors ${activePieIndex === index ? 'text-[#1B100C] font-semibold' : 'text-[#5D534F]'}`}>
+                      {entry.name}
+                    </span>
+                  </div>
+                  <span className={`text-[13.5px] font-bold ml-3 text-right transition-colors ${activePieIndex === index ? 'text-[#1B100C]' : 'text-[#1B100C] opacity-90'}`}>
+                    {entry.value}%
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

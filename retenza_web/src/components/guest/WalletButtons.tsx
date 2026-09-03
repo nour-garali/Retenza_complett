@@ -35,7 +35,7 @@ function GoogleWalletButton({ cardPublicId, primaryColor }: Omit<WalletButtonPro
     try {
       const result = await generateWalletPass({ cardPublicId, provider: 'google' });
       if ('error' in result) {
-        setError(result.error);
+        setError(result.error ?? null);
       } else {
         window.open((result as WalletPassResult).addUrl, '_blank');
       }
@@ -83,7 +83,7 @@ function AppleWalletButton({ cardPublicId }: { cardPublicId: string }) {
     try {
       const result = await generateWalletPass({ cardPublicId, provider: 'apple' });
       if ('error' in result) {
-        setError(result.error);
+        setError(result.error ?? null);
       } else {
         // Safari auto-detects .pkpass and opens Add to Wallet sheet
         window.location.href = (result as WalletPassResult).addUrl;

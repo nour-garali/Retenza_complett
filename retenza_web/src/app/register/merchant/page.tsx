@@ -8,6 +8,7 @@ import {
 import { submitPartnershipRequestAction, checkPartnershipEmailAction, resendActivationAction } from '@/services/authActions';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import PublicNavbar from '@/components/landing/PublicNavbar';
 
 const CATEGORIES = [
   'Restaurant / Café', 'Boulangerie / Pâtisserie', 'Mode & Accessoires',
@@ -121,115 +122,79 @@ export default function RegisterMerchantPage() {
   const steps = ['Commerce', 'Responsable', 'Finaliser'];
 
   return (
-    <div className="min-h-screen flex font-inter">
-
-      {/* LEFT PANEL */}
-      <div className="hidden lg:flex w-[42%] flex-col relative overflow-hidden bg-[#0D1117]">
-        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-[#D73E26]/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#D73E26]/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-
-        <div className="relative z-10 flex flex-col h-full p-10">
-          <Link href="/" className="flex items-center gap-3 mb-16">
-            <img src="/retenza-icon.png" alt="Retenza" className="h-10 w-10 object-contain drop-shadow-md" />
-            <span className="font-bricolage font-bold text-xl text-white">Retenza Connect</span>
-          </Link>
-
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm text-white/80 rounded-full text-[11px] font-bold tracking-widest w-fit mb-6 border border-white/10">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D73E26] animate-pulse" />
-              DEVENIR PARTENAIRE
-            </div>
-
-            <h1 className="font-bricolage text-[36px] font-extrabold leading-[1.1] text-white tracking-tight mb-5">
-              Rejoignez<br />le réseau<br />
-              <span className="text-[#D73E26]">Retenza.</span>
-            </h1>
-
-            <p className="text-white/50 text-[14px] leading-relaxed mb-10 max-w-[300px]">
-              Soumettez votre demande de partenariat. Notre équipe l'examine et vous contacte sous 48h.
-            </p>
-
-            {/* Comment ça marche */}
-            <div className="space-y-4">
-              {[
-                { n: '1', t: 'Remplissez la demande', d: 'Informations du commerce et du responsable' },
-                { n: '2', t: 'Validation par Retenza', d: 'Notre équipe examine votre profil' },
-                { n: '3', t: 'Activation du compte', d: 'Créez votre mot de passe par email' },
-                { n: '4', t: 'Accès au Dashboard', d: 'Gérez votre programme de fidélité' },
-              ].map((item) => (
-                <div key={item.n} className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#D73E26] flex items-center justify-center shrink-0 text-white text-[11px] font-bold mt-0.5">
-                    {item.n}
-                  </div>
-                  <div>
-                    <p className="text-white/80 text-[13px] font-semibold">{item.t}</p>
-                    <p className="text-white/40 text-[11px]">{item.d}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex gap-6 pt-8 border-t border-white/10">
-            {[{ value: '12K+', label: 'Commerçants' }, { value: '850K+', label: 'Clients fidèles' }, { value: '4.9★', label: 'Note moyenne' }].map((s) => (
-              <div key={s.label}>
-                <p className="text-white font-bricolage font-bold text-[22px]">{s.value}</p>
-                <p className="text-white/40 text-[11px] font-medium mt-0.5">{s.label}</p>
-              </div>
-            ))}
-          </div>
+    <div className="min-h-screen flex flex-col font-inter">
+      <PublicNavbar />
+      
+      <main className="flex-1 flex overflow-hidden">
+        {/* LEFT PANEL */}
+      <div className="hidden lg:flex w-[42%] flex-col relative overflow-hidden bg-white items-center justify-start pt-24 border-r border-[#F4CDBF]/30">
+        {/* Boutique illustration */}
+        <div className="relative z-10 w-full flex justify-center px-8">
+          <img
+            src="/illustration_boutique_transparent.png"
+            alt="Rejoignez le réseau Retenza"
+            className="w-full max-w-[630px] max-h-[92%] object-contain select-none"
+            draggable={false}
+          />
         </div>
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex-1 bg-[#FAFAFA] flex flex-col">
+      <div className="flex-1 bg-[#FDF0EC] flex flex-col">
 
-        {/* Top bar */}
-        <div className="flex items-center justify-between py-5 px-8 border-b border-gray-100 bg-white">
-          <Link href="/" className="flex items-center gap-2 lg:hidden">
-            <div className="w-8 h-8 bg-[#D73E26] rounded-lg flex items-center justify-center">
-              <span className="text-white font-bricolage font-bold text-sm">R</span>
-            </div>
-            <span className="font-bricolage font-bold text-base text-[#1B100C]">Retenza Connect</span>
-          </Link>
-          <span className="hidden lg:block text-[13px] text-[#9C8B82] font-medium">Demande de partenariat</span>
-          <div className="flex items-center gap-3">
-            <span className="text-[13px] text-[#5D534F] hidden sm:inline">Déjà partenaire ?</span>
-            <Link href="/login" className="px-5 py-2 rounded-xl bg-[#0D1117] text-white font-semibold text-[13px] hover:bg-black transition-colors shadow-sm">
-              Se connecter
-            </Link>
-          </div>
-        </div>
-
-        {/* Progress bar */}
-        <div className="px-8 pt-6 bg-white border-b border-gray-100">
+        {/* Progress wizard — Card */}
+        <div className="px-6 pt-5 pb-2 bg-[#FDF0EC]">
           <div className="max-w-[520px] mx-auto">
-            <div className="flex items-center gap-0 mb-2">
-              {steps.map((label, i) => {
-                const n = i + 1;
-                const active = step === n;
-                const done = step > n;
-                return (
-                  <div key={label} className="flex items-center flex-1 last:flex-none">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold shrink-0 transition-all ${done ? 'bg-[#D73E26] text-white' : active ? 'bg-[#0D1117] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                        {done ? <CheckCircle className="w-4 h-4" /> : n}
+            <div className="bg-white rounded-2xl border border-[#F0E8E4] shadow-md shadow-[#BF2112]/8 px-7 py-5">
+              <div className="flex items-center">
+                {steps.map((label, i) => {
+                  const n = i + 1;
+                  const active = step === n;
+                  const done = step > n;
+                  const upcoming = !active && !done;
+                  return (
+                    <div key={label} className="flex items-center flex-1 last:flex-none">
+                      {/* Step node */}
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold shrink-0 transition-all duration-300 ${
+                          done
+                            ? 'bg-[#BF2112] text-white shadow-md shadow-[#BF2112]/30'
+                            : active
+                            ? 'bg-[#BF2112] text-white shadow-lg shadow-[#BF2112]/30 ring-4 ring-[#BF2112]/15'
+                            : 'bg-white border-2 border-[#E8D8D4] text-[#C0A099]'
+                        }`}>
+                          {done ? <CheckCircle className="w-4 h-4" /> : n}
+                        </div>
+                        <div className="flex flex-col">
+                          <span className={`text-[10px] font-bold uppercase tracking-widest leading-none mb-0.5 ${
+                            done ? 'text-[#BF2112]/60' : active ? 'text-[#BF2112]' : 'text-[#C0A099]'
+                          }`}>
+                            {done ? 'Complété' : active ? 'En cours' : 'À venir'}
+                          </span>
+                          <span className={`text-[13px] font-semibold leading-none ${
+                            done ? 'text-[#5D534F]' : active ? 'text-[#1B100C]' : 'text-[#C0A099]'
+                          }`}>
+                            {label}
+                          </span>
+                        </div>
                       </div>
-                      <span className={`text-[12px] font-semibold ${active ? 'text-[#0D1117]' : done ? 'text-[#D73E26]' : 'text-gray-400'}`}>{label}</span>
+                      {/* Connector line */}
+                      {i < steps.length - 1 && (
+                        <div className="flex-1 mx-4 h-[2px] relative overflow-hidden rounded-full">
+                          <div className="absolute inset-0 bg-[#F0E8E4]" />
+                          {done && <div className="absolute inset-0 bg-[#BF2112]" />}
+                          {active && <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#BF2112] to-[#F4CDBF]" />}
+                        </div>
+                      )}
                     </div>
-                    {i < steps.length - 1 && (
-                      <div className={`flex-1 h-[2px] mx-3 ${done ? 'bg-[#D73E26]' : 'bg-gray-200'}`} />
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto flex items-start justify-center py-8 px-6">
+        <div className="flex-1 overflow-y-auto flex items-start justify-center py-6 px-6">
           <div className="w-full max-w-[520px]">
 
             {/* Erreur générique */}
@@ -248,7 +213,7 @@ export default function RegisterMerchantPage() {
                 <div className="animate-in fade-in duration-300">
                   <div className="mb-8">
                     <div className="w-12 h-12 bg-[#FCE7DD] rounded-2xl flex items-center justify-center mb-5">
-                      <Store className="w-6 h-6 text-[#D73E26]" />
+                      <Store className="w-6 h-6 text-[#BF2112]" />
                     </div>
                     <h2 className="font-bricolage text-[26px] font-extrabold text-[#0D1117] mb-1">Votre commerce</h2>
                     <p className="text-[#9C8B82] text-[14px]">Présentez votre établissement à notre équipe.</p>
@@ -264,7 +229,7 @@ export default function RegisterMerchantPage() {
                         <label className="block text-[11px] font-bold text-[#5D534F] mb-1.5 uppercase tracking-wide">Catégorie *</label>
                         <div className="relative">
                           <select required value={category} onChange={e => setCategory(e.target.value)}
-                            className={`w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-[13px] outline-none focus:border-[#D73E26] focus:ring-2 focus:ring-[#D73E26]/10 appearance-none cursor-pointer transition-all ${category ? 'text-gray-900' : 'text-gray-400'}`}>
+                            className={`w-full bg-white border border-[#E8D8D4] rounded-xl py-3 px-4 text-[13px] outline-none focus:border-[#BF2112] focus:ring-[3px] focus:ring-[#BF2112]/10 appearance-none cursor-pointer transition-all shadow-sm ${category ? 'text-gray-900' : 'text-gray-400'}`}>
                             <option value="" disabled>Sélectionner</option>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                           </select>
@@ -292,7 +257,7 @@ export default function RegisterMerchantPage() {
                         onChange={e => { setContactEmail(e.target.value); setEmailStatus(null); }}
                         placeholder="contact@moncommerce.com"
                         className={`field-input ${
-                          emailStatus && !emailStatus.code.startsWith('OK')
+                          emailStatus && (!emailStatus.code || !emailStatus.code.startsWith('OK'))
                             ? 'border-red-400 focus:border-red-400 focus:ring-red-100'
                             : ''
                         }`}
@@ -371,7 +336,7 @@ export default function RegisterMerchantPage() {
                 <div className="animate-in fade-in duration-300">
                   <div className="mb-8">
                     <div className="w-12 h-12 bg-[#FCE7DD] rounded-2xl flex items-center justify-center mb-5">
-                      <User className="w-6 h-6 text-[#D73E26]" />
+                      <User className="w-6 h-6 text-[#BF2112]" />
                     </div>
                     <h2 className="font-bricolage text-[26px] font-extrabold text-[#0D1117] mb-1">Responsable</h2>
                     <p className="text-[#9C8B82] text-[14px]">Informations de la personne en charge du partenariat.</p>
@@ -399,9 +364,12 @@ export default function RegisterMerchantPage() {
                         placeholder="+216 XX XXX XXX" className="field-input" />
                     </Field>
 
-                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl">
-                      <p className="text-[12px] text-blue-700 font-medium">
-                        📧 L'email d'activation sera envoyé à l'adresse <strong>{contactEmail}</strong> renseignée à l'étape précédente.
+                    <div className="p-4 bg-[#FDF3F0] border border-[#FCE7DD] rounded-2xl flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm border border-[#FCE7DD]/60">
+                        <Mail className="w-4 h-4 text-[#BF2112]" />
+                      </div>
+                      <p className="text-[12px] text-[#5D534F] font-medium leading-relaxed pt-1">
+                        L'email d'activation sera envoyé à l'adresse <strong className="text-[#BF2112] font-bold">{contactEmail}</strong> renseignée à l'étape précédente.
                       </p>
                     </div>
                   </div>
@@ -413,7 +381,7 @@ export default function RegisterMerchantPage() {
                 <div className="animate-in fade-in duration-300">
                   <div className="mb-8">
                     <div className="w-12 h-12 bg-[#FCE7DD] rounded-2xl flex items-center justify-center mb-5">
-                      <Layers className="w-6 h-6 text-[#D73E26]" />
+                      <Layers className="w-6 h-6 text-[#BF2112]" />
                     </div>
                     <h2 className="font-bricolage text-[26px] font-extrabold text-[#0D1117] mb-1">Finaliser</h2>
                     <p className="text-[#9C8B82] text-[14px]">Quelques informations sur votre projet de fidélisation.</p>
@@ -441,8 +409,8 @@ export default function RegisterMerchantPage() {
                         {LOYALTY_TYPES.map((t) => (
                           <button type="button" key={t.value}
                             onClick={() => setLoyaltyProgramType(t.value)}
-                            className={`p-3 rounded-xl border text-left transition-all ${loyaltyProgramType === t.value ? 'border-[#D73E26] bg-[#FFF5F2]' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                            <p className={`text-[13px] font-bold ${loyaltyProgramType === t.value ? 'text-[#D73E26]' : 'text-gray-800'}`}>{t.label}</p>
+                            className={`p-3 rounded-xl border text-left transition-all ${loyaltyProgramType === t.value ? 'border-[#BF2112] bg-[#FDF3F0]' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
+                            <p className={`text-[13px] font-bold ${loyaltyProgramType === t.value ? 'text-[#BF2112]' : 'text-gray-800'}`}>{t.label}</p>
                             <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">{t.desc}</p>
                           </button>
                         ))}
@@ -455,18 +423,18 @@ export default function RegisterMerchantPage() {
                       </label>
                       <textarea value={message} onChange={e => setMessage(e.target.value)} rows={4} maxLength={1000}
                         placeholder="Dites-nous quelques mots sur votre commerce et vos attentes..."
-                        className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-[13px] text-gray-900 outline-none focus:border-[#D73E26] focus:ring-2 focus:ring-[#D73E26]/10 resize-none transition-all placeholder-gray-400" />
+                        className="w-full bg-[#FDF3F0] border border-[#FCE7DD]/60 rounded-xl py-3 px-4 text-[13px] text-gray-900 outline-none focus:border-[#BF2112] focus:ring-[3px] focus:ring-[#BF2112]/10 resize-none transition-all placeholder-gray-400 shadow-sm" />
                       <p className="text-[11px] text-gray-400 text-right mt-1">{message.length}/1000</p>
                     </div>
 
                     <label className="flex items-start gap-3 cursor-pointer group">
                       <input type="checkbox" checked={acceptCGU} onChange={e => setAcceptCGU(e.target.checked)}
-                        className="mt-0.5 w-4 h-4 accent-[#D73E26] shrink-0" />
+                        className="mt-0.5 w-4 h-4 accent-[#BF2112] shrink-0" />
                       <span className="text-[12px] text-gray-600 leading-relaxed">
                         J'accepte les{' '}
-                        <a href="#" className="text-[#D73E26] font-semibold hover:underline">conditions générales d'utilisation</a>{' '}
+                        <a href="#" className="text-[#BF2112] font-semibold hover:underline">conditions générales d'utilisation</a>{' '}
                         et la{' '}
-                        <a href="#" className="text-[#D73E26] font-semibold hover:underline">politique de confidentialité</a>{' '}
+                        <a href="#" className="text-[#BF2112] font-semibold hover:underline">politique de confidentialité</a>{' '}
                         de Retenza Connect.
                       </span>
                     </label>
@@ -484,7 +452,7 @@ export default function RegisterMerchantPage() {
                 )}
                 {step < 3 ? (
                   <button type="button" onClick={handleNext} disabled={isCheckingEmail}
-                    className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-[#0D1117] text-white font-bold text-[14px] hover:bg-black transition-all shadow-xl shadow-black/20 disabled:opacity-70">
+                    className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-gradient-to-r from-[#BF2112] to-[#9E1A0A] hover:to-[#BF2112] text-white font-bold text-[14px] transition-all shadow-lg shadow-[#BF2112]/25 border border-[#BF2112]/50 disabled:opacity-70">
                     {isCheckingEmail ? (
                       <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Vérification...</>
                     ) : (
@@ -493,7 +461,7 @@ export default function RegisterMerchantPage() {
                   </button>
                 ) : (
                   <button type="submit" disabled={isLoading}
-                    className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-[#D73E26] hover:bg-[#C0321C] text-white font-bold text-[14px] transition-all shadow-xl shadow-red-900/20 disabled:opacity-60">
+                    className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-gradient-to-r from-[#BF2112] to-[#9E1A0A] hover:to-[#BF2112] text-white font-bold text-[14px] transition-all shadow-lg shadow-[#BF2112]/25 border border-[#BF2112]/50 disabled:opacity-70">
                     {isLoading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
                     {isLoading ? 'Envoi en cours...' : 'Envoyer ma demande'}
                   </button>
@@ -503,7 +471,7 @@ export default function RegisterMerchantPage() {
 
             <p className="text-center text-[12px] text-gray-400 font-medium mt-6">
               Déjà partenaire ?{' '}
-              <Link href="/login" className="text-[#D73E26] font-bold hover:underline">Se connecter</Link>
+              <Link href="/login" className="text-[#BF2112] font-bold hover:underline">Se connecter</Link>
             </p>
           </div>
         </div>
@@ -512,18 +480,21 @@ export default function RegisterMerchantPage() {
       <style jsx>{`
         .field-input {
           width: 100%;
-          background: white;
-          border: 1px solid #e5e7eb;
+          background: #FFFFFF;
+          border: 1px solid #E8D8D4;
           border-radius: 12px;
           padding: 12px 16px 12px 40px;
-          font-size: 13px;
+          font-size: 14px;
+          font-weight: 500;
           color: #111827;
           outline: none;
           transition: all 0.15s;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
         }
         .field-input::placeholder { color: #9ca3af; }
-        .field-input:focus { border-color: #D73E26; box-shadow: 0 0 0 3px rgba(215,62,38,0.08); }
+        .field-input:focus { border-color: #BF2112; box-shadow: 0 0 0 3px rgba(191,33,18,0.1); background: #FFFFFF; }
       `}</style>
+      </main>
     </div>
   );
 }
@@ -533,7 +504,7 @@ function Field({ label, icon, children }: { label: string; icon: React.ReactNode
     <div>
       <label className="block text-[11px] font-bold text-[#5D534F] mb-1.5 uppercase tracking-wide">{label}</label>
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">{icon}</div>
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#BF2112]/50">{icon}</div>
         {children}
       </div>
     </div>

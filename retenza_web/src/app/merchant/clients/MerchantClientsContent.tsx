@@ -62,7 +62,7 @@ export default function MerchantClientsContent({ initialClients }: { initialClie
       <div className="flex items-center justify-between mb-6 pt-2">
         <div>
           <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C]">Clients</h1>
-          <p className="text-[13px] text-[#5D534F] mt-0.5">Gérez votre base de clients et suivez leur engagement.</p>
+          <p className="text-[13px] text-[#5D534F] mt-0.5">Gérez vos clients et leur engagement.</p>
         </div>
         <div className="flex items-center gap-4">
           {/* Quick Stats Header */}

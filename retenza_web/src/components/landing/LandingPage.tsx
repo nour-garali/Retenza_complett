@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import PublicNavbar from '@/components/landing/PublicNavbar';
 
 export default function LandingPage() {
   return (
@@ -11,74 +12,14 @@ export default function LandingPage() {
       {/* ══════════════════════════
           NAV
       ══════════════════════════ */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(255, 255, 255, 0.95)', // <-- Rendu blanc
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #F3F4F6', // Bordure plus douce pour le fond blanc
-        padding: '12px 40px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/welcome_logo.png" alt="Logo" style={{ width: 40, height: 40 }} />
-          <span style={{
-            fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontWeight: 800, fontSize: 20, color: '#1C1C2E',
-          }}>Retenza Connect</span>
-        </div>
-
-        <div style={{ display: 'flex', gap: 32 }} className="hidden lg:flex">
-          {[
-            { label: 'Accueil', active: true },
-            { label: 'Avantages', active: false },
-            { label: 'Comment ça marche', active: false },
-            { label: 'Partenaires', active: false },
-            { label: 'Contact', active: false },
-          ].map(item => (
-            <span key={item.label} style={{
-              fontSize: 15, fontWeight: 600, cursor: 'pointer',
-              color: item.active ? '#BF2112' : '#374151',
-              borderBottom: item.active ? '2.5px solid #BF2112' : 'none',
-              paddingBottom: 2,
-            }}>{item.label}</span>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', gap: 12 }}>
-          <Link href="/login" style={{
-            padding: '10px 20px', borderRadius: 12,
-            border: '1.5px solid #E4DAD5', background: '#fff',
-            color: '#1C1C2E', fontWeight: 700, fontSize: 14,
-            textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-            </svg>
-            Se connecter
-          </Link>
-          <Link href="/register" style={{
-            padding: '10px 20px', borderRadius: 12,
-            background: 'linear-gradient(135deg, #D94030, #9E1A0A)',
-            color: '#fff', fontWeight: 700, fontSize: 14,
-            textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
-            boxShadow: '0 4px 16px rgba(191,33,18,0.28)',
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/>
-              <line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
-            </svg>
-            Créer un compte
-          </Link>
-        </div>
-      </nav>
+      <PublicNavbar />
 
       {/* ══════════════════════════════════════════════════════════
           HERO — Two columns
           Background: EXACT COLOR CODE FROM HERO-CARD-CLEAN
           Image: mix-blend-mode: darken to blend its background seamlessly
       ══════════════════════════════════════════════════════════ */}
-      <section style={{
+      <section id="accueil" style={{
         backgroundColor: '#FBF0ED', // <-- Le code couleur de fond exact de hero-card-clean.png
         display: 'flex',
         alignItems: 'center',
@@ -454,7 +395,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════════════════
           COMMENT ÇA MARCHE — Red Banner with 4 steps
       ══════════════════════════════════════════════════════════ */}
-      <section style={{
+      <section id="comment-ca-marche" style={{
         background: 'linear-gradient(135deg, #C41E0A 0%, #8B0000 100%)',
         padding: '64px 60px',
         display: 'flex',
@@ -1244,7 +1185,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════════════════
           PARTENAIRES — Ils nous font confiance
       ══════════════════════════════════════════════════════════ */}
-      <section style={{
+      <section id="partenaires" style={{
         backgroundColor: '#FFFFFF',
         padding: '80px 40px',
         display: 'flex',
@@ -1535,7 +1476,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════════════════
           FOOTER COMPLET - ULTRA REFINED
       ══════════════════════════════════════════════════════════ */}
-      <footer style={{
+      <footer id="contact" style={{
         backgroundColor: '#FFFFFF',
         padding: '100px 40px 40px 40px',
         display: 'flex',
@@ -1552,7 +1493,17 @@ export default function LandingPage() {
           {/* Col 1 */}
           <div style={{ flex: '1 1 300px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-              <img src="/welcome_logo.png" alt="Logo" style={{ width: 28, height: 28 }} />
+              <div style={{
+                width: 28, height: 28, borderRadius: 8,
+                background: '#D94030',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 2px 6px rgba(217, 64, 48, 0.2)'
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                  <path d="M21 3v5h-5"></path>
+                </svg>
+              </div>
               <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: 18, color: '#1C1C2E', letterSpacing: '-0.02em' }}>Retenza Connect</span>
             </div>
             <p style={{ color: '#8C7B73', fontSize: 14, lineHeight: 1.7, maxWidth: 280, fontWeight: 300 }}>

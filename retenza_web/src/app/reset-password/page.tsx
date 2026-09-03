@@ -64,28 +64,51 @@ function ResetPasswordForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF8F6] font-inter flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDF0EC] to-[#F9E2DB] font-inter flex flex-col items-center justify-center p-6 relative overflow-hidden">
 
-      {/* Background décor */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#D73E26]/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#D73E26]/5 rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      {/* Decorative floating icons */}
+      <div className="absolute top-1/4 left-[15%] w-16 h-16 bg-[#F4CDBF]/20 rounded-2xl flex items-center justify-center animate-[float_4s_ease-in-out_infinite] rotate-12">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D73E26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-40"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      </div>
+      <div className="absolute bottom-1/4 right-[15%] w-14 h-14 bg-[#FCE7DD]/20 rounded-full flex items-center justify-center animate-[float_5s_ease-in-out_infinite_reverse] -rotate-12">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D73E26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-40"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+      </div>
+      <div className="absolute top-[20%] right-[20%] w-20 h-20 bg-[#F9E2DB]/30 rounded-3xl flex items-center justify-center animate-[float_6s_ease-in-out_infinite] rotate-45">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D73E26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-30"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      </div>
+      <div className="absolute bottom-[15%] left-[20%] w-12 h-12 bg-[#F4CDBF]/30 rounded-xl flex items-center justify-center animate-[float_4.5s_ease-in-out_infinite_reverse] -rotate-6">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D73E26" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-40"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      </div>
+      {/* Concentric rings in corners */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] border-[1px] border-[#D73E26]/10 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="absolute top-[-50px] right-[-50px] w-[500px] h-[500px] border-[1px] border-[#D73E26]/5 rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] border-[1px] border-[#D73E26]/10 rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
       <div className="w-full max-w-[420px] relative z-10">
 
-        {/* Logo + back */}
-        <div className="flex items-center justify-between mb-10">
-          <Link href="/login"
-            className="flex items-center gap-2 text-[13px] font-semibold text-[#5D534F] hover:text-[#D73E26] transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Retour à la connexion
-          </Link>
-          <Link href="/">
-            <img src="/retenza-icon.png" alt="Retenza" className="h-8 w-8 object-contain" />
+        {/* Logo */}
+        <div className="flex items-center justify-center mb-10">
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: 10,
+              background: '#D94030',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(217, 64, 48, 0.25)'
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                <path d="M21 3v5h-5"></path>
+              </svg>
+            </div>
+            <span style={{
+              fontFamily: "'Bricolage Grotesque', sans-serif",
+              fontWeight: 800, fontSize: 20, color: '#1C1C2E',
+            }}>Retenza</span>
           </Link>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl shadow-black/5 border border-[#F0E9E4] p-8">
+        <div className="bg-white rounded-3xl shadow-xl shadow-black/5 border border-[#F0E9E4] border-l-[4px] border-l-[#BF2112] p-8">
 
           {!success ? (
             <>
@@ -188,7 +211,7 @@ function ResetPasswordForm() {
                 <button
                   type="submit"
                   disabled={isLoading || !token}
-                  className="w-full h-[52px] rounded-xl bg-[#111111] hover:bg-black text-white font-semibold text-[15px] transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-xl shadow-black/10 disabled:opacity-60 mt-2"
+                  className="w-full h-[52px] rounded-xl bg-[#BF2112] hover:bg-[#D73E26] text-white font-semibold text-[15px] transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-xl shadow-[#BF2112]/20 disabled:opacity-60 mt-2"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -228,7 +251,7 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#FBF8F6] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDF0EC] to-[#F9E2DB] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#D73E26]/30 border-t-[#D73E26] rounded-full animate-spin" />
       </div>
     }>

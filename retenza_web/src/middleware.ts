@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Routes that require NO auth (redirect to login if no token)
 const publicRoutes = [
   '/login',
   '/register',
@@ -13,22 +14,36 @@ const publicRoutes = [
   '/m', // QR Code landing pages — public by design (no Retenza account required)
 ];
 
+// Routes always accessible regardless of auth state — no redirect in either direction
+const alwaysPublicRoutes = [
+  '/chatbot', // Standalone client chatbot — accessible by anyone without Retenza account
+  '/avantages', // Public marketing page — accessible whether logged in or not
+];
+
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
   const { pathname } = request.nextUrl;
+
+  // Always-public routes: skip all auth logic entirely
+  const isAlwaysPublic = alwaysPublicRoutes.some(route =>
+    pathname === route || pathname.startsWith(`${route}/`)
+  );
+  if (isAlwaysPublic) return NextResponse.next();
 
   const isPublicRoute = publicRoutes.some(route => 
     pathname === route || pathname.startsWith(`${route}/`)
   );
 
-  // Protect private routes
+  // Protect private routes — redirect to login preserving the host/port
   if (!token && !isPublicRoute && pathname !== '/') {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const loginUrl = new URL('/login', request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // Redirect away from auth pages if already logged in
+  // Redirect logged-in users away from auth pages back to home
   if (token && isPublicRoute) {
-    return NextResponse.redirect(new URL('/', request.url));
+    const homeUrl = new URL('/', request.url);
+    return NextResponse.redirect(homeUrl);
   }
 
   return NextResponse.next();
