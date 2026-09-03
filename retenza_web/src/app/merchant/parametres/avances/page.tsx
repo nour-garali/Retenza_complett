@@ -682,79 +682,49 @@ export default function ParametresAvancesPage() {
               </div>
 
               {openSections.boutique_defaut && (
-                <div className="p-6 md:p-8 bg-white border-t border-[#EEE5DF]">
-                  <div className="flex flex-col gap-6">
+                <div className="p-6 md:p-8 border-t border-[#EEE5DF] bg-white">
+                  <div className="flex flex-col sm:flex-row gap-4 items-center">
                     
-                    {/* --- Bloc Supérieur : État actuel --- */}
-                    <div>
-                      {/* 1. Label discret */}
-                      <p className="text-[11px] font-semibold text-[#B0A49C] uppercase tracking-wider mb-3">
-                        Boutique actuellement enregistrée
-                      </p>
-                      
-                      {/* 2. Valeur actuelle mise en avant */}
-                      <div className="flex items-center gap-3.5 relative pl-4">
-                        {/* Fine barre verticale rouge */}
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-[3px] bg-[#E8462F] rounded-full"></div>
-                        
-                        {/* Icône dans badge rose */}
-                        <div className="w-10 h-10 rounded-full bg-[#FDECEA] flex items-center justify-center shrink-0 shadow-sm border border-[#F9D5CE]/50">
-                          <Store className="w-5 h-5 text-[#E8462F]" />
-                        </div>
-                        
-                        {/* Nom de la boutique */}
-                        <span className="text-lg font-black text-[#1A1A1A]">
-                          {persistedCommerceId === "__all__" ? "Toutes les boutiques" : (commerces.find(c => c.id === persistedCommerceId)?.label || persistedCommerceId)}
-                        </span>
+                    <div className="relative flex-1 w-full max-w-2xl">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8462F] pointer-events-none">
+                        <Store className="w-5 h-5" />
                       </div>
-                    </div>
-
-                    {/* 3. Séparateur */}
-                    <hr className="border-t border-[#EEE5DF]" />
-
-                    {/* 4. Formulaire d'action */}
-                    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                      <div className="w-full sm:w-auto flex-1 max-w-[360px] relative">
-                        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#B0A49C] pointer-events-none">
-                          <Store className="w-4.5 h-4.5" />
-                        </div>
-                        <select
-                          value={defaultCommerceId}
-                          onChange={(e) => setDefaultCommerceId(e.target.value)}
-                          className="w-full bg-[#FAF5F1] border border-[#EEE5DF] pl-[38px] pr-10 py-2.5 rounded-xl text-sm font-bold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] focus:ring-4 focus:ring-[#E8462F]/10 transition-all shadow-sm appearance-none cursor-pointer"
-                        >
-                          <option value="__all__">Toutes les boutiques</option>
-                          {commerces.map((c) => (
-                            <option key={c.id} value={c.id}>{c.label}</option>
-                          ))}
-                        </select>
-                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#B0A49C] pointer-events-none">
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
-                      </div>
-                      
-                      <button
-                        onClick={handleSaveDefaultCommerce}
-                        className={`flex items-center justify-center gap-2 px-6 py-2.5 text-[13px] font-bold rounded-xl transition-all duration-200 shrink-0 w-full sm:w-auto min-w-[150px] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 ${
-                          defaultCommerceSaved
-                            ? "bg-emerald-500 hover:bg-emerald-600 text-white"
-                            : "bg-[#E8462F] hover:bg-[#D73E26] text-white"
-                        }`}
+                      <select
+                        value={defaultCommerceId}
+                        onChange={(e) => setDefaultCommerceId(e.target.value)}
+                        className="w-full bg-white border border-[#EEE5DF] pl-[44px] pr-10 py-3 rounded-xl text-sm font-medium text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-colors appearance-none cursor-pointer shadow-xs"
                       >
-                        {defaultCommerceSaved ? (
-                          <>
-                            <Check className="w-4 h-4" />
-                            Enregistré
-                          </>
-                        ) : (
-                          <>
-                            <Save className="w-4 h-4" />
-                            Enregistrer
-                          </>
-                        )}
-                      </button>
+                        <option value="__all__">Toutes les boutiques</option>
+                        {commerces.map((c) => (
+                          <option key={c.id} value={c.id}>{c.label}</option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A1A] pointer-events-none">
+                        <ChevronDown className="w-4 h-4" />
+                      </div>
                     </div>
-
+                    
+                    <button
+                      onClick={handleSaveDefaultCommerce}
+                      className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-xl transition-all shrink-0 w-full sm:w-auto shadow-xs ${
+                        defaultCommerceSaved
+                          ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                          : "bg-[#E8462F] hover:bg-[#D73E26] text-white"
+                      }`}
+                    >
+                      {defaultCommerceSaved ? (
+                        <>
+                          <Check className="w-4.5 h-4.5" />
+                          Enregistré
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4.5 h-4.5" />
+                          Enregistrer
+                        </>
+                      )}
+                    </button>
+                    
                   </div>
                 </div>
               )}
