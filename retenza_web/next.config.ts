@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react'],
   },
+  // Allow access from other devices on the local network (mobile testing, etc.)
+  allowedDevOrigins: [
+    '192.168.1.*',
+    '192.168.0.*',
+    '10.0.0.*',
+    '172.16.*.*',
+  ],
 };
 
 export default nextConfig;
