@@ -477,6 +477,10 @@ export default function ParametresAvancesPage() {
   const handleSaveDefaultCommerce = () => {
     localStorage.setItem("ratenza_commerce_id", defaultCommerceId);
     setPersistedCommerceId(defaultCommerceId);
+    // Sync the PageHeader selector to the newly saved default
+    if (defaultCommerceId !== "__all__") {
+      setSelectedCommerce(defaultCommerceId);
+    }
     setDefaultCommerceSaved(true);
     setTimeout(() => setDefaultCommerceSaved(false), 3000);
   };
