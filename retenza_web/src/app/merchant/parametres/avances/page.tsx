@@ -721,7 +721,7 @@ export default function ParametresAvancesPage() {
                         onClick={handleSaveDefaultCommerce}
                         className={`flex items-center justify-center gap-2 px-6 py-2.5 text-[13px] font-bold rounded-lg transition-all duration-200 shrink-0 w-full sm:w-auto min-w-[150px] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
                           defaultCommerceSaved
-                            ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/25"
+                            ? "bg-[#1A1A1A] hover:bg-[#2D2D2D] text-white shadow-black/20"
                             : "bg-[#E8462F] hover:bg-[#D73E26] text-white shadow-[#E8462F]/25"
                         }`}
                       >
