@@ -693,9 +693,9 @@ export default function ParametresAvancesPage() {
                   </div>
 
                   {/* Formulaire d'action (carte premium) */}
-                  <div className="relative rounded-2xl border border-[#EEE5DF] p-5 md:p-6 bg-gradient-to-br from-[#FDF3EE] to-white shadow-2xs overflow-hidden group">
+                  <div className="relative rounded-lg border border-[#EEE5DF] p-5 md:p-6 bg-gradient-to-br from-[#FDF3EE] to-white shadow-2xs overflow-hidden group">
                     {/* Reflet interne subtil */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-transparent pointer-events-none rounded-2xl" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-transparent pointer-events-none rounded-lg" />
                     
                     <div className="relative flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                       <div className="flex-1 relative">
@@ -705,7 +705,7 @@ export default function ParametresAvancesPage() {
                         <select
                           value={defaultCommerceId}
                           onChange={(e) => setDefaultCommerceId(e.target.value)}
-                          className="w-full bg-white border border-[#EEE5DF] pl-[38px] pr-10 py-2.5 rounded-xl text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] focus:ring-4 focus:ring-[#E8462F]/10 transition-all shadow-sm appearance-none cursor-pointer"
+                          className="w-full bg-white border border-[#EEE5DF] pl-[38px] pr-10 py-2.5 rounded-lg text-sm font-semibold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] focus:ring-4 focus:ring-[#E8462F]/10 transition-all shadow-sm appearance-none cursor-pointer"
                         >
                           <option value="__all__">Toutes les boutiques</option>
                           {commerces.map((c) => (
@@ -719,7 +719,7 @@ export default function ParametresAvancesPage() {
                       
                       <button
                         onClick={handleSaveDefaultCommerce}
-                        className={`flex items-center justify-center gap-2 px-6 py-2.5 text-[13px] font-bold rounded-xl transition-all duration-200 shrink-0 w-full sm:w-auto min-w-[150px] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
+                        className={`flex items-center justify-center gap-2 px-6 py-2.5 text-[13px] font-bold rounded-lg transition-all duration-200 shrink-0 w-full sm:w-auto min-w-[150px] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
                           defaultCommerceSaved
                             ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/25"
                             : "bg-[#E8462F] hover:bg-[#D73E26] text-white shadow-[#E8462F]/25"
