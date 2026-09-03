@@ -448,7 +448,7 @@ export default function StatistiquesPage() {
       </PageHeader>
 
       {/* Tabs Navigation (Exact Dashboard Style) */}
-      <div className="px-6 md:px-8 mt-4">
+      <div className="px-6 md:px-8">
         <div className="flex border-b border-[#EEE5DF] gap-6 max-w-7xl mx-auto">
           <button
             onClick={() => setActiveTab("stats")}

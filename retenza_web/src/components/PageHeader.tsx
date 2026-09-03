@@ -23,7 +23,7 @@ export default function PageHeader({ title, subtitle, breadcrumb, children }: Pa
   const blackPart = words.slice(0, -2).join(" "); // rest in black
 
   return (
-    <header className="relative bg-[#F7F5F2] sticky top-0 z-30 shrink-0 border-b border-gray-200/70">
+    <header className="relative bg-[#F7F5F2] sticky top-0 z-30 shrink-0 border-b border-gray-200/70 mb-6">
       
       {/* Background container with overflow-hidden just for the decorative wave */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
