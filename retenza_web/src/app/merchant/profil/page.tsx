@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getMerchantQr } from '@/services/merchantDashboardActions';
 import QRCode from 'react-qr-code';
+import PageHeader from '@/components/PageHeader';
 import { 
   Store, Phone, Mail, MapPin, Edit2, Shield, CreditCard, 
   Camera, Settings, X, Save, Upload, Info, QrCode, Copy
@@ -133,6 +134,11 @@ export default function MerchantProfilPage() {
 
   return (
     <>
+      <PageHeader
+        title="Mon Profil & Commerce"
+        subtitle="Gérez les informations de votre établissement."
+        breadcrumb="Profil"
+      />
       {/* Full bleed white background like client profile */}
       <div className="-mt-8 -mx-6 lg:-mx-8 -mb-12 bg-white min-h-[calc(100vh-72px)] pb-16">
         

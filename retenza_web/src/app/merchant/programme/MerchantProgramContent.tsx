@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import PageHeader from '@/components/PageHeader';
 import { 
   Gift, Save, CheckCircle2, AlertCircle,
   Star, Stamp, Percent, ChevronRight, Info
@@ -89,12 +90,11 @@ export default function MerchantProgramContent({ initialProgram }: { initialProg
   return (
     <div className="h-full flex flex-col">
 
-      {/* ── Page header ── */}
-      <div className="flex items-end justify-between mb-8 pt-2">
-        <div>
-          <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C]">Programme de fidélité</h1>
-          <p className="text-[13px] text-[#5D534F] mt-0.5">Configurez les règles de récompense.</p>
-        </div>
+      <PageHeader
+        title="Programme de Fidélité"
+        subtitle="Configurez les règles de récompense."
+        breadcrumb="Programme de fidélité"
+      >
         <button
           onClick={handleSave}
           disabled={loading}
@@ -103,7 +103,7 @@ export default function MerchantProgramContent({ initialProgram }: { initialProg
           <Save className="w-3.5 h-3.5" />
           {loading ? 'Sauvegarde…' : 'Sauvegarder'}
         </button>
-      </div>
+      </PageHeader>
 
       {/* Feedback banners */}
       {successMsg && (

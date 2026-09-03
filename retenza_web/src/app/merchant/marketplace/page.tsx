@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import PageHeader from '@/components/PageHeader';
 import { 
   CheckCircle, Zap, MessageSquare, BarChart3, Sparkles, Globe,
   QrCode, CreditCard, Mail, Smartphone, ArrowUpRight, BadgeCheck
@@ -213,19 +214,18 @@ export default function MarketplacePage() {
   return (
     <div className="h-full flex flex-col">
 
-      {/* Header */}
-      <div className="flex items-end justify-between mb-8 pt-2">
-        <div>
-          <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C]">Marketplace</h1>
-          <p className="text-[13px] text-[#5D534F] mt-0.5">Modules et intégrations pour votre boutique.</p>
-        </div>
+      <PageHeader
+        title="Modules & Marketplace"
+        subtitle="Modules et intégrations pour votre boutique."
+        breadcrumb="Marketplace"
+      >
         <div className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
           <Zap className="w-3.5 h-3.5 text-[#D73E26]" />
           <span className="text-[13px] font-semibold text-[#1B100C]">
             {activeCount} module{activeCount > 1 ? 's' : ''} actif{activeCount > 1 ? 's' : ''}
           </span>
         </div>
-      </div>
+      </PageHeader>
 
       {/* Featured Banner — light, calm */}
       <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
