@@ -1266,11 +1266,11 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
                     {/* Statut */}
                     <td className="px-5 py-3.5">
-                      <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full border ${t.status === "OPEN"
-                        ? "bg-rose-50 text-rose-700 border-rose-200"
+                      <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${t.status === "OPEN"
+                        ? "bg-rose-50/80 text-rose-600"
                         : t.status === "IN_PROGRESS"
-                          ? "bg-amber-50 text-amber-700 border-amber-200"
-                          : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          ? "bg-orange-50/80 text-orange-600"
+                          : "bg-emerald-50/80 text-emerald-600"
                         }`}>
                         {t.status === "OPEN" ? <XCircle className="w-3 h-3" /> : t.status === "IN_PROGRESS" ? <RefreshCw className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
                         {t.status === "OPEN" ? "Ouvert" : t.status === "IN_PROGRESS" ? "En cours" : "Résolu"}
