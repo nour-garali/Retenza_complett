@@ -482,6 +482,12 @@ export default function StatistiquesPage() {
         ) : activeTab === "stats" ? (
           /* ── Part 1: Indicateurs & Analyses ── */
           <>
+            {/* Titre section — même style que les autres onglets du dashboard */}
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-[#E8462F]" />
+              <h3 className="font-extrabold text-sm text-[#1A1A1A]">Indicateurs &amp; Analyses</h3>
+            </div>
+
             {/* Top 4 KPI Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Card 1: CA Total */}
