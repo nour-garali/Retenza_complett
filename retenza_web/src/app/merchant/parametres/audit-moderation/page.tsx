@@ -1365,29 +1365,29 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
       {/* 💬 MODAL CONSULTATION DISCUSSION & CONTACT CLIENT */}
       {selectedTicket && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl shadow-2xl border border-[#EEE5DF] w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
             {/* Header Modal */}
-            <div className="px-6 py-4 border-b border-[#EEE5DF] flex items-center justify-between bg-[#FAF3EE]/50">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#E8462F] to-[#F06038] text-white flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 text-slate-400 flex items-center justify-center">
                   <User className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-[#1A1A1A] flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                     {selectedTicket.email}
-                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-50 text-slate-500 border border-slate-200">
                       {getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name)}
                     </span>
                   </h3>
-                  <p className="text-[11px] text-slate-400 font-semibold mt-0.5">
+                  <p className="text-[11px] text-slate-400 mt-0.5">
                     Ticket #{selectedTicket._id.substring(0, 8)} • Crée le {formatDate(selectedTicket.created_at)}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedTicket(null)}
-                className="p-1.5 rounded-xl hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 transition cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1395,9 +1395,9 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
             {/* ── BARRE FILTRES HEADER ── */}
             {!loadingConv && convMessages.length > 0 && (
-              <div className="px-6 py-2.5 bg-white border-b border-[#EEE5DF] flex items-center justify-between shrink-0">
+              <div className="px-6 py-2.5 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Filtrer :</span>
+                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mr-1">Filtrer :</span>
                   {(() => {
                     const botCount = convMessages.filter((m: any) => {
                       const ch = m.channel || (m.role === "assistant" ? "bot" : m.role === "support" ? "support" : "bot");
@@ -1411,36 +1411,36 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       <>
                         <button
                           onClick={() => setAdminSectionFilter("all")}
-                          className={`px-2.5 py-1 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 transition-all cursor-pointer border ${
+                          className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
                             adminSectionFilter === "all"
-                              ? "bg-slate-700 text-white border-slate-700"
-                              : "bg-white text-slate-500 border-slate-200 hover:border-slate-400"
+                              ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
+                              : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                           }`}
                         >
-                          <span>Tout</span>
+                          Tout
                         </button>
                         {botCount > 0 && (
                           <button
                             onClick={() => setAdminSectionFilter(adminSectionFilter === "bot" ? "all" : "bot")}
-                            className={`px-2.5 py-1 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 transition-all cursor-pointer border ${
+                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
                               adminSectionFilter === "bot"
-                                ? "bg-[#E8462F] text-white border-[#E8462F]"
-                                : "bg-white text-[#E8462F] border-[#EEE5DF] hover:border-[#E8462F] hover:shadow-2xs"
+                                ? "bg-orange-50 text-orange-600 border-orange-200 shadow-xs"
+                                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                             }`}
                           >
-                            <span>🤖 Bot ({botCount})</span>
+                            🤖 Bot ({botCount})
                           </button>
                         )}
                         {supportCount > 0 && (
                           <button
                             onClick={() => setAdminSectionFilter(adminSectionFilter === "support" ? "all" : "support")}
-                            className={`px-2.5 py-1 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 transition-all cursor-pointer border ${
+                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
                               adminSectionFilter === "support"
-                                ? "bg-amber-500 text-white border-amber-500"
-                                : "bg-amber-50 text-amber-800 border-amber-200 hover:border-amber-400 hover:shadow-2xs"
+                                ? "bg-orange-50 text-orange-600 border-orange-200 shadow-xs"
+                                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                             }`}
                           >
-                            <span>🎧 Conseiller ({supportCount})</span>
+                            🎧 Conseiller ({supportCount})
                           </button>
                         )}
                       </>
@@ -1449,25 +1449,25 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                 </div>
                 <button
                   onClick={() => adminModalTopRef.current?.scrollIntoView({ behavior: "smooth" })}
-                  className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10.5px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 text-[11px] font-medium flex items-center gap-1 transition-all cursor-pointer"
                 >
-                  <span>↑ Haut</span>
+                  ↑ Haut
                 </button>
               </div>
             )}
 
             {/* Contenu Messages structuré en 2 sections fixes */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#FAF3EE]/20">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
               <div ref={adminModalTopRef} />
               {loadingConv ? (
                 <div className="p-12 text-center">
-                  <RefreshCw className="w-6 h-6 text-[#E8462F] animate-spin mx-auto mb-3" />
+                  <RefreshCw className="w-5 h-5 text-slate-300 animate-spin mx-auto mb-3" />
                   <p className="text-slate-400 text-xs">Chargement de la discussion...</p>
                 </div>
               ) : convMessages.length === 0 ? (
-                <div className="p-8 text-center bg-white rounded-2xl border border-[#EEE5DF]">
-                  <MessageSquare className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                  <p className="text-xs text-slate-500 font-medium">Aucun historique de message sauvegardé pour cette session.</p>
+                <div className="p-8 text-center bg-slate-50 rounded-xl border border-slate-100">
+                  <MessageSquare className="w-6 h-6 text-slate-300 mx-auto mb-2" />
+                  <p className="text-xs text-slate-500">Aucun historique de message sauvegardé pour cette session.</p>
                 </div>
               ) : (
                 (() => {
@@ -1496,93 +1496,61 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     }
 
                     let senderBadgeText = "Assistant Retenza IA 🤖";
+                    let iconColorClass = "text-orange-500";
                     if (isSupport) {
                       senderBadgeText = "🎧 Conseiller Support";
+                      iconColorClass = "text-emerald-500";
                     } else if (isBotContext) {
                       senderBadgeText = "🤖 Contexte conversation bot";
+                      iconColorClass = "text-slate-400";
                     }
 
                     return (
                       <div key={idx} className={`flex items-start gap-2.5 w-full ${isUser ? "justify-end" : "justify-start"}`}>
                         {!isUser && (
-                          <div className={`w-7 h-7 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs text-xs font-bold ${
-                            isSupport ? "bg-amber-500" : isBotContext ? "bg-slate-400" : "bg-[#E8462F]"
-                          }`}>
+                          <div className={`w-6 h-6 mt-1 rounded-full flex items-center justify-center shrink-0 border border-slate-100 bg-white ${iconColorClass}`}>
                             {isSupport ? <span className="text-[10px]">🎧</span> : <Bot className="w-3.5 h-3.5" />}
                           </div>
                         )}
-                        <div className={`max-w-[80%] p-3.5 rounded-2xl text-xs font-medium space-y-1 ${
+                        <div className={`max-w-[80%] p-3.5 rounded-2xl text-[13px] leading-relaxed ${
                           isUser
-                            ? "bg-[#6B7280] text-white shadow-2xs"
-                            : isSupport
-                            ? "bg-amber-50 border border-amber-300 text-amber-900 shadow-2xs"
-                            : isBotContext
-                            ? "bg-slate-100/90 border border-slate-200 text-slate-700 shadow-2xs"
-                            : "bg-white border border-[#EEE5DF] text-[#1A1A1A] shadow-2xs"
+                            ? "bg-slate-800 text-white"
+                            : "bg-slate-50 border border-slate-100 text-slate-700"
                         }`}>
                           {!isUser && (
-                            <div className={`flex items-center gap-1.5 text-[10px] font-extrabold ${
-                              isSupport ? "text-amber-800" : isBotContext ? "text-slate-500" : "text-[#E8462F]"
-                            }`}>
+                            <div className={`flex items-center gap-1.5 text-[10px] font-semibold mb-1 ${iconColorClass}`}>
                               <span>{senderBadgeText}</span>
                             </div>
                           )}
-                          <p className="whitespace-pre-wrap leading-relaxed">{textContent}</p>
-                          {m.timestamp && <span className="text-[9px] opacity-60 block mt-1 text-right">{m.timestamp}</span>}
+                          <p className="whitespace-pre-wrap">{textContent}</p>
+                          {m.timestamp && <span className={`text-[9px] opacity-60 block mt-1.5 text-right ${!isUser && "text-slate-400"}`}>{m.timestamp}</span>}
                         </div>
-                        {isUser && (
-                          <div className="w-7 h-7 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs bg-[#6B7280]">
-                            <User className="w-3.5 h-3.5" />
-                          </div>
-                        )}
                       </div>
                     );
                   };
 
                   return (
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                       {/* Section 1 : Bot IA & Contexte */}
                       {botMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "bot") && (
-                        <div ref={adminBotSectionRef} className="space-y-3 bg-white/60 border border-[#EEE5DF] rounded-2xl p-4 shadow-xs">
-                          <div className="flex items-center gap-2 pb-2.5 border-b border-[#EEE5DF] shrink-0">
-                            <div className="w-6 h-6 rounded-lg bg-[#E8462F]/10 text-[#E8462F] flex items-center justify-center font-bold">
-                              <Bot className="w-3.5 h-3.5" />
-                            </div>
-                            <h4 className="text-xs font-extrabold text-[#1A1A1A]">Échanges & Contexte Bot IA</h4>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E8462F]/10 text-[#E8462F] ml-auto">
-                              {botMsgs.length} message{botMsgs.length > 1 ? "s" : ""}
-                            </span>
-                          </div>
-                          <div className="max-h-[280px] overflow-y-auto space-y-3 pt-1 pr-1">
-                            {botMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx))}
-                          </div>
+                        <div ref={adminBotSectionRef} className="space-y-4">
+                          {botMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx))}
                         </div>
                       )}
 
                       {/* Separateur entre Contexte Bot et Session Support */}
                       {botMsgs.length > 0 && supportMsgs.length > 0 && adminSectionFilter === "all" && (
-                        <div className="my-3 flex items-center justify-center gap-3 text-[10px] font-extrabold text-amber-700/80 uppercase tracking-widest">
-                          <span className="h-px bg-amber-200/80 flex-1" />
-                          <span>── Début de la session support ──</span>
-                          <span className="h-px bg-amber-200/80 flex-1" />
+                        <div className="py-4 flex items-center justify-center gap-3 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
+                          <span className="h-px bg-slate-200 flex-1" />
+                          <span>Session support</span>
+                          <span className="h-px bg-slate-200 flex-1" />
                         </div>
                       )}
 
                       {/* Section 2 : Conseiller Support */}
                       {supportMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "support") && (
-                        <div ref={adminSupportSectionRef} className="space-y-3 bg-amber-50/40 border border-amber-200/80 rounded-2xl p-4 shadow-xs">
-                          <div className="flex items-center gap-2 pb-2.5 border-b border-amber-200 shrink-0">
-                            <div className="w-6 h-6 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-[11px]">
-                              🎧
-                            </div>
-                            <h4 className="text-xs font-extrabold text-amber-900">Échanges avec le Conseiller Support</h4>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 ml-auto">
-                              {supportMsgs.length} message{supportMsgs.length > 1 ? "s" : ""}
-                            </span>
-                          </div>
-                          <div className="max-h-[280px] overflow-y-auto space-y-3 pt-1 pr-1">
-                            {supportMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx))}
-                          </div>
+                        <div ref={adminSupportSectionRef} className="space-y-4">
+                          {supportMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx))}
                         </div>
                       )}
                     </div>
@@ -1596,47 +1564,47 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
             {selectedTicket.status !== "CLOSED" &&
               convMessages.length > 0 &&
               (convMessages[convMessages.length - 1].role === "user" || convMessages[convMessages.length - 1].role === "client_support") && (
-                <div className="px-6 py-2.5 bg-amber-50 border-t border-amber-200 text-amber-900 text-xs font-black flex items-center justify-between shrink-0">
+                <div className="px-6 py-2 bg-orange-50/50 border-t border-orange-100 text-orange-600 text-xs font-medium flex items-center justify-between shrink-0">
                   <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                    🔴 Le client a envoyé un message en attente de votre réponse
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                    En attente de votre réponse
                   </span>
                 </div>
               )}
 
             {/* Chat Input & Direct Response Bar */}
             {selectedTicket.status === "CLOSED" ? (
-              <div className="px-6 py-3.5 border-t border-emerald-200 bg-emerald-50/80 text-emerald-800 text-xs font-bold flex items-center justify-center gap-2 shrink-0">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>🔒 Ce ticket est marqué comme résolu. L'envoi de messages est désactivé.</span>
+              <div className="px-6 py-3 border-t border-slate-100 bg-slate-50 text-slate-500 text-xs font-medium flex items-center justify-center gap-2 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 text-slate-400" />
+                <span>Ce ticket est résolu. La conversation est clôturée.</span>
               </div>
             ) : (
-              <form onSubmit={handleSendAdminReply} className="px-6 py-3 border-t border-[#EEE5DF] bg-[#FAF3EE]/40 flex items-center gap-2">
+              <form onSubmit={handleSendAdminReply} className="px-6 py-3 border-t border-slate-100 bg-slate-50/50 flex items-center gap-2">
                 <input
                   type="text"
-                  placeholder="Répondre au client directement dans la conversation (Conseiller Support)..."
+                  placeholder="Répondre au client..."
                   value={adminReplyText}
                   onChange={(e) => setAdminReplyText(e.target.value)}
-                  className="flex-1 bg-white border border-[#EEE5DF] rounded-2xl px-4 py-2.5 text-xs font-medium text-[#1A1A1A] placeholder-slate-400 outline-none focus:border-[#E8462F] transition-all"
+                  className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2 text-[13px] text-slate-800 placeholder-slate-400 outline-none focus:border-slate-300 transition-all"
                 />
                 <button
                   type="submit"
                   disabled={!adminReplyText.trim() || sendingReply}
-                  className="px-4 py-2.5 rounded-2xl bg-[#E8462F] hover:bg-[#C93A25] text-white text-xs font-bold transition flex items-center gap-1.5 disabled:opacity-40 shrink-0 cursor-pointer shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-[13px] font-medium transition flex items-center gap-1.5 disabled:opacity-50 shrink-0 cursor-pointer shadow-xs"
                 >
                   <span>Envoyer</span>
-                  {sendingReply ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  {sendingReply ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3 h-3" />}
                 </button>
               </form>
             )}
 
             {/* Actions Rapides Admin Footer */}
-            <div className="px-6 py-3 border-t border-[#EEE5DF] bg-white flex flex-wrap items-center justify-between gap-3">
+            <div className="px-6 py-3 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3">
               <a
                 href={`mailto:${selectedTicket.email}?subject=Support Retenza AI - ${encodeURIComponent(getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name))}&body=Bonjour,\n\nSuite à votre demande auprès du support virtuel de ${encodeURIComponent(getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name))}, nous prenons en charge votre dossier.\n\nCordialement,`}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer border border-slate-200"
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 text-xs font-medium transition cursor-pointer border border-slate-200 shadow-xs"
               >
-                <Mail className="w-3.5 h-3.5 text-slate-500" />
+                <Mail className="w-3.5 h-3.5 text-slate-400" />
                 <span>Envoyer e-mail</span>
               </a>
 
@@ -1647,15 +1615,15 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       updateStatus(selectedTicket._id, "CLOSED");
                       setSelectedTicket(null);
                     }}
-                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 text-xs font-bold transition cursor-pointer"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 hover:border-emerald-200 border border-slate-200 text-xs font-medium transition cursor-pointer shadow-xs"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Marquer résolu</span>
                   </button>
                 )}
                 <button
                   onClick={() => setSelectedTicket(null)}
-                  className="px-4 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold transition cursor-pointer border border-slate-200"
+                  className="px-4 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-medium transition cursor-pointer"
                 >
                   Fermer
                 </button>
