@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import PageHeader from "@/components/PageHeader";
+import StatCard from "@/components/StatCard";
 import {
   Link2,
   Target,
@@ -466,33 +467,30 @@ function StatsTab() {
   const maxTriggerCount = topTriggers.length > 0 ? Math.max(...topTriggers.map(([_, c]) => c)) : 1;
 
   const kpis = [
-    { label: "Règles actives",  value: String(data.total),                  icon: Link2,      isHighlight: false },
-    { label: "Confiance moy.",  value: `${Math.round(avgConfiance * 100)}%`, icon: Target,     isHighlight: false },
-    { label: "Lift moyen",      value: `×${avgLift.toFixed(2)}`,             icon: TrendingUp, isHighlight: false },
-    { label: "Meilleure conf.", value: `${Math.round(maxConfiance * 100)}%`, icon: Star,       isHighlight: true  },
+    { label: "RÈGLES ACTIVES",  value: String(data.total),                  sub: "Total des règles",      icon: Link2,      isHighlight: false },
+    { label: "CONFIANCE MOY.",  value: `${Math.round(avgConfiance * 100)}%`, sub: "Pertinence globale",    icon: Target,     isHighlight: false },
+    { label: "LIFT MOYEN",      value: `×${avgLift.toFixed(2)}`,             sub: "Multiplicateur moyen",  icon: TrendingUp, isHighlight: false },
+    { label: "MEILLEURE CONF.", value: `${Math.round(maxConfiance * 100)}%`, sub: "Meilleure recommandation", icon: Star,       isHighlight: true  },
   ];
 
   return (
     <div className="space-y-6">
-      {/* KPIs — style sobre avec dégradé et profondeur subtile */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {kpis.map(kpi => {
-          const Icon = kpi.icon;
-          return (
-            <div
-              key={kpi.label}
-              className="bg-gradient-to-br from-white to-[#FAF3EE]/50 rounded-2xl shadow-sm hover:shadow-md border border-[#EEE5DF] p-5 transition-all duration-200"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{kpi.label}</span>
-                <Icon className={`w-4 h-4 ${kpi.isHighlight ? "text-[#E8462F]" : "text-slate-400"}`} />
-              </div>
-              <p className={`text-2xl font-black ${kpi.isHighlight ? "text-[#E8462F]" : "text-slate-800"}`}>
-                {kpi.value}
-              </p>
-            </div>
-          );
-        })}
+      {/* 4 KPI cards */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        {kpis.map(kpi => (
+          <div key={kpi.label}>
+            <StatCard
+              title={kpi.label}
+              value={kpi.value}
+              subtitle={kpi.sub}
+              icon={kpi.icon}
+              iconBg={kpi.isHighlight ? "bg-rose-50" : undefined}
+              iconColor={kpi.isHighlight ? "text-rose-600" : undefined}
+              valueColor={kpi.isHighlight ? "text-[#E8462F]" : "text-[#1A1A1A]"}
+              compact={true}
+            />
+          </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
