@@ -1916,7 +1916,7 @@ function AuditModerationContent() {
       </PageHeader>
 
       {/* ─── ONGLETS (même style que Indicateurs & Analyses / RFM) ─── */}
-      <div className="px-6 md:px-8 mt-4">
+      <div className="px-6 md:px-8 mt-0">
         <div className="flex border-b border-[#EEE5DF] gap-6 max-w-7xl mx-auto">
           {tabs.map(({ key, label }) => (
             <button
