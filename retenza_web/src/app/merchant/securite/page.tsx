@@ -323,7 +323,7 @@ export default function SecurityAdminPage() {
       </PageHeader>
 
       {/* Main Content */}
-      <div className="flex-1 px-8 py-8 w-full max-w-7xl mx-auto flex flex-col gap-6">
+      <div className="flex-1 pt-1 pb-8 px-8 md:pt-2 w-full max-w-7xl mx-auto flex flex-col gap-6">
 
         {loading && !data ? (
           <div className="flex items-center justify-center h-40">
