@@ -149,7 +149,7 @@ export default function HeuresCreuses() {
 
       {error && <p className="mx-8 mt-4 text-sm text-rose-600">{error}</p>}
 
-      <div className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="flex-1 pt-1 pb-6 px-6 md:pt-2 md:pb-8 md:px-8 max-w-7xl mx-auto w-full grid grid-cols-1 xl:grid-cols-3 gap-6">
         <section className="xl:col-span-2 bg-white border border-[#EEE5DF] rounded-2xl p-6 shadow-sm">
           <h3 className="font-extrabold text-[#1A1A1A] text-sm">Carte de chaleur — 30 derniers jours</h3>
           {!hasData ? (
