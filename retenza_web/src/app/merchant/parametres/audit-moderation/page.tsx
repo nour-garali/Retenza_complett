@@ -1506,24 +1506,24 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     }
 
                     return (
-                      <div key={idx} className={`flex items-start gap-2.5 w-full ${isUser ? "justify-end" : "justify-start"}`}>
+                      <div key={idx} className={`flex items-end gap-2.5 w-full ${isUser ? "justify-end" : "justify-start"}`}>
                         {!isUser && (
-                          <div className={`w-6 h-6 mt-1 rounded-full flex items-center justify-center shrink-0 border border-slate-100 bg-white ${iconColorClass}`}>
-                            {isSupport ? <span className="text-[10px]">🎧</span> : <Bot className="w-3.5 h-3.5" />}
+                          <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 border border-slate-200 bg-white shadow-xs ${iconColorClass}`}>
+                            {isSupport ? <span className="text-[10px]">🎧</span> : <Bot className="w-4 h-4" />}
                           </div>
                         )}
-                        <div className={`max-w-[80%] p-3.5 rounded-2xl text-[13px] leading-relaxed ${
+                        <div className={`flex flex-col min-w-[80px] max-w-[75%] px-4 py-3 rounded-2xl text-[13px] leading-relaxed ${
                           isUser
-                            ? "bg-slate-800 text-white"
-                            : "bg-slate-50 border border-slate-100 text-slate-700"
+                            ? "bg-slate-800 text-white rounded-br-sm"
+                            : "bg-slate-50 border border-slate-200 text-slate-700 rounded-bl-sm"
                         }`}>
                           {!isUser && (
-                            <div className={`flex items-center gap-1.5 text-[10px] font-semibold mb-1 ${iconColorClass}`}>
+                            <div className={`flex items-center gap-1.5 text-[10px] font-bold mb-1 ${iconColorClass}`}>
                               <span>{senderBadgeText}</span>
                             </div>
                           )}
-                          <p className="whitespace-pre-wrap">{textContent}</p>
-                          {m.timestamp && <span className={`text-[9px] opacity-60 block mt-1.5 text-right ${!isUser && "text-slate-400"}`}>{m.timestamp}</span>}
+                          <div className="whitespace-pre-wrap break-words">{textContent}</div>
+                          {m.timestamp && <div className={`text-[9px] font-medium mt-1.5 self-end ${isUser ? "text-slate-300" : "text-slate-400"}`}>{m.timestamp}</div>}
                         </div>
                       </div>
                     );
