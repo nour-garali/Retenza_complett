@@ -442,7 +442,7 @@ function CampaignsContent() {
       <div className="flex-1 pt-1 pb-6 px-6 md:pt-2 md:pb-8 md:px-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
 
       {/* Main Grid: Form Left, SmartAutomation Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 shrink-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 shrink-0 items-start">
         {/* Left 2/3 - Group Campaign Creator */}
         <div className="lg:col-span-2 bg-white border border-[#EEE5DF] rounded-2xl p-6 shadow-sm flex flex-col gap-4">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
