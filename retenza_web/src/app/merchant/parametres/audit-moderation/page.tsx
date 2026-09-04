@@ -1456,8 +1456,9 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
               </div>
             )}
 
-            {/* Contenu Messages structuré en 2 sections fixes */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
+            {/* Zone de conversation encadrée */}
+            <div className="flex-1 overflow-hidden mx-5 my-4 rounded-xl border border-[#EEEEEE] bg-white flex flex-col">
+              <div className="flex-1 overflow-y-auto p-5 [scrollbar-width:thin] [scrollbar-color:#E5E5E5_transparent]">
               <div ref={adminModalTopRef} />
               {loadingConv ? (
                 <div className="p-12 text-center">
@@ -1564,6 +1565,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                 })()
               )}
               <div ref={adminConvEndRef} />
+              </div>
             </div>
 
             {/* Bannière "Message Client non répondu" */}
