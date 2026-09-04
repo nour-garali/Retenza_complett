@@ -1537,27 +1537,34 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                   });
 
                   return (
-                    <div className="flex flex-col">
-                      {/* Section 1 : Bot IA & Contexte */}
+                    <div className="flex flex-col gap-5">
+                      {/* Cadre 1 : Session Chatbot */}
                       {botMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "bot") && (
-                        <div ref={adminBotSectionRef} className="flex flex-col">
-                          {botMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx, botMsgs))}
+                        <div ref={adminBotSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden">
+                          {/* En-tête cadre Bot */}
+                          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
+                            <Bot className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[11px] font-medium text-slate-500 tracking-wide">Session Chatbot</span>
+                            <span className="ml-auto text-[10px] text-slate-400">{botMsgs.length} message{botMsgs.length > 1 ? "s" : ""}</span>
+                          </div>
+                          <div className="p-4 flex flex-col">
+                            {botMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx, botMsgs))}
+                          </div>
                         </div>
                       )}
 
-                      {/* Separateur entre Contexte Bot et Session Support */}
-                      {botMsgs.length > 0 && supportMsgs.length > 0 && adminSectionFilter === "all" && (
-                        <div className="py-6 flex items-center justify-center gap-3 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
-                          <span className="h-px bg-slate-200 flex-1" />
-                          <span>Session support</span>
-                          <span className="h-px bg-slate-200 flex-1" />
-                        </div>
-                      )}
-
-                      {/* Section 2 : Conseiller Support */}
+                      {/* Cadre 2 : Session Conseiller */}
                       {supportMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "support") && (
-                        <div ref={adminSupportSectionRef} className="flex flex-col">
-                          {supportMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx, supportMsgs))}
+                        <div ref={adminSupportSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden">
+                          {/* En-tête cadre Support */}
+                          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
+                            <span className="text-[13px]">🎧</span>
+                            <span className="text-[11px] font-medium text-slate-500 tracking-wide">Session Conseiller</span>
+                            <span className="ml-auto text-[10px] text-slate-400">{supportMsgs.length} message{supportMsgs.length > 1 ? "s" : ""}</span>
+                          </div>
+                          <div className="p-4 flex flex-col">
+                            {supportMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx, supportMsgs))}
+                          </div>
                         </div>
                       )}
                     </div>
