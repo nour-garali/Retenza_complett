@@ -228,7 +228,7 @@ export default function MarketplacePage() {
       </PageHeader>
 
       {/* Featured Banner — light, calm */}
-      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 -mt-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-[#D73E26]" />
@@ -252,10 +252,6 @@ export default function MarketplacePage() {
       {/* Filters */}
       <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 w-full overflow-x-auto [scrollbar-width:none]">
         {CATEGORIES.map(cat => {
-          const count = cat.id === 'all' 
-            ? PRODUCTS.length 
-            : PRODUCTS.filter(p => p.category === cat.id).length;
-
           return (
             <button
               key={cat.id}
@@ -267,15 +263,6 @@ export default function MarketplacePage() {
               }`}
             >
               {cat.label}
-              <span
-                className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded-full leading-none flex items-center justify-center ${
-                  category === cat.id
-                    ? 'bg-[#E8462F] text-white'
-                    : 'bg-slate-100 text-slate-400'
-                }`}
-              >
-                {count}
-              </span>
             </button>
           );
         })}
