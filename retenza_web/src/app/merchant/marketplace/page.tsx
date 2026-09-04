@@ -250,7 +250,7 @@ export default function MarketplacePage() {
       </div>
 
       {/* Filters */}
-      <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 w-full overflow-x-auto [scrollbar-width:none]">
+      <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 mt-3 w-full overflow-x-auto [scrollbar-width:none]">
         {CATEGORIES.map(cat => (
           <button
             key={cat.id}
