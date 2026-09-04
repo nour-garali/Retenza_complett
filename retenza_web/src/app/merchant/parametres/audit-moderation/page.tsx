@@ -246,16 +246,6 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
       valueColor: "text-[#1A1A1A]",
       border: "border-[#EEE5DF]",
     },
-    {
-      label: "ÉVÉNEMENTS AUDIT",
-      value: metrics.total_audit_logs || 0,
-      sub: "Logs de modération IA",
-      icon: ShieldCheck,
-      iconBg: "bg-[#FDECEA]",
-      iconColor: "text-[#E8462F]",
-      valueColor: "text-[#1A1A1A]",
-      border: "border-[#EEE5DF]",
-    },
   ];
 
   return (
@@ -266,8 +256,8 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
         <h3 className="font-extrabold text-sm text-[#1A1A1A]">Monitoring IA &amp; Santé du Chatbot</h3>
       </div>
 
-      {/* 6 KPI cards — grille 6 colonnes (1 ligne) sur très grand écran desktop, 3 ou 2 sur plus petit */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 lg:gap-4">
+      {/* 5 KPI cards — 1 seule ligne sur desktop (xl:grid-cols-5), repli 2-3 colonnes sur mobile/tablette */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 lg:gap-4">
         {kpiCards.map((kpi) => (
           <div key={kpi.label}>
             <StatCard
