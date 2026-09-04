@@ -228,7 +228,7 @@ export default function MarketplacePage() {
       </PageHeader>
 
       {/* Featured Banner — light, calm */}
-      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 -mt-4">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 -mt-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-[#D73E26]" />
