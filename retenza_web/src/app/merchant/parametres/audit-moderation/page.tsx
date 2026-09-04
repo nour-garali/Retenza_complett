@@ -1334,7 +1334,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                           {t.status === "OPEN" && (
                             <button
                               onClick={() => updateStatus(t._id, "IN_PROGRESS")}
-                              className="w-full justify-center text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-amber-50/50 text-amber-600 hover:bg-amber-50 transition cursor-pointer flex items-center gap-1.5"
+                              className="w-full justify-center text-xs font-bold px-2.5 py-1.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 shadow-xs transition cursor-pointer flex items-center gap-1.5"
                             >
                               <ArrowUpCircle className="w-3.5 h-3.5" /> Prendre en charge
                             </button>
@@ -1342,14 +1342,14 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                           {t.status === "IN_PROGRESS" && (
                             <button
                               onClick={() => updateStatus(t._id, "CLOSED")}
-                              className="w-full justify-center text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-emerald-50/50 text-emerald-600 hover:bg-emerald-50 transition cursor-pointer flex items-center gap-1.5"
+                              className="w-full justify-center text-xs font-bold px-2.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 shadow-xs transition cursor-pointer flex items-center gap-1.5"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" /> Marquer résolu
                             </button>
                           )}
                           {t.status === "CLOSED" && (
-                            <span className="w-full justify-center text-xs text-emerald-600/80 font-semibold flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50/40 rounded-xl">
-                              <CheckCircle2 className="w-3.5 h-3.5" /> Résolu
+                            <span className="w-full justify-center text-xs text-slate-400 font-medium flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl">
+                              <CheckCircle2 className="w-3.5 h-3.5 opacity-70" /> Résolu
                             </span>
                           )}
                         </div>
