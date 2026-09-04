@@ -583,63 +583,44 @@ function SatisfactionTab({
         <h3 className="font-extrabold text-sm text-[#1A1A1A]">Satisfaction &amp; Retours Clients</h3>
       </div>
 
-      {/* 4 KPI Cards — Harmonisées avec la plateforme + barre de progression */}
+      {/* 4 KPI Cards — même composant StatCard que Vue d'ensemble pour cohérence visuelle */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-
-        {/* Total Feedbacks */}
-        <div className="bg-white rounded-2xl p-5 border border-[#EEE5DF] shadow-xs flex flex-col justify-between min-h-[110px]">
-          <div className="flex items-start justify-between mb-3">
-            <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Total Avis Reçus</p>
-            <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-              <MessageSquare className="w-4 h-4 text-[#2563EB]" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-[#1A1A1A]">{metrics.total}</p>
-            <p className="text-[11px] text-slate-400 mt-1">Évaluations enregistrées</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-5 border border-[#EEE5DF] shadow-xs flex flex-col justify-between min-h-[110px]">
-          <div className="flex items-start justify-between mb-3">
-            <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Avis Utiles</p>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-[#1A1A1A]">{metrics.likes}</p>
-            <p className="text-[11px] text-slate-400 mt-1">Réponses satisfaisantes</p>
-          </div>
-        </div>
-
-        {/* Avis Insatisfaisants */}
-        <div className="bg-white rounded-2xl p-5 border border-[#EEE5DF] shadow-xs flex flex-col justify-between min-h-[110px]">
-          <div className="flex items-start justify-between mb-3">
-            <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Avis Insatisfaisants</p>
-            <div className="w-8 h-8 rounded-xl bg-rose-50 flex items-center justify-center shrink-0">
-              <XCircle className="w-4 h-4 text-rose-600" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-[#1A1A1A]">{metrics.dislikes}</p>
-            <p className="text-[11px] text-slate-400 mt-1">Réponses insatisfaisantes</p>
-          </div>
-        </div>
-
-        {/* Satisfaction Globale */}
-        <div className="bg-white rounded-2xl p-5 border border-[#EEE5DF] shadow-xs flex flex-col justify-between min-h-[110px]">
-          <div className="flex items-start justify-between mb-3">
-            <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Satisfaction Globale</p>
-            <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-              <Smile className="w-4 h-4 text-[#2563EB]" />
-            </div>
-          </div>
-          <div>
-            <p className="text-2xl font-black text-[#1A1A1A]">{metrics.satisfaction_rate}%</p>
-            <p className="text-[11px] text-slate-400 mt-1">Score moyen de satisfaction</p>
-          </div>
-        </div>
+        <StatCard
+          title="Total Avis Reçus"
+          value={metrics.total}
+          subtitle="Évaluations enregistrées"
+          icon={MessageSquare}
+          iconBg="bg-blue-50"
+          iconColor="text-[#2563EB]"
+          compact={true}
+        />
+        <StatCard
+          title="Avis Utiles"
+          value={metrics.likes}
+          subtitle="Réponses satisfaisantes"
+          icon={CheckCircle2}
+          iconBg="bg-emerald-50"
+          iconColor="text-emerald-600"
+          compact={true}
+        />
+        <StatCard
+          title="Avis Insatisfaisants"
+          value={metrics.dislikes}
+          subtitle="Réponses insatisfaisantes"
+          icon={XCircle}
+          iconBg="bg-rose-50"
+          iconColor="text-rose-600"
+          compact={true}
+        />
+        <StatCard
+          title="Satisfaction Globale"
+          value={`${metrics.satisfaction_rate}%`}
+          subtitle="Score moyen de satisfaction"
+          icon={Smile}
+          iconBg="bg-blue-50"
+          iconColor="text-[#2563EB]"
+          compact={true}
+        />
       </div>
 
 
