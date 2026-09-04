@@ -362,8 +362,6 @@ export default function SecurityAdminPage() {
                     </div>
                   }
                   icon={UserX}
-                  iconBg="bg-rose-50"
-                  iconColor="text-rose-500"
                   valueColor="text-rose-600"
                 />
               </Link>
@@ -383,8 +381,6 @@ export default function SecurityAdminPage() {
                 value={data?.summary.total_suspicious_frequency || 0}
                 subtitle={`Achats > ${maxDaily}/jour`}
                 icon={ShoppingBag}
-                iconBg="bg-orange-50"
-                iconColor="text-orange-500"
               />
 
               <StatCard
@@ -392,8 +388,6 @@ export default function SecurityAdminPage() {
                 value={data?.summary.total_suspicious_baskets || 0}
                 subtitle={`Achats > ${basketMultiplier}x Panier Moyen`}
                 icon={Sparkles}
-                iconBg="bg-purple-50"
-                iconColor="text-purple-500"
               />
             </div>
 

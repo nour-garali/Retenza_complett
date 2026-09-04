@@ -482,20 +482,12 @@ export default function StatistiquesPage() {
         ) : activeTab === "stats" ? (
           /* ── Part 1: Indicateurs & Analyses ── */
           <>
-            {/* Titre section — même style que les autres onglets du dashboard */}
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-[#E8462F]" />
-              <h3 className="font-extrabold text-sm text-[#1A1A1A]">Indicateurs &amp; Analyses</h3>
-            </div>
-
             {/* Top 4 KPI Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Card 1: CA Total */}
               <StatCard
                 title="CA Total Généré"
                 icon={DollarSign}
-                iconBg="bg-emerald-50"
-                iconColor="text-emerald-600"
                 compact={true}
                 value={
                   <>
@@ -509,8 +501,6 @@ export default function StatistiquesPage() {
               <StatCard
                 title="Taux d'Ouverture"
                 icon={Eye}
-                iconBg="bg-[#FDECEA]"
-                iconColor="text-[#E8462F]"
                 compact={true}
                 value={
                   (globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
@@ -535,8 +525,6 @@ export default function StatistiquesPage() {
               <StatCard
                 title="Taux de Conversion"
                 icon={ShoppingCart}
-                iconBg="bg-[#FDECEA]"
-                iconColor="text-[#E8462F]"
                 compact={true}
                 value={
                   (globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0

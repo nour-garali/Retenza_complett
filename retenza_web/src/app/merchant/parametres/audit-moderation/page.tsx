@@ -201,8 +201,6 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
       value: metrics.total_conversations || 0,
       sub: "Sessions chatbot",
       icon: MessageSquare,
-      iconBg: "bg-blue-50",
-      iconColor: "text-[#2563EB]",
       valueColor: "text-[#1A1A1A]",
       border: "border-[#EEE5DF]",
     },
@@ -231,8 +229,6 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
       value: metrics.total_tickets || 0,
       sub: "Transferts vers support",
       icon: ArrowUpCircle,
-      iconBg: "bg-purple-50",
-      iconColor: "text-purple-600",
       valueColor: "text-[#1A1A1A]",
       border: "border-[#EEE5DF]",
     },
@@ -590,8 +586,6 @@ function SatisfactionTab({
           value={metrics.total}
           subtitle="Évaluations enregistrées"
           icon={MessageSquare}
-          iconBg="bg-blue-50"
-          iconColor="text-[#2563EB]"
           compact={true}
         />
         <StatCard
@@ -599,8 +593,6 @@ function SatisfactionTab({
           value={metrics.likes}
           subtitle="Réponses satisfaisantes"
           icon={CheckCircle2}
-          iconBg="bg-emerald-50"
-          iconColor="text-emerald-600"
           compact={true}
         />
         <StatCard
@@ -617,8 +609,6 @@ function SatisfactionTab({
           value={`${metrics.satisfaction_rate}%`}
           subtitle="Score moyen de satisfaction"
           icon={Smile}
-          iconBg="bg-blue-50"
-          iconColor="text-[#2563EB]"
           compact={true}
         />
       </div>
