@@ -1266,11 +1266,11 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
                     {/* Statut */}
                     <td className="px-5 py-3.5">
-                      <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${t.status === "OPEN"
-                        ? "bg-rose-50/80 text-rose-600"
+                      <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold whitespace-nowrap ${t.status === "OPEN"
+                        ? "text-rose-500"
                         : t.status === "IN_PROGRESS"
-                          ? "bg-orange-50/80 text-orange-600"
-                          : "bg-emerald-50/80 text-emerald-600"
+                          ? "text-[#7A6E68]"
+                          : "text-slate-400"
                         }`}>
                         {t.status === "OPEN" ? <XCircle className="w-3 h-3" /> : t.status === "IN_PROGRESS" ? <RefreshCw className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
                         {t.status === "OPEN" ? "Ouvert" : t.status === "IN_PROGRESS" ? "En cours" : "Résolu"}
@@ -1334,7 +1334,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                           {t.status === "OPEN" && (
                             <button
                               onClick={() => updateStatus(t._id, "IN_PROGRESS")}
-                              className="w-full justify-center text-xs font-bold px-2.5 py-1.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition cursor-pointer flex items-center gap-1.5"
+                              className="w-full justify-center text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-amber-50/50 text-amber-600 hover:bg-amber-50 transition cursor-pointer flex items-center gap-1.5"
                             >
                               <ArrowUpCircle className="w-3.5 h-3.5" /> Prendre en charge
                             </button>
@@ -1342,13 +1342,13 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                           {t.status === "IN_PROGRESS" && (
                             <button
                               onClick={() => updateStatus(t._id, "CLOSED")}
-                              className="w-full justify-center text-xs font-bold px-2.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition cursor-pointer flex items-center gap-1.5"
+                              className="w-full justify-center text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-emerald-50/50 text-emerald-600 hover:bg-emerald-50 transition cursor-pointer flex items-center gap-1.5"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" /> Marquer résolu
                             </button>
                           )}
                           {t.status === "CLOSED" && (
-                            <span className="w-full justify-center text-xs text-emerald-600 font-bold flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <span className="w-full justify-center text-xs text-emerald-600/80 font-semibold flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50/40 rounded-xl">
                               <CheckCircle2 className="w-3.5 h-3.5" /> Résolu
                             </span>
                           )}
