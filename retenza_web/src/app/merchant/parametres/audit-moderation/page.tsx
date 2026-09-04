@@ -1821,7 +1821,7 @@ function AuditModerationContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
   const [selectedCommerce, setSelectedCommerce] = useState<string>("__all__");
-  const [period, setPeriod] = useState<string>("all");
+  const [period, setPeriod] = useState<string>("30d");
   const [commercesList, setCommercesList] = useState<{ id: string; name: string }[]>([]);
 
   // Lire les query params pour auto-navigation + auto-ouverture modal
@@ -1886,19 +1886,24 @@ function AuditModerationContent() {
           </select>
         </div>
 
-        {/* Filtre Période */}
-        <div className="flex items-center gap-1.5">
-          <Calendar className="w-4 h-4 text-[#7A6E68]" />
-          <select
-            value={period}
-            onChange={(e) => setPeriod(e.target.value)}
-            className="bg-white border border-[#EEE5DF] px-3.5 py-2 rounded-xl text-xs font-bold text-[#1A1A1A] outline-none hover:border-[#E8462F] focus:border-[#E8462F] transition-all cursor-pointer shadow-sm shrink-0"
-          >
-            <option value="7d">7 derniers jours</option>
-            <option value="30d">30 derniers jours</option>
-            <option value="90d">90 derniers jours</option>
-            <option value="all">Toutes les périodes</option>
-          </select>
+        {/* Filtre Période (Pills) */}
+        <div className="bg-[#FAF3EE] p-1 rounded-xl flex items-center shadow-inner border border-[#EEE5DF]">
+          {[
+            { value: "7d", label: "7 Jours" },
+            { value: "14d", label: "14 Jours" },
+            { value: "30d", label: "30 Jours" }
+          ].map((option) => (
+            <button
+              key={option.value}
+              onClick={() => setPeriod(option.value)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${period === option.value
+                ? "bg-white text-[#E8462F] shadow-sm"
+                : "text-[#7A6E68] hover:text-[#1A1A1A]"
+                }`}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
 
         {/* Indicateur Live */}
