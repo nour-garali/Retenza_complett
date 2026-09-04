@@ -483,13 +483,14 @@ export default function StatistiquesPage() {
           /* ── Part 1: Indicateurs & Analyses ── */
           <>
             {/* Top 4 KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Card 1: CA Total */}
               <StatCard
                 title="CA Total Généré"
                 icon={DollarSign}
                 iconBg="bg-emerald-50"
                 iconColor="text-emerald-600"
+                compact={true}
                 value={
                   <>
                     {(globalKPIs?.total_revenue || 0).toLocaleString("fr-FR", { minimumFractionDigits: 2 })} <span className="text-sm font-bold text-[#7A6E68]">DT</span>
@@ -504,13 +505,14 @@ export default function StatistiquesPage() {
                 icon={Eye}
                 iconBg="bg-[#FDECEA]"
                 iconColor="text-[#E8462F]"
+                compact={true}
                 value={
                   (globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
                     ? `${(globalKPIs?.open_rate || 0).toFixed(1)}%`
                     : <span className="text-xl font-bold text-[#B0A49C]">N/A</span>
                 }
                 subtitle={
-                  <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex items-center gap-1.5">
                     <span className="truncate">
                       {(globalKPIs?.total_sent_tracked || globalKPIs?.total_sent || 0) > 0
                         ? `${globalKPIs!.total_opened} / ${globalKPIs!.total_sent_tracked || globalKPIs!.total_sent} envois`
@@ -529,6 +531,7 @@ export default function StatistiquesPage() {
                 icon={ShoppingCart}
                 iconBg="bg-[#FDECEA]"
                 iconColor="text-[#E8462F]"
+                compact={true}
                 value={
                   (globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
                     ? `${(globalKPIs?.conversion_rate || 0).toFixed(1)}%`
@@ -547,8 +550,9 @@ export default function StatistiquesPage() {
                 icon={Award}
                 iconBg="bg-amber-50"
                 iconColor="text-amber-600"
+                compact={true}
                 value={
-                  <div className="mt-2">
+                  <div className="mt-1">
                     <p className="text-[10px] font-extrabold text-slate-400 uppercase leading-none">Top CA Total</p>
                     <p className="text-sm font-black text-[#1A1A1A] truncate mt-1">
                       {getCategoryBadge(globalKPIs?.top_category || "N/A").label}
