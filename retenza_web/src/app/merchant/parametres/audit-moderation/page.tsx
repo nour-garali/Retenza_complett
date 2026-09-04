@@ -1540,7 +1540,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     <div className="flex flex-col gap-5">
                       {/* Cadre 1 : Session Chatbot */}
                       {botMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "bot") && (
-                        <div ref={adminBotSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden">
+                        <div ref={adminBotSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden bg-[#F8F9FB]">
                           {/* En-tête cadre Bot */}
                           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
                             <Bot className="w-3.5 h-3.5 text-slate-400" />
@@ -1555,7 +1555,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
                       {/* Cadre 2 : Session Conseiller */}
                       {supportMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "support") && (
-                        <div ref={adminSupportSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden">
+                        <div ref={adminSupportSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden bg-[#FEFAF7]">
                           {/* En-tête cadre Support */}
                           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
                             <span className="text-[13px]">🎧</span>
