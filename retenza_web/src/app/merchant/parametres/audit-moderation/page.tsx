@@ -577,6 +577,12 @@ function SatisfactionTab({
 
   return (
     <div className="space-y-6">
+      {/* Titre section — même style que "Monitoring IA & Santé du Chatbot" */}
+      <div className="flex items-center gap-2">
+        <Smile className="w-4 h-4 text-emerald-600" />
+        <h3 className="font-extrabold text-sm text-[#1A1A1A]">Satisfaction &amp; Retours Clients</h3>
+      </div>
+
       {/* 4 KPI Cards — Harmonisées avec la plateforme + barre de progression */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
