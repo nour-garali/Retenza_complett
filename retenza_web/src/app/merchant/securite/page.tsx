@@ -1,6 +1,7 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
+import StatCard from "@/components/StatCard";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -340,75 +341,60 @@ export default function SecurityAdminPage() {
             )}
 
             {/* KPI Summary Cards (5 Cards Grid) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              <div className="bg-white border border-[#EEE5DF] rounded-2xl p-5 shadow-sm">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Total Alertes
-                  </span>
-                  <AlertTriangle className="w-4 h-4 text-amber-500" />
-                </div>
-                <p className="text-2xl font-black text-[#1A1A1A]">{data?.summary.total_alerts || 0}</p>
-                <p className="text-xs text-slate-400 mt-1">Comportements signalés</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+              <StatCard
+                title="Total Alertes"
+                value={data?.summary.total_alerts || 0}
+                subtitle="Comportements signalés"
+                icon={AlertTriangle}
+                iconBg="bg-amber-50"
+                iconColor="text-amber-500"
+              />
 
-              <Link
-                href="/parametres/audit-moderation?tab=blocked"
-                className="bg-white border border-[#EEE5DF] hover:border-[#D5C8C0] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group cursor-pointer block"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider group-hover:text-[#E8462F] transition-colors">
-                    Chatbot Bloqués
-                  </span>
-                  <UserX className="w-4 h-4 text-rose-500" />
-                </div>
-                <p className="text-2xl font-black text-rose-600">
-                  {data?.summary.total_blocked_chatbot || 0}
-                </p>
-                <div className="flex items-center justify-between mt-1">
-                  <p className="text-xs text-slate-400">Insultes / Spam répétitif</p>
-                  <ArrowRight className="w-3 h-3 text-[#E8462F] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
-                </div>
+              <Link href="/merchant/parametres/audit-moderation?tab=blocked" className="block">
+                <StatCard
+                  title="Chatbot Bloqués"
+                  value={data?.summary.total_blocked_chatbot || 0}
+                  subtitle={
+                    <div className="flex items-center justify-between">
+                      <span>Insultes / Spam répétitif</span>
+                      <ArrowRight className="w-3 h-3 text-[#E8462F] shrink-0" />
+                    </div>
+                  }
+                  icon={UserX}
+                  iconBg="bg-rose-50"
+                  iconColor="text-rose-500"
+                  valueColor="text-rose-600"
+                />
               </Link>
 
-              <div className="bg-white border border-[#EEE5DF] rounded-2xl p-5 shadow-sm">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Bloqués Anti-Fraude
-                  </span>
-                  <ShieldAlert className="w-4 h-4 text-rose-600" />
-                </div>
-                <p className="text-2xl font-black text-rose-600">
-                  {blockedFraudClients.length}
-                </p>
-                <p className="text-xs text-slate-400 mt-1">Score de confiance &lt; 0.3</p>
-              </div>
+              <StatCard
+                title="Bloqués Anti-Fraude"
+                value={blockedFraudClients.length}
+                subtitle="Score de confiance < 0.3"
+                icon={ShieldAlert}
+                iconBg="bg-rose-50"
+                iconColor="text-rose-600"
+                valueColor="text-rose-600"
+              />
 
-              <div className="bg-white border border-[#EEE5DF] rounded-2xl p-5 shadow-sm">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Volume Suspect
-                  </span>
-                  <ShoppingBag className="w-4 h-4 text-[#FDECEA]0" />
-                </div>
-                <p className="text-2xl font-black text-[#1A1A1A]">
-                  {data?.summary.total_suspicious_frequency || 0}
-                </p>
-                <p className="text-xs text-slate-400 mt-1">Achats &gt; {maxDaily}/jour</p>
-              </div>
+              <StatCard
+                title="Volume Suspect"
+                value={data?.summary.total_suspicious_frequency || 0}
+                subtitle={`Achats > ${maxDaily}/jour`}
+                icon={ShoppingBag}
+                iconBg="bg-orange-50"
+                iconColor="text-orange-500"
+              />
 
-              <div className="bg-white border border-[#EEE5DF] rounded-2xl p-5 shadow-sm">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Paniers Hors-Normes
-                  </span>
-                  <Sparkles className="w-4 h-4 text-purple-500" />
-                </div>
-                <p className="text-2xl font-black text-[#1A1A1A]">
-                  {data?.summary.total_suspicious_baskets || 0}
-                </p>
-                <p className="text-xs text-slate-400 mt-1">Achats &gt; {basketMultiplier}x Panier Moyen</p>
-              </div>
+              <StatCard
+                title="Paniers Hors-Normes"
+                value={data?.summary.total_suspicious_baskets || 0}
+                subtitle={`Achats > ${basketMultiplier}x Panier Moyen`}
+                icon={Sparkles}
+                iconBg="bg-purple-50"
+                iconColor="text-purple-500"
+              />
             </div>
 
 
@@ -749,3 +735,4 @@ export default function SecurityAdminPage() {
     </div>
   );
 }
+

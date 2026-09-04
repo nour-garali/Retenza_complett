@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
+import StatCard from "@/components/StatCard";
 import {
   Banknote,
   Users,
@@ -734,129 +735,65 @@ function DashboardContent() {
             <>
               {/* KPI Cards Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Clients Totaux
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                      <Users className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#1B100C] leading-none mt-1">{totalClients}</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Clients modélisés en base
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Panier Moyen
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                      <Banknote className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#1B100C] leading-none mt-1">
-                    {avgMonetary.toFixed(2)} DT
-                  </h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Valeur monétaire moyenne
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Taux de Retour (Tr)
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                      <Undo2 className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#1B100C] leading-none mt-1">{returnRate.toFixed(1)}%</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Clients actifs revenus sous 30j
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Taux de Churn (IA)
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-[#FCE7E7] text-[#dc2626] flex items-center justify-center">
-                      <Flame className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#1B100C] leading-none mt-1">{avgChurn.toFixed(1)}%</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Probabilité moyenne de départ
-                  </p>
-                </div>
+                <StatCard
+                  title="Clients Totaux"
+                  value={totalClients}
+                  subtitle="Clients modélisés en base"
+                  icon={Users}
+                />
+                <StatCard
+                  title="Panier Moyen"
+                  value={`${avgMonetary.toFixed(2)} DT`}
+                  subtitle="Valeur monétaire moyenne"
+                  icon={Banknote}
+                />
+                <StatCard
+                  title="Taux de Retour (Tr)"
+                  value={`${returnRate.toFixed(1)}%`}
+                  subtitle="Clients actifs revenus sous 30j"
+                  icon={Undo2}
+                />
+                <StatCard
+                  title="Taux de Churn (IA)"
+                  value={`${avgChurn.toFixed(1)}%`}
+                  subtitle="Probabilité moyenne de départ"
+                  icon={Flame}
+                  iconBg="bg-[#FCE7E7]"
+                  iconColor="text-[#dc2626]"
+                />
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Récence Moyenne
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                      <ShoppingBag className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#1B100C] leading-none mt-1">{avgRecency.toFixed(1)} j</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Depuis le dernier achat
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Fréquence Moyenne
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                      <TrendingDown className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#1B100C] leading-none mt-1">{avgFrequency.toFixed(1)} achats</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Transactions cumulées par client
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Alerte Churn (≥ 55%)
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-[#FCE7E7] text-[#dc2626] flex items-center justify-center">
-                      <AlertTriangle className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#dc2626] leading-none mt-1">{alertClientsCount}</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Clients en risque modéré/élevé
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide">
-                      Ambassadeurs 👑
-                    </span>
-                    <div className="w-9 h-9 rounded-full bg-amber-50 text-[#F59E0B] flex items-center justify-center">
-                      <Crown className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <h3 className="text-[32px] font-medium text-[#F59E0B] leading-none mt-1">{ambassadorsCount}</h3>
-                  <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-                    Clients avec influence {`>=`} 80%
-                  </p>
-                </div>
+                <StatCard
+                  title="Récence Moyenne"
+                  value={`${avgRecency.toFixed(1)} j`}
+                  subtitle="Depuis le dernier achat"
+                  icon={ShoppingBag}
+                />
+                <StatCard
+                  title="Fréquence Moyenne"
+                  value={`${avgFrequency.toFixed(1)} achats`}
+                  subtitle="Transactions cumulées par client"
+                  icon={TrendingDown}
+                />
+                <StatCard
+                  title="Alerte Churn (≥ 55%)"
+                  value={alertClientsCount}
+                  subtitle="Clients en risque modéré/élevé"
+                  icon={AlertTriangle}
+                  iconBg="bg-[#FCE7E7]"
+                  iconColor="text-[#dc2626]"
+                  valueColor="text-[#dc2626]"
+                />
+                <StatCard
+                  title="Ambassadeurs 👑"
+                  value={ambassadorsCount}
+                  subtitle="Clients avec influence >= 80%"
+                  icon={Crown}
+                  iconBg="bg-amber-50"
+                  iconColor="text-[#F59E0B]"
+                  valueColor="text-[#F59E0B]"
+                />
               </div>
 
 

@@ -1,6 +1,7 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
+import StatCard from "@/components/StatCard";
 import { useEffect, useState, useMemo } from "react";
 import {
   BarChart3,
@@ -483,102 +484,90 @@ export default function StatistiquesPage() {
           <>
             {/* Top 4 KPI Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-
               {/* Card 1: CA Total */}
-              <div className="bg-white border border-[#EEE5DF] hover:border-[#D5C8C0] rounded-2xl p-5 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between min-h-[110px]">
-                <div className="flex items-start justify-between mb-3">
-                  <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider leading-tight">CA Total Généré</p>
-                  <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-                    <DollarSign className="w-4 h-4 text-emerald-600" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-2xl font-black text-[#1A1A1A]">
+              <StatCard
+                title="CA Total Généré"
+                icon={DollarSign}
+                iconBg="bg-emerald-50"
+                iconColor="text-emerald-600"
+                value={
+                  <>
                     {(globalKPIs?.total_revenue || 0).toLocaleString("fr-FR", { minimumFractionDigits: 2 })} <span className="text-sm font-bold text-[#7A6E68]">DT</span>
-                  </p>
-                  <p className="text-[11px] text-slate-400 mt-1 leading-tight">Attribution Last-Touch · {windowDays}j</p>
-                </div>
-              </div>
+                  </>
+                }
+                subtitle={`Attribution Last-Touch · ${windowDays}j`}
+              />
 
               {/* Card 2: Taux d'Ouverture */}
-              <div className="bg-white border border-[#EEE5DF] hover:border-[#D5C8C0] rounded-2xl p-5 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between min-h-[110px]">
-                <div className="flex items-start justify-between mb-3">
-                  <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider leading-tight">Taux d'Ouverture</p>
-                  <div className="w-9 h-9 rounded-xl bg-[#FDECEA] flex items-center justify-center shrink-0">
-                    <Eye className="w-4 h-4 text-[#E8462F]" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-2xl font-black text-[#1A1A1A]">
-                    {(globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
-                      ? `${(globalKPIs?.open_rate || 0).toFixed(1)}%`
-                      : <span className="text-xl font-bold text-[#B0A49C]">N/A</span>
-                    }
-                  </p>
+              <StatCard
+                title="Taux d'Ouverture"
+                icon={Eye}
+                iconBg="bg-[#FDECEA]"
+                iconColor="text-[#E8462F]"
+                value={
+                  (globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
+                    ? `${(globalKPIs?.open_rate || 0).toFixed(1)}%`
+                    : <span className="text-xl font-bold text-[#B0A49C]">N/A</span>
+                }
+                subtitle={
                   <div className="flex items-center gap-1.5 mt-1">
-                    <p className="text-[11px] text-slate-400 leading-tight truncate">
+                    <span className="truncate">
                       {(globalKPIs?.total_sent_tracked || globalKPIs?.total_sent || 0) > 0
                         ? `${globalKPIs!.total_opened} / ${globalKPIs!.total_sent_tracked || globalKPIs!.total_sent} envois`
                         : "Historique non disponible"}
-                    </p>
+                    </span>
                     {globalKPIs && globalKPIs.total_sent_tracked > 0 && globalKPIs.total_sent_tracked < 30 && (
                       <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-full shrink-0">Test</span>
                     )}
                   </div>
-                </div>
-              </div>
+                }
+              />
 
               {/* Card 3: Taux de Conversion */}
-              <div className="bg-white border border-[#EEE5DF] hover:border-[#D5C8C0] rounded-2xl p-5 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between min-h-[110px]">
-                <div className="flex items-start justify-between mb-3">
-                  <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider leading-tight">Taux de Conversion</p>
-                  <div className="w-9 h-9 rounded-xl bg-[#FDECEA] flex items-center justify-center shrink-0">
-                    <ShoppingCart className="w-4 h-4 text-[#E8462F]" />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-2xl font-black text-[#1A1A1A]">
-                    {(globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
-                      ? `${(globalKPIs?.conversion_rate || 0).toFixed(1)}%`
-                      : <span className="text-xl font-bold text-[#B0A49C]">N/A</span>
-                    }
-                  </p>
-                  <p className="text-[11px] text-slate-400 mt-1 leading-tight">
-                    {(globalKPIs?.total_sent_tracked || globalKPIs?.total_sent || 0) > 0
-                      ? `${globalKPIs?.total_converted || 0} / ${globalKPIs?.total_sent_tracked || globalKPIs?.total_sent || 0} clients`
-                      : `${globalKPIs?.total_converted_all || 0} acheteurs`
-                    }
-                  </p>
-                </div>
-              </div>
+              <StatCard
+                title="Taux de Conversion"
+                icon={ShoppingCart}
+                iconBg="bg-[#FDECEA]"
+                iconColor="text-[#E8462F]"
+                value={
+                  (globalKPIs?.tracked_batches_count ?? 0) > 0 || (globalKPIs?.total_sent ?? 0) > 0
+                    ? `${(globalKPIs?.conversion_rate || 0).toFixed(1)}%`
+                    : <span className="text-xl font-bold text-[#B0A49C]">N/A</span>
+                }
+                subtitle={
+                  (globalKPIs?.total_sent_tracked || globalKPIs?.total_sent || 0) > 0
+                    ? `${globalKPIs?.total_converted || 0} / ${globalKPIs?.total_sent_tracked || globalKPIs?.total_sent || 0} clients`
+                    : `${globalKPIs?.total_converted_all || 0} acheteurs`
+                }
+              />
 
               {/* Card 4: Top Campagnes */}
-              <div className="bg-white border border-[#EEE5DF] hover:border-[#D5C8C0] rounded-2xl p-5 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between min-h-[110px]">
-                <div className="flex items-start justify-between mb-3">
-                  <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider leading-tight">Top Campagnes</p>
-                  <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
-                    <Award className="w-4 h-4 text-amber-600" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div>
-                    <p className="text-[10px] font-extrabold text-slate-400 uppercase">Top CA Total</p>
-                    <p className="text-sm font-black text-[#1A1A1A] truncate">
+              <StatCard
+                title="Top Campagnes"
+                icon={Award}
+                iconBg="bg-amber-50"
+                iconColor="text-amber-600"
+                value={
+                  <div className="mt-2">
+                    <p className="text-[10px] font-extrabold text-slate-400 uppercase leading-none">Top CA Total</p>
+                    <p className="text-sm font-black text-[#1A1A1A] truncate mt-1">
                       {getCategoryBadge(globalKPIs?.top_category || "N/A").label}
                       {globalKPIs?.top_category_revenue_val ? <span className="font-bold text-[#7A6E68] ml-1 text-xs">· {globalKPIs.top_category_revenue_val.toFixed(2)} DT</span> : ""}
                     </p>
                   </div>
-                  {globalKPIs?.top_category_efficiency && (
-                    <div className="pt-1.5 border-t border-[#EEE5DF]">
+                }
+                subtitle={
+                  globalKPIs?.top_category_efficiency ? (
+                    <div className="pt-1.5 border-t border-[#EEE5DF] mt-1.5">
                       <p className="text-[10px] font-extrabold text-slate-400 uppercase">Top Rendement/Client</p>
                       <p className="text-xs font-extrabold text-[#1A1A1A] truncate">
                         {getCategoryBadge(globalKPIs.top_category_efficiency).label}
                         {globalKPIs?.top_category_efficiency_val ? <span className="font-bold text-[#7A6E68] ml-1">· {globalKPIs.top_category_efficiency_val.toFixed(2)} DT/cli</span> : ""}
                       </p>
                     </div>
-                  )}
-                </div>
-              </div>
+                  ) : null
+                }
+              />
             </div>
 
             {/* Section 2: Performance par Type de Campagne */}

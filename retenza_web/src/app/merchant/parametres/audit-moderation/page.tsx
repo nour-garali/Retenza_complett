@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
+import StatCard from "@/components/StatCard";
 import {
   ShieldAlert,
   ShieldCheck,
@@ -266,19 +267,18 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
       </div>
 
       {/* 6 KPI cards — grille 4 colonnes max (4+2) comme la page RFM */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {kpiCards.map(({ label, value, sub, icon: Icon, iconBg, iconColor, valueColor, border }) => (
-          <div key={label} className={`bg-white rounded-2xl p-5 border ${border} shadow-xs flex flex-col justify-between min-h-[110px]`}>
-            <div className="flex items-start justify-between mb-3">
-              <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider leading-tight">{label}</p>
-              <div className={`w-9 h-9 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}>
-                <Icon className={`w-4 h-4 ${iconColor}`} />
-              </div>
-            </div>
-            <div>
-              <p className={`text-2xl font-black ${valueColor}`}>{value}</p>
-              <p className="text-[11px] text-slate-400 mt-1 leading-tight">{sub}</p>
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {kpiCards.map((kpi, idx) => (
+          <div key={kpi.label} className={idx >= 4 ? "lg:col-span-2" : ""}>
+            <StatCard
+              title={kpi.label}
+              value={kpi.value}
+              subtitle={kpi.sub}
+              icon={kpi.icon}
+              iconBg={kpi.iconBg}
+              iconColor={kpi.iconColor}
+              valueColor={kpi.valueColor}
+            />
           </div>
         ))}
       </div>
