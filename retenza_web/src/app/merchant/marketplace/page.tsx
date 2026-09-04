@@ -250,20 +250,35 @@ export default function MarketplacePage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-xl p-1 shadow-sm mb-6 w-fit">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setCategory(cat.id)}
-            className={`px-3.5 py-1.5 rounded-lg text-[13px] font-semibold transition-all ${
-              category === cat.id
-                ? 'bg-[#1A0F0A] text-white shadow-sm'
-                : 'text-[#5D534F] hover:text-[#1B100C] hover:bg-gray-50'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
+      <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 w-full overflow-x-auto [scrollbar-width:none]">
+        {CATEGORIES.map(cat => {
+          const count = cat.id === 'all' 
+            ? PRODUCTS.length 
+            : PRODUCTS.filter(p => p.category === cat.id).length;
+
+          return (
+            <button
+              key={cat.id}
+              onClick={() => setCategory(cat.id)}
+              className={`pb-3 text-[13px] font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                category === cat.id
+                  ? 'border-[#E8462F] text-[#E8462F]'
+                  : 'border-transparent text-[#B0A49C] hover:text-[#7A6E68]'
+              }`}
+            >
+              {cat.label}
+              <span
+                className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded-full leading-none flex items-center justify-center ${
+                  category === cat.id
+                    ? 'bg-[#E8462F] text-white'
+                    : 'bg-slate-100 text-slate-400'
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Grid */}
