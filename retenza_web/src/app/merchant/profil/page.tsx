@@ -139,8 +139,8 @@ export default function MerchantProfilPage() {
         subtitle="Gérez les informations de votre établissement."
         breadcrumb="Profil"
       />
-      {/* Full bleed white background like client profile */}
-      <div className="-mt-8 -mx-6 lg:-mx-8 -mb-12 bg-white min-h-[calc(100vh-72px)] pb-16">
+      {/* Full bleed background matching header color */}
+      <div className="-mt-8 -mx-6 lg:-mx-8 -mb-12 bg-[#F7F5F2] min-h-[calc(100vh-72px)] pb-16">
         
         {/* 1. Cover Banner */}
         <div className="max-w-[1040px] mx-auto px-6 lg:px-8 pt-6 lg:pt-8">

@@ -1869,7 +1869,7 @@ function AuditModerationContent() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FAF3EE]">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F7F5F2]">
       {/* ─── HEADER + FILTRES INTÉGRÉS (comme les autres pages) ─── */}
       <PageHeader
         title="Modération & Audit Chatbot"
@@ -1958,7 +1958,7 @@ function AuditModerationContent() {
 // ─── EXPORT avec Suspense (requis pour useSearchParams dans Next.js App Router) ──
 export default function AuditModerationPage() {
   return (
-    <Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-screen bg-[#FAF3EE]"><div className="w-8 h-8 border-4 border-[#E8462F] border-t-transparent rounded-full animate-spin" /></div>}>
+    <Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-screen bg-[#F7F5F2]"><div className="w-8 h-8 border-4 border-[#E8462F] border-t-transparent rounded-full animate-spin" /></div>}>
       <AuditModerationContent />
     </Suspense>
   );

@@ -593,7 +593,7 @@ export default function ParametresAvancesPage() {
 
   // ─────────────────────────────────────────────────────────────────────────────
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FAF3EE]">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F7F5F2]">
       {/* ─── HEADER + FILTRE BOUTIQUE INTÉGRÉ ─── */}
       <PageHeader
         title="Paramètres de l'Application"
