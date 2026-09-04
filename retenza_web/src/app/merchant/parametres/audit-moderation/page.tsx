@@ -1488,23 +1488,34 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       icon = <Headset className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />;
                     }
 
-                    const marginTop = isFirstInGroup && idx !== 0 ? "mt-5" : "mt-2";
+                    const marginTop = isFirstInGroup && idx !== 0 ? "mt-4" : "mt-1.5";
 
                     return (
                       <div key={idx} className={`w-full flex flex-col ${isUser ? "items-end" : "items-start"} ${marginTop}`}>
                         {isFirstInGroup && !isUser && (
-                          <div className="flex items-center gap-1.5 mb-1.5 ml-1 text-slate-500">
+                          <div className="flex items-center gap-1.5 mb-1.5 ml-1 text-slate-400">
                             {icon}
-                            <span className="text-[11px] font-medium">{senderBadgeText}</span>
+                            <span className="text-[10.5px] font-medium">{senderBadgeText}</span>
                           </div>
                         )}
-                        <div className={`max-w-[75%] px-[14px] py-[10px] rounded-[18px] text-[13px] leading-relaxed flex flex-col ${
-                          isUser
-                            ? "bg-slate-800 text-white"
-                            : "bg-[#F5F5F5] text-slate-800"
-                        }`}>
+                        <div
+                          className={`min-w-[64px] max-w-[75%] text-[13px] leading-relaxed flex flex-col ${
+                            isUser
+                              ? "bg-slate-800 text-white"
+                              : "bg-[#F1F2F4] text-slate-800"
+                          }`}
+                          style={{
+                            borderRadius: "14px",
+                            padding: "10px 16px",
+                            boxShadow: isUser ? "0 1px 2px rgba(0,0,0,0.08)" : "none",
+                          }}
+                        >
                           <div className="whitespace-pre-wrap break-words">{textContent}</div>
-                          {m.timestamp && <div className={`text-[9.5px] mt-1 self-end opacity-70 ${isUser ? "text-slate-300" : "text-slate-400"}`}>{m.timestamp}</div>}
+                          {m.timestamp && (
+                            <div className={`text-[10px] mt-1 self-end ${isUser ? "text-slate-300/70" : "text-slate-400/60"}`}>
+                              {m.timestamp}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
