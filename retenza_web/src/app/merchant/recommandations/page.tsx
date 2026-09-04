@@ -685,28 +685,31 @@ function RecalcTab() {
 
         {result && (
           <div className={`bg-white rounded-2xl shadow-sm border overflow-hidden animate-fadeIn ${
-            result.status === "success" ? "border-emerald-200" :
-            result.status === "skip"    ? "border-amber-200"   : "border-rose-200"
+            result.status === "success" ? "border-[#F5C5BB]" :
+            result.status === "skip"    ? "border-amber-200"  : "border-rose-200"
           }`}>
             <div className={`px-5 py-4 border-b flex items-center gap-3 ${
-              result.status === "success" ? "bg-emerald-50 border-emerald-200" :
-              result.status === "skip"    ? "bg-amber-50   border-amber-200"   :
-                                           "bg-rose-50     border-rose-200"
+              result.status === "success" ? "bg-[#FDF0EC] border-[#F5C5BB]" :
+              result.status === "skip"    ? "bg-amber-50  border-amber-200"  :
+                                           "bg-rose-50   border-rose-200"
             }`}>
-              {result.status === "success" ? <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" /> :
-               result.status === "skip"    ? <SkipForward  className="w-5 h-5 text-amber-600  shrink-0" /> :
-                                            <XCircle      className="w-5 h-5 text-rose-600   shrink-0" />}
+              {result.status === "success"
+                ? <div className="w-5 h-5 rounded-full bg-[#E8462F] flex items-center justify-center shrink-0"><CheckCircle className="w-3.5 h-3.5 text-white" /></div>
+                : result.status === "skip"
+                ? <SkipForward className="w-5 h-5 text-amber-600 shrink-0" />
+                : <XCircle className="w-5 h-5 text-rose-600 shrink-0" />}
               <div>
                 <p className={`font-bold text-sm ${
-                  result.status === "success" ? "text-emerald-700" :
-                  result.status === "skip"    ? "text-amber-700"   : "text-rose-700"
+                  result.status === "success" ? "text-[#1A1A1A]" :
+                  result.status === "skip"    ? "text-amber-700" : "text-rose-700"
                 }`}>
-                  {result.status === "success" ? "Recalcul terminé avec succès" :
-                   result.status === "skip"    ? "Analyse ignorée" : "Erreur"}
+                  {result.status === "success"
+                    ? <><span className="text-[#E8462F]">Recalcul</span> terminé avec succès</>
+                    : result.status === "skip" ? "Analyse ignorée" : "Erreur"}
                 </p>
                 <p className={`text-xs mt-0.5 ${
-                  result.status === "success" ? "text-emerald-600" :
-                  result.status === "skip"    ? "text-amber-600"   : "text-rose-600"
+                  result.status === "success" ? "text-[#5D534F]" :
+                  result.status === "skip"    ? "text-amber-600" : "text-rose-600"
                 }`}>{result.message}</p>
               </div>
             </div>
