@@ -1500,7 +1500,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                         )}
                         <div
                           className={`max-w-[75%] text-[13px] leading-relaxed flex flex-col ${
-                            isUser ? "bg-[#52525B] text-white" : "bg-white text-slate-800 border border-[#ECECEC]"
+                            isUser ? "bg-[#6B7280] text-white" : "bg-white text-slate-800 border border-[#ECECEC]"
                           }`}
                           style={{ borderRadius: "8px", padding: "4px 8px" }}
                         >
