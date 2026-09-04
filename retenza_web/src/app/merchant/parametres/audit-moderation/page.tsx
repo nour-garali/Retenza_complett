@@ -1488,25 +1488,25 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       icon = <Headset className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />;
                     }
 
-                    const marginTop = isFirstInGroup && idx !== 0 ? "mt-4" : "mt-1.5";
+                    const marginTop = isFirstInGroup && idx !== 0 ? "mt-3" : "mt-1";
 
                     return (
                       <div key={idx} className={`w-full flex flex-col ${isUser ? "items-end" : "items-start"} ${marginTop}`}>
                         {isFirstInGroup && !isUser && (
-                          <div className="flex items-center gap-1.5 mb-1.5 ml-1 text-slate-400">
+                          <div className="flex items-center gap-1.5 mb-1 ml-1 text-slate-400">
                             {icon}
-                            <span className="text-[10.5px] font-medium">{senderBadgeText}</span>
+                            <span className="text-[10px] font-medium">{senderBadgeText}</span>
                           </div>
                         )}
                         <div
                           className={`max-w-[75%] text-[13px] leading-relaxed flex flex-col ${
                             isUser ? "bg-[#52525B] text-white" : "bg-white text-slate-800 border border-[#ECECEC]"
                           }`}
-                          style={{ borderRadius: "10px", padding: "6px 12px" }}
+                          style={{ borderRadius: "8px", padding: "4px 8px" }}
                         >
                           <div className="whitespace-pre-wrap break-words">{textContent}</div>
                           {m.timestamp && (
-                            <div className={`text-[10px] mt-1 self-end ${isUser ? "text-slate-300/80" : "text-slate-400/80"}`}>
+                            <div className={`text-[9.5px] mt-0.5 self-end ${isUser ? "text-slate-300/80" : "text-slate-400/80"}`}>
                               {m.timestamp}
                             </div>
                           )}
