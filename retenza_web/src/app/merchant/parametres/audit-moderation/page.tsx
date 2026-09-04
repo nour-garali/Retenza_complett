@@ -1499,20 +1499,14 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                           </div>
                         )}
                         <div
-                          className={`min-w-[64px] max-w-[75%] text-[13px] leading-relaxed flex flex-col ${
-                            isUser
-                              ? "bg-slate-800 text-white"
-                              : "bg-[#F1F2F4] text-slate-800"
+                          className={`min-w-[48px] max-w-[75%] text-[13px] leading-relaxed flex flex-col ${
+                            isUser ? "bg-slate-800 text-white" : "bg-[#F7F7F8] text-slate-800"
                           }`}
-                          style={{
-                            borderRadius: "14px",
-                            padding: "10px 16px",
-                            boxShadow: isUser ? "0 1px 2px rgba(0,0,0,0.08)" : "none",
-                          }}
+                          style={{ borderRadius: "10px", padding: "8px 12px" }}
                         >
                           <div className="whitespace-pre-wrap break-words">{textContent}</div>
                           {m.timestamp && (
-                            <div className={`text-[10px] mt-1 self-end ${isUser ? "text-slate-300/70" : "text-slate-400/60"}`}>
+                            <div className={`text-[10px] mt-1 self-end ${isUser ? "text-slate-400/70" : "text-slate-400/60"}`}>
                               {m.timestamp}
                             </div>
                           )}
