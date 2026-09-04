@@ -26,12 +26,12 @@ export default function StatCard({
         <span className="text-[12px] font-semibold text-[#9C8B82] uppercase tracking-wide leading-tight">
           {title}
         </span>
-        <div className={w-9 h-9 rounded-full flex items-center justify-center shrink-0  }>
+        <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${iconBg} ${iconColor}`}>
           <Icon className="w-4 h-4" />
         </div>
       </div>
       <div>
-        <h3 className={	ext-[32px] font-medium leading-none mt-1 }>
+        <h3 className={`text-[32px] font-medium leading-none mt-1 ${valueColor}`}>
           {value}
         </h3>
         <div className="text-[10px] text-slate-400 mt-1 font-semibold leading-tight">
