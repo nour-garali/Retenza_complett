@@ -1471,20 +1471,21 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                 </div>
               ) : (
                 (() => {
-                  const botMsgs = convMessages.filter((m: any) => {
-                    const ch = m.channel || (m.role === "assistant" ? "bot" : m.role === "support" ? "support" : "bot");
-                    return ch === "bot" || ch === "bot_context";
-                  });
+                  const getSenderType = (msg: any) => {
+                    const isU = msg.role === "user" || msg.role === "client_support";
+                    if (isU) return "user";
+                    const ch = msg.channel || (msg.role === "assistant" ? "bot" : msg.role === "support" ? "support" : "bot");
+                    if (ch === "bot" || ch === "bot_context") return "bot";
+                    return "support";
+                  };
 
-                  const supportMsgs = convMessages.filter((m: any) => {
-                    const ch = m.channel || (m.role === "assistant" ? "bot" : m.role === "support" ? "support" : "bot");
-                    return ch === "support";
-                  });
-
-                  const renderMsgBubble = (m: any, idx: number) => {
-                    const isUser = m.role === "user" || m.role === "client_support";
-                    const isSupport = m.role === "support";
-                    const isBotContext = m.channel === "bot_context";
+                  const renderMsgBubble = (m: any, idx: number, arr: any[]) => {
+                    const sender = getSenderType(m);
+                    const prevSender = idx > 0 ? getSenderType(arr[idx - 1]) : null;
+                    const isFirstInGroup = sender !== prevSender;
+                    
+                    const isUser = sender === "user";
+                    const isSupport = sender === "support";
 
                     let textContent = m.text || m.content || m.message || "";
                     if (typeof textContent === "string") {
@@ -1495,52 +1496,57 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       textContent = stripMarkdown(textContent);
                     }
 
-                    let senderBadgeText = "Assistant Retenza IA 🤖";
-                    let iconColorClass = "text-orange-500";
+                    let senderBadgeText = "Assistant IA";
+                    let icon = <Bot className="w-3.5 h-3.5" />;
                     if (isSupport) {
-                      senderBadgeText = "🎧 Conseiller Support";
-                      iconColorClass = "text-emerald-500";
-                    } else if (isBotContext) {
-                      senderBadgeText = "🤖 Contexte conversation bot";
-                      iconColorClass = "text-slate-400";
+                      senderBadgeText = "Conseiller Support";
+                      icon = <span className="text-[12px]">🎧</span>;
                     }
 
+                    const marginTop = isFirstInGroup && idx !== 0 ? "mt-5" : "mt-2";
+
                     return (
-                      <div key={idx} className={`flex items-end gap-2.5 w-full ${isUser ? "justify-end" : "justify-start"}`}>
-                        {!isUser && (
-                          <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 border border-slate-200 bg-white shadow-xs ${iconColorClass}`}>
-                            {isSupport ? <span className="text-[10px]">🎧</span> : <Bot className="w-4 h-4" />}
+                      <div key={idx} className={`w-full flex flex-col ${isUser ? "items-end" : "items-start"} ${marginTop}`}>
+                        {isFirstInGroup && !isUser && (
+                          <div className="flex items-center gap-1.5 mb-1.5 ml-1 text-slate-500">
+                            {icon}
+                            <span className="text-[11px] font-medium">{senderBadgeText}</span>
                           </div>
                         )}
-                        <div className={`flex flex-col min-w-[80px] max-w-[75%] px-4 py-3 rounded-2xl text-[13px] leading-relaxed ${
+                        <div className={`max-w-[75%] px-[14px] py-[10px] rounded-[18px] text-[13px] leading-relaxed flex flex-col ${
                           isUser
-                            ? "bg-slate-800 text-white rounded-br-sm"
-                            : "bg-slate-50 border border-slate-200 text-slate-700 rounded-bl-sm"
+                            ? "bg-slate-800 text-white"
+                            : "bg-[#F5F5F5] text-slate-800"
                         }`}>
-                          {!isUser && (
-                            <div className={`flex items-center gap-1.5 text-[10px] font-bold mb-1 ${iconColorClass}`}>
-                              <span>{senderBadgeText}</span>
-                            </div>
-                          )}
                           <div className="whitespace-pre-wrap break-words">{textContent}</div>
-                          {m.timestamp && <div className={`text-[9px] font-medium mt-1.5 self-end ${isUser ? "text-slate-300" : "text-slate-400"}`}>{m.timestamp}</div>}
+                          {m.timestamp && <div className={`text-[9.5px] mt-1 self-end opacity-70 ${isUser ? "text-slate-300" : "text-slate-400"}`}>{m.timestamp}</div>}
                         </div>
                       </div>
                     );
                   };
 
+                  const botMsgs = convMessages.filter((m: any) => {
+                    const ch = m.channel || (m.role === "assistant" ? "bot" : m.role === "support" ? "support" : "bot");
+                    return ch === "bot" || ch === "bot_context";
+                  });
+
+                  const supportMsgs = convMessages.filter((m: any) => {
+                    const ch = m.channel || (m.role === "assistant" ? "bot" : m.role === "support" ? "support" : "bot");
+                    return ch === "support";
+                  });
+
                   return (
-                    <div className="space-y-4">
+                    <div className="flex flex-col">
                       {/* Section 1 : Bot IA & Contexte */}
                       {botMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "bot") && (
-                        <div ref={adminBotSectionRef} className="space-y-4">
-                          {botMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx))}
+                        <div ref={adminBotSectionRef} className="flex flex-col">
+                          {botMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx, botMsgs))}
                         </div>
                       )}
 
                       {/* Separateur entre Contexte Bot et Session Support */}
                       {botMsgs.length > 0 && supportMsgs.length > 0 && adminSectionFilter === "all" && (
-                        <div className="py-4 flex items-center justify-center gap-3 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
+                        <div className="py-6 flex items-center justify-center gap-3 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
                           <span className="h-px bg-slate-200 flex-1" />
                           <span>Session support</span>
                           <span className="h-px bg-slate-200 flex-1" />
@@ -1549,8 +1555,8 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
                       {/* Section 2 : Conseiller Support */}
                       {supportMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "support") && (
-                        <div ref={adminSupportSectionRef} className="space-y-4">
-                          {supportMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx))}
+                        <div ref={adminSupportSectionRef} className="flex flex-col">
+                          {supportMsgs.map((m: any, idx: number) => renderMsgBubble(m, idx, supportMsgs))}
                         </div>
                       )}
                     </div>
