@@ -266,10 +266,10 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
         <h3 className="font-extrabold text-sm text-[#1A1A1A]">Monitoring IA &amp; Santé du Chatbot</h3>
       </div>
 
-      {/* 6 KPI cards — grille 4 colonnes max (4+2) comme la page RFM */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {kpiCards.map((kpi, idx) => (
-          <div key={kpi.label} className={idx >= 4 ? "lg:col-span-2" : ""}>
+      {/* 6 KPI cards — grille 6 colonnes (1 ligne) sur très grand écran desktop, 3 ou 2 sur plus petit */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 lg:gap-4">
+        {kpiCards.map((kpi) => (
+          <div key={kpi.label}>
             <StatCard
               title={kpi.label}
               value={kpi.value}
@@ -278,6 +278,7 @@ function ChatbotHealthMetricsHeader({ selectedCommerce, period }: { selectedComm
               iconBg={kpi.iconBg}
               iconColor={kpi.iconColor}
               valueColor={kpi.valueColor}
+              compact={true}
             />
           </div>
         ))}
