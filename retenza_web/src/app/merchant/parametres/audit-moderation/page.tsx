@@ -1793,7 +1793,7 @@ function AuditModerationContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
   const [selectedCommerce, setSelectedCommerce] = useState<string>("__all__");
-  const [period, setPeriod] = useState<string>("30d");
+  const [period, setPeriod] = useState<string>("all");
   const [commercesList, setCommercesList] = useState<{ id: string; name: string }[]>([]);
 
   // Lire les query params pour auto-navigation + auto-ouverture modal

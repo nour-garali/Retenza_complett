@@ -436,7 +436,7 @@ const getChatbotMetrics = async (req, res) => {
         // ─── Filtre période ────────────────────────────────────────────────────────
         let dateFilter = null;
         if (period && period !== 'all') {
-            const daysMap = { '7d': 7, '30d': 30, '90d': 90 };
+            const daysMap = { '7d': 7, '14d': 14, '30d': 30, '90d': 90 };
             const days = daysMap[period];
             if (days) {
                 const since = new Date();
