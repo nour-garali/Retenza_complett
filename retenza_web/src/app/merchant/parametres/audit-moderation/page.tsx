@@ -1267,10 +1267,10 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     {/* Statut */}
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold whitespace-nowrap ${t.status === "OPEN"
-                        ? "text-rose-500/90"
+                        ? "text-[#C27A7E]"
                         : t.status === "IN_PROGRESS"
-                          ? "text-amber-500/90"
-                          : "text-emerald-500/80"
+                          ? "text-[#B8926A]"
+                          : "text-[#7A9884]"
                         }`}>
                         {t.status === "OPEN" ? <XCircle className="w-3 h-3" /> : t.status === "IN_PROGRESS" ? <RefreshCw className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
                         {t.status === "OPEN" ? "Ouvert" : t.status === "IN_PROGRESS" ? "En cours" : "Résolu"}
