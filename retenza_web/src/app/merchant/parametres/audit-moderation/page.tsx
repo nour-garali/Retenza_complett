@@ -993,21 +993,13 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
   const adminModalTopRef = useRef<HTMLDivElement>(null);
   const [adminSectionFilter, setAdminSectionFilter] = useState<"bot" | "support">("support");
 
-  // Auto-scroll vers le bas (section Support) quand les messages sont chargés
+  // Auto-scroll vers le bas à chaque chargement de messages ou changement de filtre
   useEffect(() => {
     if (convMessages.length === 0) return;
-    // Priorité 1 : si la section support existe, scroll jusqu'à son bas
-    const supportSection = adminSupportSectionRef.current;
-    if (supportSection) {
-      const scrollableArea = supportSection.querySelector<HTMLDivElement>('.overflow-y-auto');
-      if (scrollableArea) {
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-        return;
-      }
-    }
-    // Priorité 2 : scroll jusqu'à la fin globale de la conv
-    adminConvEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [convMessages, selectedTicket]);
+    setTimeout(() => {
+      adminConvEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  }, [convMessages, selectedTicket, adminSectionFilter]);
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -1579,8 +1571,8 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
             {/* Chat Input & Direct Response Bar */}
             {selectedTicket.status === "CLOSED" ? (
-              <div className="px-6 py-3 border-t border-slate-100 bg-slate-50 text-slate-500 text-xs font-medium flex items-center justify-center gap-2 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5 text-slate-400" />
+              <div className="px-6 py-3 border-t border-emerald-100 bg-[#EAF7EE] text-emerald-700 text-xs font-medium flex items-center justify-center gap-2 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Ce ticket est résolu. La conversation est clôturée.</span>
               </div>
             ) : (
