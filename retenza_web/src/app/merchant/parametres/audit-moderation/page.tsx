@@ -1502,7 +1502,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                           className={`max-w-[75%] text-[13px] leading-relaxed flex flex-col ${
                             isUser ? "bg-[#52525B] text-white" : "bg-white text-slate-800 border border-[#ECECEC]"
                           }`}
-                          style={{ borderRadius: "10px", padding: "8px 12px" }}
+                          style={{ borderRadius: "10px", padding: "6px 12px" }}
                         >
                           <div className="whitespace-pre-wrap break-words">{textContent}</div>
                           {m.timestamp && (
