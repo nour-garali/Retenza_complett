@@ -451,8 +451,8 @@ function CampaignsContent() {
           </div>
 
           {formSuccess && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
+            <div className="p-3 bg-[#F2F7F4] border border-[#DCE8E0] rounded-xl text-xs font-bold text-[#4C8C6B] flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-[#4C8C6B]" />
               <span>{formSuccess}</span>
             </div>
           )}
@@ -518,8 +518,8 @@ function CampaignsContent() {
                 onClick={() => setOnlyAmbassadors(!onlyAmbassadors)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                   onlyAmbassadors
-                    ? "bg-amber-500 border-amber-500 text-white shadow-2xs"
-                    : "bg-transparent border-amber-500/40 text-amber-700 hover:bg-amber-50 hover:border-amber-500"
+                    ? "bg-[#1A1A1A] border-[#1A1A1A] text-white shadow-2xs"
+                    : "bg-transparent border-[#EEE5DF] text-[#7A6E68] hover:bg-gray-50 hover:border-[#D5C8C0]"
                 }`}
               >
                 <Crown className="w-3.5 h-3.5" />
@@ -610,7 +610,7 @@ function CampaignsContent() {
               return (
                 <div className="space-y-2">
                   <div className="flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#E8462F]" />
                     <span className="text-[10px] font-bold text-[#E8462F] uppercase tracking-wider">Modèles suggérés par l'IA</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -622,7 +622,7 @@ function CampaignsContent() {
                           setSubject(tpl.subject);
                           setBody(tpl.body);
                         }}
-                        className="text-[10px] font-bold px-2.5 py-1.5 bg-[#FDECEA] border border-indigo-100 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-all cursor-pointer"
+                        className="text-[10px] font-bold px-2.5 py-1.5 bg-white border border-[#EEE5DF] hover:border-[#D5C8C0] hover:bg-gray-50 text-[#5D534F] rounded-lg transition-all cursor-pointer"
                       >
                         {tpl.label}
                       </button>
@@ -687,8 +687,8 @@ function CampaignsContent() {
               <h3 className="font-extrabold text-slate-800 text-sm">IA SmartAutomation</h3>
             </div>
             {/* Auto-scheduled badge */}
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-black">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F2F7F4] border border-[#DCE8E0] text-[#4C8C6B] text-[10px] font-black">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4C8C6B] animate-pulse inline-block"></span>
               Auto-planifié ✅
             </span>
           </div>
@@ -724,18 +724,18 @@ function CampaignsContent() {
           {/* Status Box */}
           <div className={`p-4 rounded-xl border flex items-center justify-between shadow-sm transition-colors ${
             autoRunning
-              ? "bg-amber-50/50 border-amber-200"
+              ? "bg-[#FDF0EC] border-[#F5C5BB]"
               : "bg-[#FAF3EE] border-[#EEE5DF]"
           }`}>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400 block">Statut Moteur</span>
-              <strong className={`text-xs font-black block mt-0.5 ${autoRunning ? "text-amber-600 animate-pulse" : "text-[#7A6E68]"}`}>
+              <strong className={`text-xs font-black block mt-0.5 ${autoRunning ? "text-[#E8462F] animate-pulse" : "text-[#7A6E68]"}`}>
                 {autoRunning ? "⚙️ Traitement IA en cours..." : `💤 En veille — prochain run à ${String(dailyRunHour).padStart(2,'0')}h00`}
               </strong>
             </div>
 
             {autoRunning ? (
-              <Loader2 className="w-5 h-5 text-amber-500 animate-spin" />
+              <Loader2 className="w-5 h-5 text-[#E8462F] animate-spin" />
             ) : (
               <button
                 onClick={handleTriggerAutomation}
@@ -794,7 +794,7 @@ function CampaignsContent() {
                       <CheckCircle className="w-3 h-3 text-[#E8462F] shrink-0" />
                       <span className="text-[11px] font-semibold text-[#5E524B]">{fmtDate(date)} — {String(dailyRunHour).padStart(2,'0')}h00</span>
                     </div>
-                    <span className="text-[11px] font-black text-[#E8462F] bg-[#FDECEA] border border-[#F9D5CE] px-2 py-0.5 rounded-full">
+                    <span className="text-[11px] font-black text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
                       {count} mail{count > 1 ? "s" : ""}
                     </span>
                   </div>
