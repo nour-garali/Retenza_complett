@@ -1111,7 +1111,7 @@ function ClientsContent() {
         </div>
       </PageHeader>
 
-      <div className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full flex flex-col">
+      <div className="flex-1 pt-3 pb-6 px-6 md:pt-4 md:pb-8 md:px-8 max-w-7xl mx-auto w-full flex flex-col">
 
         {/* ── FILTER PANEL ── */}
         <div className="bg-white border border-[#E9E4DD] rounded-lg p-5 mb-6 shrink-0">
