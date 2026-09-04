@@ -1401,18 +1401,6 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     }).length;
                     return (
                       <>
-                        {botCount > 0 && (
-                          <button
-                            onClick={() => setAdminSectionFilter("bot")}
-                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
-                              adminSectionFilter === "bot"
-                                ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
-                                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
-                            }`}
-                          >
-                            🤖 Bot ({botCount})
-                          </button>
-                        )}
                         {supportCount > 0 && (
                           <button
                             onClick={() => setAdminSectionFilter("support")}
@@ -1423,6 +1411,18 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                             }`}
                           >
                             🎧 Conseiller ({supportCount})
+                          </button>
+                        )}
+                        {botCount > 0 && (
+                          <button
+                            onClick={() => setAdminSectionFilter("bot")}
+                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
+                              adminSectionFilter === "bot"
+                                ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
+                                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+                            }`}
+                          >
+                            🤖 Bot ({botCount})
                           </button>
                         )}
                       </>
@@ -1571,8 +1571,8 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
 
             {/* Chat Input & Direct Response Bar */}
             {selectedTicket.status === "CLOSED" ? (
-              <div className="px-6 py-3 border-t border-emerald-100 bg-[#EAF7EE] text-emerald-700 text-xs font-medium flex items-center justify-center gap-2 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <div className="px-6 py-3 border-t border-emerald-200 bg-[#DCF3E3] text-[#1E7B3E] text-xs font-semibold flex items-center justify-center gap-2 shrink-0">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22A05E]" />
                 <span>Ce ticket est résolu. La conversation est clôturée.</span>
               </div>
             ) : (
