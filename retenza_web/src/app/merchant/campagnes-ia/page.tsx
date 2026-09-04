@@ -815,121 +815,61 @@ function CampaignsContent() {
 
 
 
-          {/* Last Run Stats summary */}
           {autoLastResult && (
-            <div className="bg-[#FAF3EE] border border-slate-100 rounded-xl p-4 space-y-3">
-              <div className="flex items-center gap-1.5 border-b border-slate-100 pb-2">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="text-xs font-bold text-[#7A6E68]">Dernier rapport IA</span>
+            <div className="bg-white border border-[#EEE5DF] rounded-xl shadow-sm overflow-hidden">
+              {/* Header */}
+              <div className="px-4 py-3 border-b border-[#EEE5DF] bg-[#FAF3EE] flex items-center gap-2">
+                <CheckCircle className="w-3.5 h-3.5 text-[#E8462F]" />
+                <span className="text-[11px] font-extrabold text-[#1A1A1A] uppercase tracking-wider">Dernier rapport IA</span>
               </div>
-              <p className="text-[11px] text-slate-500 leading-snug">{autoLastResult.message}</p>
+              <div className="p-4 space-y-3">
+                <p className="text-[11px] text-slate-500 leading-snug">{autoLastResult.message}</p>
 
-              {/* Full category grid */}
-              {autoLastResult.stats && (
-                <div className="space-y-2">
-                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">E-mails envoyés par catégorie</span>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {/* Ambassadeurs */}
-                    <div className="bg-white p-2 rounded-lg border border-yellow-105 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">Invitation Ambassadeur</span>
-                        <span className="text-[9px] text-slate-400 truncate">Score influence ≥ 80</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.ambassador_invite || 0) > 0 ? 'bg-yellow-100 text-yellow-700' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.ambassador_invite || 0}
-                      </span>
-                    </div>
+                {/* Segments grid */}
+                {autoLastResult.stats && (
+                  <div className="space-y-2">
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">E-mails envoyés par catégorie</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {[
+                        { key: 'ambassador_invite',  label: 'Invitation Ambassadeur',  sub: 'Score influence ≥ 80' },
+                        { key: 'birthday_gift',      label: 'Cadeau Anniversaire',     sub: 'Anniversaire demain' },
+                        { key: 'vip_danger',         label: 'VIP en Danger',           sub: 'VIP avec Churn élevé' },
+                        { key: 'vip',                label: 'VIP Fidèles',             sub: 'Remerciements VIP' },
+                        { key: 'regular',            label: 'Clients Réguliers',       sub: 'Offres & nouveautés' },
+                        { key: 'baisse_frequence',   label: 'Baisse de Fréquence',     sub: 'Relance -15%' },
+                        { key: 'at_risk',            label: 'À Risque',                sub: 'Churn élevé (-20%)' },
+                        { key: 'lost',               label: 'Clients Perdus',          sub: 'Reconquête -30%' },
+                      ].map(({ key, label, sub }) => {
+                        const count = (autoLastResult.stats as Record<string, number>)[key] || 0;
+                        return (
+                          <div key={key} className="bg-[#FAFAFA] rounded-lg border border-[#EEE5DF] px-3 py-2.5 flex items-center justify-between gap-3">
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-[11px] font-bold text-[#1A1A1A] truncate">{label}</span>
+                              <span className="text-[10px] text-slate-400 truncate">{sub}</span>
+                            </div>
+                            <span className={`text-sm font-black shrink-0 min-w-[28px] text-center px-2 py-0.5 rounded-md ${
+                              count > 0 ? 'bg-[#FDF0EC] text-[#E8462F]' : 'bg-slate-100 text-slate-400'
+                            }`}>
+                              {count}
+                            </span>
+                          </div>
+                        );
+                      })}
 
-                    {/* Anniversaires */}
-                    <div className="bg-white p-2 rounded-lg border border-pink-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">Cadeau Anniversaire</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Anniversaire demain</span>
+                      {/* Ignorés — full width */}
+                      <div className="sm:col-span-2 bg-slate-50 rounded-lg border border-slate-200 px-3 py-2.5 flex items-center justify-between gap-3">
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-[11px] font-bold text-slate-500 truncate">Ignorés (Cooldown actif)</span>
+                          <span className="text-[10px] text-slate-400 truncate">Déjà contactés récemment</span>
+                        </div>
+                        <span className="text-sm font-black shrink-0 min-w-[28px] text-center px-2 py-0.5 rounded-md bg-slate-100 text-slate-500">
+                          {autoLastResult.stats.skipped_cooldown || 0}
+                        </span>
                       </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.birthday_gift || 0) > 0 ? 'bg-pink-100 text-pink-700' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.birthday_gift || 0}
-                      </span>
-                    </div>
-
-                    {/* VIP en danger */}
-                    <div className="bg-white p-2 rounded-lg border border-orange-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">VIP en Danger</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">VIP avec Churn élevé</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.vip_danger || 0) > 0 ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.vip_danger || 0}
-                      </span>
-                    </div>
-
-                    {/* VIP fidèles */}
-                    <div className="bg-white p-2 rounded-lg border border-blue-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">VIP Fidèles</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Remerciements VIP</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.vip || 0) > 0 ? 'bg-blue-100 text-[#E8462F]' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.vip || 0}
-                      </span>
-                    </div>
-
-                    {/* Réguliers */}
-                    <div className="bg-white p-2 rounded-lg border border-indigo-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">Clients Réguliers</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Offres & nouveautés</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.regular || 0) > 0 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.regular || 0}
-                      </span>
-                    </div>
-
-                    {/* Baisse fréquence */}
-                    <div className="bg-white p-2 rounded-lg border border-red-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">Baisse de Fréquence</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Relance -15%</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.baisse_frequence || 0) > 0 ? 'bg-red-100 text-red-650' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.baisse_frequence || 0}
-                      </span>
-                    </div>
-
-                    {/* À risque */}
-                    <div className="bg-white p-2 rounded-lg border border-amber-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">À Risque</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Churn élevé (-20%)</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.at_risk || 0) > 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.at_risk || 0}
-                      </span>
-                    </div>
-
-                    {/* Perdus */}
-                    <div className="bg-white p-2 rounded-lg border border-rose-100 flex items-center justify-between gap-1">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-700 truncate">Clients Perdus</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Reconquête -30%</span>
-                      </div>
-                      <span className={`text-xs font-black px-1.5 py-0.5 rounded-full shrink-0 ${(autoLastResult.stats.lost || 0) > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-[#B0A49C]'}`}>
-                        {autoLastResult.stats.lost || 0}
-                      </span>
-                    </div>
-
-                    {/* Ignorés cooldown */}
-                    <div className="bg-[#FAF3EE] p-2 rounded-lg border border-slate-200 flex items-center justify-between gap-1 sm:col-span-2">
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-black text-slate-500 truncate">Ignorés (Cooldown actif)</span>
-                        <span className="text-[9px] text-slate-400 truncate font-medium">Déjà contactés récemment</span>
-                      </div>
-                      <span className="text-xs font-black px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 shrink-0">
-                        {autoLastResult.stats.skipped_cooldown || 0}
-                      </span>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -1069,14 +1009,17 @@ function CampaignsContent() {
                               </span>
                             </td>
                             <td className="px-6 py-4 text-right whitespace-nowrap">
-                              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-bold border ${
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
                                 isSent
                                   ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                   : isSimulated
-                                  ? 'bg-[#FDECEA] text-[#E8462F] border-blue-200'
-                                  : 'bg-rose-50 text-rose-700 border-rose-200'
+                                  ? 'bg-slate-100 text-slate-600 border-slate-200'
+                                  : 'bg-rose-50 text-rose-600 border-rose-200'
                               }`}>
-                                <span>{isSent ? '🟢 Envoyé' : isSimulated ? '🔵 Simulé' : '🔴 Échoué'}</span>
+                                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                  isSent ? 'bg-emerald-500' : isSimulated ? 'bg-slate-400' : 'bg-rose-500'
+                                }`} />
+                                {isSent ? 'Envoyé' : isSimulated ? 'Simulé' : 'Échoué'}
                               </span>
                             </td>
                           </tr>
