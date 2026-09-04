@@ -439,7 +439,7 @@ function CampaignsContent() {
         </a>
       </PageHeader>
 
-      <div className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
+      <div className="flex-1 pt-1 pb-6 px-6 md:pt-2 md:pb-8 md:px-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
 
       {/* Main Grid: Form Left, SmartAutomation Right */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 shrink-0">
