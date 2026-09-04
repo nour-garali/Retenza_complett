@@ -1404,25 +1404,27 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                         {supportCount > 0 && (
                           <button
                             onClick={() => setAdminSectionFilter("support")}
-                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
+                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border flex items-center gap-1.5 ${
                               adminSectionFilter === "support"
                                 ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
                                 : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                             }`}
                           >
-                            🎧 Conseiller ({supportCount})
+                            <Headset className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+                            Conseiller ({supportCount})
                           </button>
                         )}
                         {botCount > 0 && (
                           <button
                             onClick={() => setAdminSectionFilter("bot")}
-                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
+                            className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border flex items-center gap-1.5 ${
                               adminSectionFilter === "bot"
                                 ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
                                 : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                             }`}
                           >
-                            🤖 Bot ({botCount})
+                            <Bot className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+                            Bot ({botCount})
                           </button>
                         )}
                       </>
@@ -1480,10 +1482,10 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     }
 
                     let senderBadgeText = "Assistant IA";
-                    let icon = <Bot className="w-3.5 h-3.5" />;
+                    let icon = <Bot className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />;
                     if (isSupport) {
                       senderBadgeText = "Conseiller Support";
-                      icon = <span className="text-[12px]">🎧</span>;
+                      icon = <Headset className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />;
                     }
 
                     const marginTop = isFirstInGroup && idx !== 0 ? "mt-5" : "mt-2";
@@ -1540,7 +1542,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                         <div ref={adminSupportSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden bg-[#F8F9FB]">
                           {/* En-tête cadre Support */}
                           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
-                            <span className="text-[13px]">🎧</span>
+                            <Headset className="w-3.5 h-3.5 text-slate-400" strokeWidth={1.75} />
                             <span className="text-[11px] font-medium text-slate-500 tracking-wide">Session Conseiller</span>
                             <span className="ml-auto text-[10px] text-slate-400">{supportMsgs.length} message{supportMsgs.length > 1 ? "s" : ""}</span>
                           </div>
