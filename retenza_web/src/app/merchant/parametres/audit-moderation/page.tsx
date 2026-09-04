@@ -991,7 +991,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
   const adminBotSectionRef = useRef<HTMLDivElement>(null);
   const adminSupportSectionRef = useRef<HTMLDivElement>(null);
   const adminModalTopRef = useRef<HTMLDivElement>(null);
-  const [adminSectionFilter, setAdminSectionFilter] = useState<"all" | "bot" | "support">("all");
+  const [adminSectionFilter, setAdminSectionFilter] = useState<"bot" | "support">("support");
 
   // Auto-scroll vers le bas (section Support) quand les messages sont chargés
   useEffect(() => {
@@ -1409,22 +1409,12 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                     }).length;
                     return (
                       <>
-                        <button
-                          onClick={() => setAdminSectionFilter("all")}
-                          className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
-                            adminSectionFilter === "all"
-                              ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
-                              : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
-                          }`}
-                        >
-                          Tout
-                        </button>
                         {botCount > 0 && (
                           <button
-                            onClick={() => setAdminSectionFilter(adminSectionFilter === "bot" ? "all" : "bot")}
+                            onClick={() => setAdminSectionFilter("bot")}
                             className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
                               adminSectionFilter === "bot"
-                                ? "bg-orange-50 text-orange-600 border-orange-200 shadow-xs"
+                                ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
                                 : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                             }`}
                           >
@@ -1433,10 +1423,10 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                         )}
                         {supportCount > 0 && (
                           <button
-                            onClick={() => setAdminSectionFilter(adminSectionFilter === "support" ? "all" : "support")}
+                            onClick={() => setAdminSectionFilter("support")}
                             className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer border ${
                               adminSectionFilter === "support"
-                                ? "bg-orange-50 text-orange-600 border-orange-200 shadow-xs"
+                                ? "bg-slate-100 text-slate-700 border-slate-200 shadow-xs"
                                 : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                             }`}
                           >
@@ -1539,7 +1529,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                   return (
                     <div className="flex flex-col gap-5">
                       {/* Cadre 1 : Session Chatbot */}
-                      {botMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "bot") && (
+                      {botMsgs.length > 0 && adminSectionFilter === "bot" && (
                         <div ref={adminBotSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden bg-[#F8F9FB]">
                           {/* En-tête cadre Bot */}
                           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
@@ -1554,8 +1544,8 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       )}
 
                       {/* Cadre 2 : Session Conseiller */}
-                      {supportMsgs.length > 0 && (adminSectionFilter === "all" || adminSectionFilter === "support") && (
-                        <div ref={adminSupportSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden bg-[#FEFAF7]">
+                      {supportMsgs.length > 0 && adminSectionFilter === "support" && (
+                        <div ref={adminSupportSectionRef} className="border border-[#EEEEEE] rounded-xl overflow-hidden bg-[#F8F9FB]">
                           {/* En-tête cadre Support */}
                           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#EEEEEE] bg-slate-50/70">
                             <span className="text-[13px]">🎧</span>
