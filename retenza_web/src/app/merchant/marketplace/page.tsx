@@ -227,8 +227,25 @@ export default function MarketplacePage() {
         </div>
       </PageHeader>
 
+      {/* Filters */}
+      <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 mt-4 w-full overflow-x-auto [scrollbar-width:none]">
+        {CATEGORIES.map(cat => (
+          <button
+            key={cat.id}
+            onClick={() => setCategory(cat.id)}
+            className={`pb-3 text-[13px] font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+              category === cat.id
+                ? 'border-[#E8462F] text-[#E8462F]'
+                : 'border-transparent text-[#B0A49C] hover:text-[#7A6E68]'
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
       {/* Featured Banner — light, calm */}
-      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-[#D73E26]" />
@@ -247,23 +264,6 @@ export default function MarketplacePage() {
         >
           Découvrir <ArrowUpRight className="w-4 h-4" />
         </button>
-      </div>
-
-      {/* Filters */}
-      <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 mt-3 w-full overflow-x-auto [scrollbar-width:none]">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setCategory(cat.id)}
-            className={`pb-3 text-[13px] font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              category === cat.id
-                ? 'border-[#E8462F] text-[#E8462F]'
-                : 'border-transparent text-[#B0A49C] hover:text-[#7A6E68]'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
       </div>
 
       {/* Grid */}
