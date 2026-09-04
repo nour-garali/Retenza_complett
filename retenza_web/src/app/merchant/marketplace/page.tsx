@@ -227,52 +227,53 @@ export default function MarketplacePage() {
         </div>
       </PageHeader>
 
-      {/* Filters */}
-      <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 mt-4 w-full overflow-x-auto [scrollbar-width:none]">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setCategory(cat.id)}
-            className={`pb-3 text-[13px] font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
-              category === cat.id
-                ? 'border-[#E8462F] text-[#E8462F]'
-                : 'border-transparent text-[#B0A49C] hover:text-[#7A6E68]'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Featured Banner — light, calm */}
-      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-[#D73E26]" />
-            <span className="text-[11px] font-bold text-[#D73E26] uppercase tracking-widest">Nouveau · IA Insights</span>
-          </div>
-          <h2 className="text-[16px] font-bricolage font-bold text-[#1B100C] mb-1">
-            Votre assistant IA personnel pour la fidélité
-          </h2>
-          <p className="text-[13px] text-[#5D534F] max-w-lg leading-relaxed">
-            Détection des clients à risque, recommandations d'horaires et résumé hebdomadaire automatique.
-          </p>
+      <div className="px-6 md:px-8 mt-0 flex flex-col flex-1">
+        {/* Filters */}
+        <div className="flex border-b border-[#EEE5DF] gap-8 mb-6 w-full overflow-x-auto [scrollbar-width:none]">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setCategory(cat.id)}
+              className={`pb-3 text-[13px] font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                category === cat.id
+                  ? 'border-[#E8462F] text-[#E8462F]'
+                  : 'border-transparent text-[#B0A49C] hover:text-[#7A6E68]'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
         </div>
-        <button
-          onClick={() => setCategory('analytics')}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white text-[13px] font-semibold rounded-xl transition-colors shrink-0 shadow-sm shadow-[#D73E26]/20"
-        >
-          Découvrir <ArrowUpRight className="w-4 h-4" />
-        </button>
-      </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-8">
-        {filtered.map(product => (
-          <ProductCard key={product.id} product={product} onToggle={toggleProduct} />
-        ))}
-      </div>
+        {/* Featured Banner — light, calm */}
+        <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#D73E26]" />
+              <span className="text-[11px] font-bold text-[#D73E26] uppercase tracking-widest">Nouveau · IA Insights</span>
+            </div>
+            <h2 className="text-[16px] font-bricolage font-bold text-[#1B100C] mb-1">
+              Votre assistant IA personnel pour la fidélité
+            </h2>
+            <p className="text-[13px] text-[#5D534F] max-w-lg leading-relaxed">
+              Détection des clients à risque, recommandations d'horaires et résumé hebdomadaire automatique.
+            </p>
+          </div>
+          <button
+            onClick={() => setCategory('analytics')}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white text-[13px] font-semibold rounded-xl transition-colors shrink-0 shadow-sm shadow-[#D73E26]/20"
+          >
+            Découvrir <ArrowUpRight className="w-4 h-4" />
+          </button>
+        </div>
 
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-8">
+          {filtered.map(product => (
+            <ProductCard key={product.id} product={product} onToggle={toggleProduct} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
