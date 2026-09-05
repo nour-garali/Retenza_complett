@@ -25,7 +25,7 @@ interface AutomationRule {
   priority: number;
 }
 
-type TabType = "all" | "smart_automation" | "heures_creuses" | "anniversaire" | "absence" | "securite" | "cross_sell" | "costs";
+type TabType = "all" | "boutique_defaut" | "smart_automation" | "heures_creuses" | "anniversaire" | "absence" | "securite" | "cross_sell" | "costs";
 
 // ─── Constantes règles SmartAutomation ────────────────────────────────────────
 
@@ -169,6 +169,7 @@ export default function ParametresAvancesPage() {
 
   // ── État Accordéon Repliable ──
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    boutique_defaut: false,
     smart_automation: false,
     heures_creuses: false,
     anniversaire: false,
@@ -186,6 +187,7 @@ export default function ParametresAvancesPage() {
     setActiveTab(tabId);
     if (tabId === "all") {
       setOpenSections({
+        boutique_defaut: true,
         smart_automation: true,
         heures_creuses: true,
         anniversaire: true,
@@ -616,9 +618,10 @@ export default function ParametresAvancesPage() {
 
       {/* ─── ONGLETS DE NAVIGATION (Style identique à Modération & Audit) ─── */}
       <div className="px-6 md:px-8 mt-0">
-        <div className="flex border-b border-[#EEE5DF] gap-6 max-w-7xl mx-auto overflow-x-auto scrollbar-none pb-0">
+        <div className="flex border-b border-[#EEE5DF] gap-3 sm:gap-3.5 lg:gap-4.5 max-w-7xl mx-auto overflow-x-auto pb-0 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#D5C8C0]/50 hover:[&::-webkit-scrollbar-thumb]:bg-[#D5C8C0] [scrollbar-width:thin] [scrollbar-color:#D5C8C0_transparent]">
           {[
             { id: "all", label: "Tout afficher", icon: Settings2 },
+            { id: "boutique_defaut", label: "Boutique par défaut", icon: Store },
             { id: "smart_automation", label: "SmartAutomation", icon: Bot },
             { id: "heures_creuses", label: "Heures Creuses", icon: Clock },
             { id: "anniversaire", label: "Anniversaire Boutique", icon: Cake },
@@ -633,13 +636,13 @@ export default function ParametresAvancesPage() {
               <button
                 key={t.id}
                 onClick={() => handleTabClick(t.id as TabType)}
-                className={`pb-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                className={`pb-2.5 px-0.5 sm:px-1 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
                   isActive
                     ? "border-[#E8462F] text-[#E8462F]"
                     : "border-transparent text-[#B0A49C] hover:text-[#7A6E68]"
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-3.5 h-3.5 shrink-0" />
                 {t.label}
               </button>
             );
@@ -656,7 +659,7 @@ export default function ParametresAvancesPage() {
           <div className="space-y-4 md:space-y-5">
           
           {/* ── SECTION 0 : Boutique par défaut ── */}
-          {showSection("all") && (
+          {showSection("boutique_defaut") && (
             <div id="section-boutique_defaut" className="bg-white rounded-2xl border border-[#EEE5DF] shadow-2xs overflow-hidden transition-all duration-200">
               <div
                 onClick={() => toggleSectionOpen("boutique_defaut")}
