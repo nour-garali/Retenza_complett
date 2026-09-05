@@ -979,24 +979,89 @@ function AnalyzeTab() {
       </div>
 
       {/* Résultat */}
-      <div ref={resultRef}>
+      <div ref={resultRef} className={`flex flex-col gap-6 ${(!showResult && !loading) ? "self-stretch h-full" : ""}`}>
         {!showResult && !loading && (
-          <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] p-8 flex flex-col items-center justify-center text-center min-h-[400px]">
-            <div className="w-12 h-12 rounded-2xl bg-[#FAF3EE] border border-[#EEE5DF] flex items-center justify-center text-slate-400 mb-3">
-              <BrainCircuit className="w-6 h-6" />
+          <>
+            <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] p-8 flex flex-col items-center justify-center text-center">
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF3EE] border border-[#EEE5DF] flex items-center justify-center text-slate-400 mb-3">
+                <BrainCircuit className="w-6 h-6" />
+              </div>
+              <p className="text-[#1A1A1A] font-bold text-sm">Prêt à analyser</p>
+              <p className="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
+                Saisissez l&apos;avis à gauche pour calculer le sentiment, les motifs clés et le risque de churn.
+              </p>
+              <div className="mt-5 flex flex-wrap justify-center gap-1.5 text-[10px] font-bold">
+                {["Sentiment NLP", "Risque Churn", "Motifs clés", "Recommandations"].map((t) => (
+                  <span key={t} className="bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md border border-slate-200">
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
-            <p className="text-[#1A1A1A] font-bold text-sm">Prêt à analyser</p>
-            <p className="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
-              Saisissez l&apos;avis à gauche pour calculer le sentiment, les motifs clés et le risque de churn.
-            </p>
-            <div className="mt-5 flex flex-wrap justify-center gap-1.5 text-[10px] font-bold">
-              {["Sentiment NLP", "Risque Churn", "Motifs clés", "Recommandations"].map((t) => (
-                <span key={t} className="bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md border border-slate-200">
-                  {t}
-                </span>
-              ))}
+
+            {/* Illustration Decorative SVG */}
+            <div className="flex-1 rounded-2xl overflow-hidden relative flex items-end justify-center bg-gradient-to-b from-transparent to-[#F5D7CD] min-h-[250px]">
+              <svg viewBox="0 0 400 250" className="w-full max-w-md h-auto object-cover object-bottom" xmlns="http://www.w3.org/2000/svg">
+                {/* Nuages lointains en arrière-plan */}
+                <path d="M -20 250 Q 80 180 160 250 Z" fill="#FCE3DC" opacity="0.6"/>
+                <path d="M 100 250 Q 200 160 300 250 Z" fill="#FDECE7" opacity="0.8"/>
+                <path d="M 240 250 Q 320 180 420 250 Z" fill="#FCE3DC" opacity="0.6"/>
+
+                {/* Feuillage stylisé gauche */}
+                <g transform="translate(40, 150)">
+                  <path d="M 40 100 C 20 60 50 20 50 20 C 50 20 60 50 40 100 Z" fill="#F3C4B6"/>
+                  <path d="M 40 100 C 10 70 20 30 20 30 C 20 30 40 60 40 100 Z" fill="#F0B2A2"/>
+                  <path d="M 40 100 C 70 70 60 30 60 30 C 60 30 40 60 40 100 Z" fill="#F0B2A2"/>
+                </g>
+
+                {/* Feuillage stylisé droite */}
+                <g transform="translate(280, 150)">
+                  <path d="M 40 100 C 20 60 50 20 50 20 C 50 20 60 50 40 100 Z" fill="#F3C4B6"/>
+                  <path d="M 40 100 C 10 70 20 30 20 30 C 20 30 40 60 40 100 Z" fill="#F0B2A2"/>
+                  <path d="M 40 100 C 70 70 60 30 60 30 C 60 30 40 60 40 100 Z" fill="#F0B2A2"/>
+                </g>
+
+                {/* Boutique */}
+                <g transform="translate(130, 110)">
+                  {/* Bâtiment */}
+                  <rect x="0" y="30" width="140" height="110" rx="4" fill="#F6BBAA" />
+                  {/* Ombre sous auvent */}
+                  <rect x="0" y="30" width="140" height="20" fill="#E8462F" opacity="0.1" />
+                  
+                  {/* Porte */}
+                  <rect x="15" y="70" width="35" height="70" rx="2" fill="#FFFFFF" opacity="0.9" />
+                  <circle cx="43" cy="110" r="2.5" fill="#E8462F" />
+                  <rect x="20" y="75" width="25" height="25" rx="1" fill="#F6BBAA" opacity="0.3" />
+                  
+                  {/* Fenêtre */}
+                  <rect x="70" y="70" width="55" height="45" rx="3" fill="#FFFFFF" opacity="0.9" />
+                  <rect x="75" y="75" width="45" height="35" rx="1.5" fill="#F6BBAA" opacity="0.3" />
+                  <path d="M 80 105 L 115 75 M 100 105 L 115 90" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round"/>
+                  
+                  {/* Auvent */}
+                  <path d="M -10 30 L 150 30 L 140 10 L 0 10 Z" fill="#FFFFFF" />
+                  <path d="M 15 30 L 25 10 L 45 10 L 35 30 Z" fill="#E8462F" />
+                  <path d="M 55 30 L 65 10 L 85 10 L 75 30 Z" fill="#E8462F" />
+                  <path d="M 95 30 L 105 10 L 125 10 L 115 30 Z" fill="#E8462F" />
+                  
+                  <path d="M -10 30 C -10 40 10 40 10 30 Z" fill="#FFFFFF" />
+                  <path d="M 10 30 C 10 40 30 40 30 30 Z" fill="#E8462F" />
+                  <path d="M 30 30 C 30 40 50 40 50 30 Z" fill="#FFFFFF" />
+                  <path d="M 50 30 C 50 40 70 40 70 30 Z" fill="#E8462F" />
+                  <path d="M 70 30 C 70 40 90 40 90 30 Z" fill="#FFFFFF" />
+                  <path d="M 90 30 C 90 40 110 40 110 30 Z" fill="#E8462F" />
+                  <path d="M 110 30 C 110 40 130 40 130 30 Z" fill="#FFFFFF" />
+                  <path d="M 130 30 C 130 40 150 40 150 30 Z" fill="#E8462F" />
+
+                  {/* Pin Localisation */}
+                  <g transform="translate(70, -35)">
+                    <path d="M 0 0 C -14 0 -24 10 -24 24 C -24 38 0 54 0 54 C 0 54 24 38 24 24 C 24 10 14 0 0 0 Z" fill="#E8462F"/>
+                    <circle cx="0" cy="22" r="8" fill="#FFFFFF"/>
+                  </g>
+                </g>
+              </svg>
             </div>
-          </div>
+          </>
         )}
 
         {loading && (
