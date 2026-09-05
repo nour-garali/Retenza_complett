@@ -770,7 +770,7 @@ function CampaignsContent() {
             });
             const runs = Object.entries(byDate)
               .sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
-              .slice(0, 3);
+              .slice(0, 1);
 
             if (runs.length === 0) return null;
 
@@ -788,10 +788,10 @@ function CampaignsContent() {
               <div className="border-t border-[#EEE5DF] pt-3 space-y-1.5">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
                   <History className="w-3 h-3" />
-                  Dernières exécutions IA
+                  Dernière exécution IA
                 </span>
                 {runs.map(([date, count]) => (
-                  <div key={date} className="flex items-center justify-between bg-[#FAF3EE] rounded-lg px-3 py-2">
+                  <div key={date} className="flex items-center justify-between bg-[#F5D7CD] rounded-lg px-3 py-2">
                     <div className="flex items-center gap-1.5">
                       <CheckCircle className="w-3 h-3 text-[#E8462F] shrink-0" />
                       <span className="text-[11px] font-semibold text-[#5E524B]">{fmtDate(date)} — {String(dailyRunHour).padStart(2,'0')}h00</span>
