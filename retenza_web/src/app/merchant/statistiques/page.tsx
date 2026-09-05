@@ -106,7 +106,7 @@ type SortDirection = "asc" | "desc";
 
 export default function StatistiquesPage() {
   const [selectedCommerce, setSelectedCommerce] = useState<string>("__all__");
-  const [windowDays, setWindowDays] = useState<number>(7);
+  const [windowDays, setWindowDays] = useState<number>(30);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [commerces, setCommerces] = useState<{ id: string; label: string }[]>([]);
@@ -159,7 +159,7 @@ export default function StatistiquesPage() {
     try {
       const timestamp = Date.now();
       const statsRes = await fetch(
-        `http://localhost:5000/api/campaigns/advanced-stats?commerce_id=${encodeURIComponent(cId)}&window_days=${wDays}&_t=${timestamp}`,
+        `http://localhost:5000/api/campaigns/advanced-stats?commerce_id=${encodeURIComponent(cId)}${wDays > 0 ? `&window_days=${wDays}` : ""}&_t=${timestamp}`,
         { cache: "no-store" }
       );
       const stats = await statsRes.json();
@@ -445,6 +445,16 @@ export default function StatistiquesPage() {
               {days} Jours
             </button>
           ))}
+          <span className="w-px h-4 bg-[#D5C8C0] mx-1 shrink-0" />
+          <button
+            onClick={() => setWindowDays(0)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${windowDays === 0
+              ? "bg-white text-[#E8462F] shadow-sm"
+              : "text-[#7A6E68] hover:text-[#1A1A1A]"
+              }`}
+          >
+            Tout
+          </button>
         </div>
       </PageHeader>
 
@@ -494,7 +504,7 @@ export default function StatistiquesPage() {
                     {(globalKPIs?.total_revenue || 0).toLocaleString("fr-FR", { minimumFractionDigits: 2 })} <span className="text-sm font-bold text-[#7A6E68]">DT</span>
                   </>
                 }
-                subtitle={`Attribution Last-Touch · ${windowDays}j`}
+                subtitle={`Attribution Last-Touch${windowDays > 0 ? ` — ${windowDays}j` : " — Tout"}`}
               />
 
               {/* Card 2: Taux d'Ouverture */}

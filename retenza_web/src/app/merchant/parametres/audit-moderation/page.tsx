@@ -1793,7 +1793,7 @@ function AuditModerationContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
   const [selectedCommerce, setSelectedCommerce] = useState<string>("__all__");
-  const [period, setPeriod] = useState<string>("all");
+  const [period, setPeriod] = useState<string>("30d");
   const [commercesList, setCommercesList] = useState<{ id: string; name: string }[]>([]);
 
   // Lire les query params pour auto-navigation + auto-ouverture modal
@@ -1876,6 +1876,16 @@ function AuditModerationContent() {
               {option.label}
             </button>
           ))}
+          <span className="w-px h-4 bg-[#D5C8C0] mx-1 shrink-0" />
+          <button
+            onClick={() => setPeriod("all")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${period === "all"
+              ? "bg-white text-[#E8462F] shadow-sm"
+              : "text-[#7A6E68] hover:text-[#1A1A1A]"
+              }`}
+          >
+            Tout
+          </button>
         </div>
 
         {/* Indicateur Live */}
