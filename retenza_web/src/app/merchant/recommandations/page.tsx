@@ -64,7 +64,7 @@ const API = "http://localhost:5000/api";
 function ConfidenceBadge({ value }: { value: number }) {
   const pct = Math.round(value * 100);
   const color =
-    pct >= 80 ? "bg-rose-50/80 text-[#E8462F] border-[#E8462F]/30" :
+    pct >= 80 ? "bg-rose-50/80 text-[#dc2626] border-[#dc2626]/30" :
     pct >= 60 ? "bg-slate-100 text-slate-700 border-slate-200/80" :
                "bg-slate-100 text-slate-500 border-slate-200";
   return (
@@ -78,7 +78,7 @@ function ConfidenceBadge({ value }: { value: number }) {
 function LiftBadge({ value }: { value: number }) {
   const color =
     value >= 2   ? "text-emerald-600 font-black" :
-    value >= 1.5 ? "text-[#E8462F] font-bold"    :
+    value >= 1.5 ? "text-[#dc2626] font-bold"    :
     value >= 1   ? "text-amber-600 font-semibold" :
                    "text-slate-400 font-semibold";
   return <span className={`text-sm ${color}`}>×{value.toFixed(2)}</span>;
@@ -90,7 +90,7 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 bg-slate-100 rounded-full h-1 overflow-hidden">
-        <div className="h-full rounded-full bg-[#E8462F]/70 transition-all duration-700" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-[#dc2626]/70 transition-all duration-700" style={{ width: `${pct}%` }} />
       </div>
       <span className="text-xs text-slate-400 w-8 text-right shrink-0">{value}</span>
     </div>
@@ -100,9 +100,9 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
 // ─── Rang badge neutre ────────────────────────────────────────────────────────
 function RankBadge({ rank }: { rank: number }) {
   const badgeStyle =
-    rank === 1 ? "bg-[#E8462F] text-white border-[#E8462F] shadow-xs font-black" :
-    rank === 2 ? "bg-rose-100 text-[#E8462F] border-rose-200 font-extrabold" :
-    rank === 3 ? "bg-rose-50 text-[#E8462F] border-rose-100 font-extrabold" :
+    rank === 1 ? "bg-[#dc2626] text-white border-[#dc2626] shadow-xs font-black" :
+    rank === 2 ? "bg-rose-100 text-[#dc2626] border-rose-200 font-extrabold" :
+    rank === 3 ? "bg-rose-50 text-[#dc2626] border-rose-100 font-extrabold" :
                  "bg-slate-100 text-slate-500 border-slate-200 font-semibold";
   return (
     <span className={`w-5 h-5 rounded-full text-[10px] flex items-center justify-center shrink-0 border ${badgeStyle}`}>
@@ -113,11 +113,11 @@ function RankBadge({ rank }: { rank: number }) {
 
 // ─── Donut Chart SVG natif ────────────────────────────────────────────────────
 const DONUT_PALETTE = [
-  "#E8462F",   // rouge plein (1er)
-  "#EF6B56",   // rouge moyen
-  "#F5977F",   // saumon
-  "#F9BDB0",   // rose pâle
-  "#FDDFD9",   // rose très pâle
+  "#dc2626",   // rouge plein (1er)
+  "#ef4444",   // rouge moyen
+  "#f87171",   // saumon / rouge clair
+  "#fca5a5",   // rose pâle
+  "#fecaca",   // rose très pâle
 ];
 
 function DonutChart({ items }: { items: [string, number][] }) {
@@ -177,7 +177,7 @@ function DonutChart({ items }: { items: [string, number][] }) {
             />
           ))}
           <circle cx={cx} cy={cy} r={innerRadius - 1} fill="white" />
-          <text x={cx} y={cy - 7} textAnchor="middle" style={{ fontFamily: "inherit", fontSize: 22, fontWeight: 900, fill: "#E8462F" }}>{total}</text>
+          <text x={cx} y={cy - 7} textAnchor="middle" style={{ fontFamily: "inherit", fontSize: 22, fontWeight: 900, fill: "#dc2626" }}>{total}</text>
           <text x={cx} y={cy + 10} textAnchor="middle" style={{ fontFamily: "inherit", fontSize: 9, fontWeight: 600, fill: "#B0A49C", letterSpacing: 1 }}>RÈGLES</text>
         </svg>
       </div>
@@ -255,7 +255,7 @@ function RulesTab() {
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
                 placeholder="Nom du produit..."
-                className="w-full border border-[#EEE5DF] bg-[#FAF3EE] rounded-xl pl-9 pr-4 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#E8462F] focus:bg-white transition-all"
+                className="w-full border border-[#EEE5DF] bg-[#FAF3EE] rounded-xl pl-9 pr-4 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#dc2626] focus:bg-white transition-all"
               />
             </div>
           </div>
@@ -263,13 +263,13 @@ function RulesTab() {
           {/* Confiance min */}
           <div className="min-w-[180px]">
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1.5">
-              Confiance min : <span className="text-[#E8462F] font-bold">{minConf}%</span>
+              Confiance min : <span className="text-[#dc2626] font-bold">{minConf}%</span>
             </label>
             <input
               type="range" min={0} max={95} step={5}
               value={minConf}
               onChange={e => { setMinConf(Number(e.target.value)); setPage(1); }}
-              className="w-full accent-[#E8462F]"
+              className="w-full accent-[#dc2626]"
             />
           </div>
 
@@ -280,7 +280,7 @@ function RulesTab() {
               {(["confiance", "lift"] as const).map(s => (
                 <button key={s} onClick={() => { setSortBy(s); setPage(1); }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${sortBy === s
-                    ? "bg-[#E8462F] text-white border-[#E8462F] shadow-sm"
+                    ? "bg-[#dc2626] text-white border-[#dc2626] shadow-sm"
                     : "bg-[#FAF3EE] text-slate-600 border-[#EEE5DF] hover:border-slate-300"}`}>
                   {s === "confiance" ? "% Confiance" : "Lift ×"}
                 </button>
@@ -295,7 +295,7 @@ function RulesTab() {
         <div className="px-6 py-4 border-b border-[#EEE5DF] flex items-center justify-between">
           <div>
             <h2 className="text-sm font-extrabold text-[#1A1A1A] uppercase tracking-wider flex items-center gap-2">
-              <Link2 className="w-4 h-4 text-[#E8462F]" />
+              <Link2 className="w-4 h-4 text-[#dc2626]" />
               Règles d&apos;association détectées
             </h2>
             {data && (
@@ -313,7 +313,7 @@ function RulesTab() {
 
         {loading ? (
           <div className="p-12 text-center">
-            <Loader2 className="w-7 h-7 text-[#E8462F] animate-spin mx-auto" />
+            <Loader2 className="w-7 h-7 text-[#dc2626] animate-spin mx-auto" />
             <p className="text-slate-400 text-sm mt-3">Chargement des règles...</p>
           </div>
         ) : !data || data.regles.length === 0 ? (
@@ -400,12 +400,12 @@ function RulesTab() {
                   <button
                     disabled={page <= 1}
                     onClick={() => setPage(p => p - 1)}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#EEE5DF] hover:border-[#E8462F] hover:text-[#E8462F] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#EEE5DF] hover:border-[#dc2626] hover:text-[#dc2626] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >← Précédent</button>
                   <button
                     disabled={page >= data.pages}
                     onClick={() => setPage(p => p + 1)}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#EEE5DF] hover:border-[#E8462F] hover:text-[#E8462F] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#EEE5DF] hover:border-[#dc2626] hover:text-[#dc2626] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >Suivant →</button>
                 </div>
               </div>
@@ -437,7 +437,7 @@ function StatsTab() {
   if (loading) {
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] p-12 text-center">
-        <Loader2 className="w-7 h-7 text-[#E8462F] animate-spin mx-auto" />
+        <Loader2 className="w-7 h-7 text-[#dc2626] animate-spin mx-auto" />
         <p className="text-slate-400 text-sm mt-3">Calcul des statistiques...</p>
       </div>
     );
@@ -486,7 +486,7 @@ function StatsTab() {
               icon={kpi.icon}
               iconBg={kpi.isHighlight ? "bg-rose-50" : undefined}
               iconColor={kpi.isHighlight ? "text-rose-600" : undefined}
-              valueColor={kpi.isHighlight ? "text-[#E8462F]" : "text-[#1A1A1A]"}
+              valueColor={kpi.isHighlight ? "text-[#dc2626]" : "text-[#1A1A1A]"}
               compact={true}
             />
           </div>
@@ -497,7 +497,7 @@ function StatsTab() {
         {/* Top 5 règles */}
         <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#EEE5DF] flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-100 text-[#E8462F] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-100 text-[#dc2626] flex items-center justify-center">
               <Trophy className="w-3.5 h-3.5" />
             </div>
             <h3 className="text-xs font-extrabold text-[#1A1A1A] uppercase tracking-wider">Top 5 règles (confiance × lift)</h3>
@@ -518,7 +518,7 @@ function StatsTab() {
                   <div className="flex items-center gap-1.5 shrink-0">
                     <ConfidenceBadge value={r.confiance} />
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/70">
-                      <TrendingUp className="w-3 h-3 text-[#E8462F]" />
+                      <TrendingUp className="w-3 h-3 text-[#dc2626]" />
                       ×{r.lift.toFixed(1)}
                     </span>
                   </div>
@@ -531,7 +531,7 @@ function StatsTab() {
         {/* Top produits déclencheurs */}
         <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] overflow-hidden flex flex-col">
           <div className="px-5 py-4 border-b border-[#EEE5DF] flex items-center gap-2.5 shrink-0">
-            <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-100 text-[#E8462F] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-100 text-[#dc2626] flex items-center justify-center">
               <Package className="w-3.5 h-3.5" />
             </div>
             <h3 className="text-xs font-extrabold text-[#1A1A1A] uppercase tracking-wider">Produits déclencheurs (le plus souvent en A)</h3>
@@ -579,7 +579,7 @@ function RecalcTab() {
         {/* En-tête sobre, couleur marque */}
         <div className="px-6 py-4 border-b border-[#EEE5DF] flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-[#FAF3EE] flex items-center justify-center">
-            <RefreshCw className="w-4 h-4 text-[#E8462F]" />
+            <RefreshCw className="w-4 h-4 text-[#dc2626]" />
           </div>
           <div>
             <h2 className="text-xs font-extrabold text-[#1A1A1A] uppercase tracking-wider">Recalcul manuel</h2>
@@ -599,7 +599,7 @@ function RecalcTab() {
               ["Lift",      "Corrélation nette (élimine les produits populaires)"],
             ].map(([k, v]) => (
               <div key={k} className="flex items-start gap-2">
-                <span className="text-[11px] font-bold text-[#E8462F] w-16 shrink-0">{k}</span>
+                <span className="text-[11px] font-bold text-[#dc2626] w-16 shrink-0">{k}</span>
                 <span className="text-[11px] text-[#7A6E68]">{v}</span>
               </div>
             ))}
@@ -644,7 +644,7 @@ function RecalcTab() {
             id="btn-recalculate-cross-sell"
             onClick={handleRecalculate}
             disabled={loading}
-            className="w-full py-3 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#E8462F] to-[#F06038] hover:from-[#C93A25] hover:to-[#E8462F] transition-all shadow-sm shadow-[#E8462F]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl font-bold text-xs text-white bg-[#dc2626] hover:bg-[#b91c1c] active:bg-[#991b1b] transition-all shadow-sm shadow-[#dc2626]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -677,7 +677,7 @@ function RecalcTab() {
 
         {loading && (
           <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] p-10 flex flex-col items-center justify-center min-h-[380px]">
-            <div className="w-16 h-16 rounded-full border-2 border-[#EEE5DF] border-t-[#E8462F] animate-spin mb-6" />
+            <div className="w-16 h-16 rounded-full border-2 border-[#EEE5DF] border-t-[#dc2626] animate-spin mb-6" />
             <p className="text-[#1A1A1A] font-semibold text-sm">Analyse Market Basket en cours...</p>
             <p className="text-slate-400 text-xs mt-1">Calcul des co-occurrences, support, confiance et lift</p>
           </div>
@@ -694,7 +694,7 @@ function RecalcTab() {
                                            "bg-rose-50   border-rose-200"
             }`}>
               {result.status === "success"
-                ? <div className="w-5 h-5 rounded-full bg-[#E8462F] flex items-center justify-center shrink-0"><CheckCircle className="w-3.5 h-3.5 text-white" /></div>
+                ? <div className="w-5 h-5 rounded-full bg-[#dc2626] flex items-center justify-center shrink-0"><CheckCircle className="w-3.5 h-3.5 text-white" /></div>
                 : result.status === "skip"
                 ? <SkipForward className="w-5 h-5 text-amber-600 shrink-0" />
                 : <XCircle className="w-5 h-5 text-rose-600 shrink-0" />}
@@ -704,7 +704,7 @@ function RecalcTab() {
                   result.status === "skip"    ? "text-amber-700" : "text-rose-700"
                 }`}>
                   {result.status === "success"
-                    ? <><span className="text-[#E8462F]">Recalcul</span> terminé avec succès</>
+                    ? <><span className="text-[#dc2626]">Recalcul</span> terminé avec succès</>
                     : result.status === "skip" ? "Analyse ignorée" : "Erreur"}
                 </p>
                 <p className={`text-xs mt-0.5 ${
@@ -777,14 +777,14 @@ export default function RecommandationsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`pb-3 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
                   isActive
-                    ? "border-[#E8462F] text-[#E8462F]"
+                    ? "border-[#dc2626] text-[#dc2626]"
                     : "border-transparent text-[#B0A49C] hover:text-[#7A6E68]"
                 }`}
               >
                 {tab.label}
                 {tab.badge !== null && (
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center transition-all ${
-                    isActive ? "bg-[#E8462F]/90 text-white" : "bg-slate-200 text-slate-600"
+                    isActive ? "bg-[#dc2626] text-white" : "bg-slate-200 text-slate-600"
                   }`}>
                     {tab.badge}
                   </span>
