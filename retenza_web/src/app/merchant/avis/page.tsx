@@ -785,8 +785,8 @@ function AnalyzeTab() {
 
         <div className="p-6 space-y-4">
           {/* Source */}
-          <div>
-            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+          <div className="mb-5">
+            <label className="text-[11.5px] font-bold text-[#736C72] uppercase tracking-[.03em] block mb-2">
               Source de l'avis
             </label>
             <div className="flex gap-2">
@@ -794,19 +794,15 @@ function AnalyzeTab() {
                 <button
                   key={s}
                   onClick={() => setSource(s)}
-                  className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${source === s
-                    ? "bg-slate-800 text-white border-slate-800 shadow-xs"
-                    : "bg-[#FAF3EE] text-slate-600 border-[#EEE5DF] hover:border-slate-300"
+                  className={`flex-1 py-[11px] rounded-lg text-[13.5px] font-semibold transition-all border flex items-center justify-center gap-2 cursor-pointer ${source === s
+                    ? "bg-[#17151A] text-white border-[#17151A]"
+                    : "bg-white text-[#736C72] border-[#E9E4DD] hover:border-slate-300"
                     }`}
                 >
                   {s === "google" ? (
-                    <>
-                      <Globe className="w-3.5 h-3.5 text-blue-500" /> Google
-                    </>
+                    <><Globe className="w-3.5 h-3.5" /> Google</>
                   ) : (
-                    <>
-                      <FacebookIcon className="w-3.5 h-3.5 text-indigo-500" /> Facebook
-                    </>
+                    <><FacebookIcon className="w-3.5 h-3.5" /> Facebook</>
                   )}
                 </button>
               ))}
@@ -814,9 +810,9 @@ function AnalyzeTab() {
           </div>
 
           {/* Email avec autocomplete */}
-          <div ref={emailRef} className="relative">
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+          <div ref={emailRef} className="relative mb-5">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[11.5px] font-bold text-[#736C72] uppercase tracking-[.03em]">
                 Email du client (optionnel)
               </label>
               {historyFetching && (
@@ -825,7 +821,7 @@ function AnalyzeTab() {
                 </span>
               )}
               {clientHistory && !historyFetching && (
-                <span className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+                <span className="text-[11px] text-[#3F9142] font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="w-3 h-3" /> Historique chargé
                 </span>
               )}
@@ -842,7 +838,7 @@ function AnalyzeTab() {
                   if (suggestions.length > 0) setShowSuggestions(true);
                 }}
                 placeholder="Tapez l'email ou le nom du client..."
-                className="w-full bg-[#FAF3EE] border border-[#EEE5DF] rounded-xl px-3.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#E8462F] focus:bg-white transition-all pr-9"
+                className="w-full border border-[#E9E4DD] rounded-lg px-[14px] py-3 text-[13.5px] font-normal text-[#17151A] bg-white focus:outline-none focus:border-[#C31F3C] focus:shadow-[0_0_0_3px_#F5D7CD] transition-all pr-9"
               />
               {clientEmail && (
                 <button
@@ -862,7 +858,7 @@ function AnalyzeTab() {
 
             {/* Dropdown suggestions */}
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute z-50 mt-1 w-full bg-white border border-[#EEE5DF] rounded-xl shadow-lg overflow-hidden">
+              <div className="absolute z-50 mt-1 w-full bg-white border border-[#E9E4DD] rounded-xl shadow-lg overflow-hidden">
                 {suggestions.map((c) => (
                   <button
                     key={c.email}
@@ -870,7 +866,7 @@ function AnalyzeTab() {
                       e.preventDefault();
                       selectClient(c);
                     }}
-                    className="w-full flex items-center justify-between px-3.5 py-2 text-left hover:bg-[#FAF3EE] transition border-b border-slate-50 last:border-0 cursor-pointer"
+                    className="w-full flex items-center justify-between px-3.5 py-2 text-left hover:bg-[#F7F4EF] transition border-b border-slate-50 last:border-0 cursor-pointer"
                   >
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-[#1A1A1A] truncate">
@@ -880,18 +876,14 @@ function AnalyzeTab() {
                     </div>
                     <span
                       className={`ml-2 shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 ${(c.segment_gmm || "").toLowerCase() === "vip"
-                        ? "bg-amber-50 text-amber-700 border border-amber-200"
+                        ? "bg-[#F5D7CD] text-[#8A1329] border border-[#EFC1B4]"
                         : "bg-slate-100 text-slate-600 border border-slate-200"
                         }`}
                     >
                       {(c.segment_gmm || "").toLowerCase() === "vip" ? (
-                        <>
-                          <Crown className="w-3 h-3 text-amber-600" /> VIP
-                        </>
+                        <><Crown className="w-3 h-3" /> VIP</>
                       ) : (
-                        <>
-                          <User className="w-3 h-3 text-slate-400" /> Std
-                        </>
+                        <><User className="w-3 h-3 text-slate-400" /> Std</>
                       )}
                     </span>
                   </button>
@@ -899,61 +891,103 @@ function AnalyzeTab() {
               </div>
             )}
 
-            {/* Badge client détecté */}
+            {/* Badge client détecté — style Retenza rouge */}
             {detectedClient && (
               <div
-                className={`mt-2 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold border ${clientStatus === "vip"
-                  ? "bg-amber-50 border-amber-200 text-amber-800"
-                  : "bg-slate-50 border-slate-200 text-slate-700"
+                className={`mt-2.5 flex items-center gap-2.5 px-[14px] py-[11px] rounded-lg text-[13.5px] border ${clientStatus === "vip"
+                  ? "bg-[#F5D7CD] border-[#EFC1B4]"
+                  : "bg-slate-50 border-slate-200"
                   }`}
               >
                 {clientStatus === "vip" ? (
-                  <Crown className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span className="w-5 h-5 rounded-full bg-[#C31F3C] flex items-center justify-center shrink-0">
+                    <Crown className="w-[11px] h-[11px] text-white" />
+                  </span>
                 ) : (
-                  <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <User className="w-4 h-4 text-slate-400 shrink-0" />
                 )}
-                <span className="font-bold">{detectedClient.nom || detectedClient.email}</span>
-                <span className="font-normal text-slate-400">
-                  ({clientStatus === "vip" ? "Client VIP" : "Standard"})
-                </span>
+                <div>
+                  <span className={`font-bold ${clientStatus === "vip" ? "text-[#8A1329]" : "text-[#17151A]"}`}>
+                    {detectedClient.nom || detectedClient.email}
+                  </span>
+                  <span className="text-[12.5px] text-[#736C72] ml-2">
+                    {clientStatus === "vip" ? "Client VIP" : "Standard"}
+                  </span>
+                </div>
               </div>
             )}
           </div>
 
           {/* Texte avis */}
-          <div>
-            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
-              Texte de l&apos;avis <span className="text-[#E8462F]">*</span>
+          <div className="mb-5">
+            <label className="text-[11.5px] font-bold text-[#736C72] uppercase tracking-[.03em] block mb-2">
+              Texte de l&apos;avis <span className="text-[#C31F3C]">*</span>
             </label>
             <textarea
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               rows={4}
               placeholder="Collez le commentaire ou l'avis reçu de votre client..."
-              className="w-full bg-[#FAF3EE] border border-[#EEE5DF] rounded-xl px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:outline-none focus:border-[#E8462F] focus:bg-white transition-all resize-none leading-relaxed"
+              className="w-full border border-[#E9E4DD] rounded-lg px-[14px] py-3 text-[13.5px] text-[#17151A] bg-white focus:outline-none focus:border-[#C31F3C] focus:shadow-[0_0_0_3px_#F5D7CD] transition-all resize-y leading-relaxed min-h-[96px] font-[inherit]"
             />
-            <p className="text-[10px] text-slate-400 mt-1">
+            <p className="text-[12px] text-[#A39C9F] mt-1.5">
               {reviewText.length} caractères · Supporte Français, Arabe dialectal et Anglais
             </p>
           </div>
 
-          {/* Historique */}
-          <div>
-            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+          {/* Historique — mini-timeline */}
+          <div className="mb-5">
+            <label className="text-[11.5px] font-bold text-[#736C72] uppercase tracking-[.03em] block mb-2">
               Historique client (Optionnel)
             </label>
-            <textarea
-              value={clientHistory}
-              onChange={(e) => setClientHistory(e.target.value)}
-              rows={2}
-              placeholder="S'auto-remplit automatiquement après sélection du client..."
-              className="w-full bg-[#FAF3EE] border border-[#EEE5DF] rounded-xl px-3.5 py-2 text-xs text-slate-600 focus:outline-none focus:border-[#E8462F] transition-all resize-none font-mono"
-            />
+            {clientHistory ? (
+              <div className="border border-[#E9E4DD] rounded-lg px-4 py-1 max-h-[190px] overflow-y-auto">
+                {clientHistory.split("\n").filter(l => l.trim()).map((line, i, arr) => {
+                  // parse "[N] DD/MM/YYYY — Sentiment: X, Churn: Y, Avis: "quote""
+                  const dateMatch = line.match(/(\d{2}\/\d{2}\/\d{4})/);
+                  const sentimentMatch = line.match(/Sentiment\s*:\s*(\w+)/i);
+                  const churnMatch = line.match(/Churn\s*:\s*(\d+\/\d+)/i);
+                  const quoteMatch = line.match(/Avis\s*:\s*"?(.+)"?\s*$/i);
+                  return (
+                    <div key={i} className="flex gap-3 py-3.5 border-b border-dashed border-[#E9E4DD] last:border-b-0">
+                      <div className="flex flex-col items-center shrink-0 pt-0.5">
+                        <span className="w-2 h-2 rounded-full bg-[#C31F3C] shrink-0" />
+                        {i < arr.filter(l => l.trim()).length - 1 && <span className="w-px flex-1 bg-[#E9E4DD] mt-1" />}
+                      </div>
+                      <div className="min-w-0">
+                        {dateMatch && <div className="text-[11.5px] text-[#A39C9F] font-semibold mb-0.5">{dateMatch[1]}</div>}
+                        <div className="flex gap-2 flex-wrap mb-1">
+                          {sentimentMatch && (
+                            <span className="text-[11px] font-bold px-2 py-[2px] rounded-[5px] bg-[#E7F4E6] text-[#2C6E30]">
+                              Sentiment : {sentimentMatch[1]}
+                            </span>
+                          )}
+                          {churnMatch && (
+                            <span className="text-[11px] font-bold px-2 py-[2px] rounded-[5px] bg-[#F7F4EF] text-[#736C72]">
+                              Churn : {churnMatch[1]}
+                            </span>
+                          )}
+                        </div>
+                        {quoteMatch && <div className="text-[12.5px] text-[#736C72] italic leading-snug">&ldquo;{quoteMatch[1].replace(/[""]$/, '')}&rdquo;</div>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <textarea
+                value={clientHistory}
+                onChange={(e) => setClientHistory(e.target.value)}
+                rows={2}
+                placeholder="S'auto-remplit automatiquement après sélection du client..."
+                className="w-full border border-[#E9E4DD] rounded-lg px-[14px] py-3 text-[13px] text-[#736C72] bg-white focus:outline-none focus:border-[#C31F3C] focus:shadow-[0_0_0_3px_#F5D7CD] transition-all resize-none font-mono"
+              />
+            )}
           </div>
 
           {error && (
-            <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs font-bold text-rose-700 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="flex items-center gap-2.5 bg-[#FCEAEA] border border-[#F0C3C3] rounded-lg px-[14px] py-3 text-[13px] font-semibold text-[#8A1329] mb-5">
+              <AlertCircle className="w-4 h-4 shrink-0 text-[#8A1329]" />
               <span>{error}</span>
             </div>
           )}
@@ -961,16 +995,16 @@ function AnalyzeTab() {
           <button
             onClick={handleAnalyze}
             disabled={loading || !reviewText.trim()}
-            className="w-full py-2.5 rounded-xl font-bold text-xs text-white bg-[#E8462F] hover:bg-[#C93A25] transition-all shadow-sm disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+            className="w-full py-[14px] rounded-lg font-bold text-[14px] text-white bg-[#C31F3C] hover:bg-[#8A1329] transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.99]"
           >
             {loading ? (
               <>
-                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                <RefreshCw className="w-4 h-4 animate-spin" />
                 Analyse IA en cours...
               </>
             ) : (
               <>
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-4 h-4" />
                 Lancer l&apos;analyse sentiment
               </>
             )}
