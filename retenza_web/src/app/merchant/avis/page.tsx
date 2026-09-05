@@ -1001,11 +1001,11 @@ function AnalyzeTab() {
 
         {/* Illustration décorative — visible uniquement en état "prêt", flottant sur le fond rose */}
         {!showResult && !loading && (
-          <div className="flex justify-center mt-6 mb-2">
+          <div className="flex justify-center mt-5 pb-6">
             <img
               src="/illustration-boutique.png"
               alt="Illustration boutique"
-              className="w-56 sm:w-64 md:w-72 max-w-[300px] h-auto object-contain select-none pointer-events-none"
+              className="w-40 sm:w-48 max-w-[200px] h-auto object-contain select-none pointer-events-none"
               draggable={false}
             />
           </div>
