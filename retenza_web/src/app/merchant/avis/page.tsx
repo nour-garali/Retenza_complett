@@ -996,15 +996,18 @@ function AnalyzeTab() {
                 </span>
               ))}
             </div>
-            {/* Illustration décorative */}
-            <div className="mt-8 flex justify-center">
-              <img
-                src="/illustration-boutique.png"
-                alt="Illustration boutique"
-                className="w-44 sm:w-52 max-w-[220px] h-auto object-contain opacity-90 select-none pointer-events-none"
-                draggable={false}
-              />
-            </div>
+          </div>
+        )}
+
+        {/* Illustration décorative — visible uniquement en état "prêt", flottant sur le fond rose */}
+        {!showResult && !loading && (
+          <div className="flex justify-center mt-6 mb-2">
+            <img
+              src="/illustration-boutique.png"
+              alt="Illustration boutique"
+              className="w-56 sm:w-64 md:w-72 max-w-[300px] h-auto object-contain select-none pointer-events-none"
+              draggable={false}
+            />
           </div>
         )}
 
