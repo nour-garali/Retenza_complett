@@ -23,7 +23,8 @@ import {
   Bot,
   Download,
   LayoutList,
-  MousePointerClick
+  MousePointerClick,
+  ChevronDown
 } from "lucide-react";
 import { ToastContainer, useToast } from "@/components/Toast";
 
@@ -85,6 +86,7 @@ function CampaignsContent() {
   const [autoStartedAt, setAutoStartedAt] = useState<string | null>(null);
   const [autoLastResult, setAutoLastResult] = useState<{ message: string; stats: AutomationStats } | null>(null);
   const [autoLastError, setAutoLastError] = useState<string | null>(null);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(true);
 
   // Feedback states
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
@@ -818,11 +820,20 @@ function CampaignsContent() {
           {autoLastResult && (
             <div className="bg-white border border-[#EEE5DF] rounded-xl shadow-sm overflow-hidden">
               {/* Header */}
-              <div className="px-4 py-3 border-b border-[#EEE5DF] bg-[#FAF3EE] flex items-center gap-2">
-                <CheckCircle className="w-3.5 h-3.5 text-[#E8462F]" />
-                <span className="text-[11px] font-extrabold text-[#1A1A1A] uppercase tracking-wider">Dernier rapport IA</span>
+              <div 
+                className="px-4 py-3 border-b border-[#EEE5DF] bg-[#F5D7CD] flex items-center justify-between cursor-pointer hover:bg-[#F0C9BD] transition-colors"
+                onClick={() => setIsReportOpen(!isReportOpen)}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-3.5 h-3.5 text-[#E8462F]" />
+                  <span className="text-[11px] font-extrabold text-[#1A1A1A] uppercase tracking-wider">Dernier rapport IA</span>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-[#1A1A1A] transition-transform duration-300 ${isReportOpen ? "rotate-0" : "-rotate-90"}`} />
               </div>
-              <div className="p-4 space-y-3">
+              <div 
+                className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${isReportOpen ? "max-h-[1200px]" : "max-h-0"}`}
+              >
+                <div className="p-4 space-y-3">
                 <p className="text-[11px] text-slate-500 leading-snug">{autoLastResult.message}</p>
 
                 {/* Segments grid */}
@@ -869,6 +880,7 @@ function CampaignsContent() {
                     </div>
                   </div>
                 )}
+              </div>
               </div>
             </div>
           )}
