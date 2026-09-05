@@ -618,7 +618,7 @@ export default function ParametresAvancesPage() {
 
       {/* ─── ONGLETS DE NAVIGATION (Style identique à Modération & Audit) ─── */}
       <div className="px-6 md:px-8 mt-0">
-        <div className="flex border-b border-[#EEE5DF] gap-3 sm:gap-3.5 lg:gap-4.5 max-w-7xl mx-auto overflow-x-auto pb-0 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#D5C8C0]/50 hover:[&::-webkit-scrollbar-thumb]:bg-[#D5C8C0] [scrollbar-width:thin] [scrollbar-color:#D5C8C0_transparent]">
+        <div className="flex flex-wrap border-b border-[#EEE5DF] gap-x-2.5 sm:gap-x-3.5 lg:gap-x-4 xl:gap-x-5 gap-y-2 max-w-7xl mx-auto pb-0">
           {[
             { id: "all", label: "Tout afficher", icon: Settings2 },
             { id: "boutique_defaut", label: "Boutique par défaut", icon: Store },
@@ -636,13 +636,13 @@ export default function ParametresAvancesPage() {
               <button
                 key={t.id}
                 onClick={() => handleTabClick(t.id as TabType)}
-                className={`pb-2.5 px-0.5 sm:px-1 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
+                className={`pb-2.5 pt-1 px-1 sm:px-1.5 text-[13px] font-bold border-b-2 -mb-px transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
                   isActive
                     ? "border-[#E8462F] text-[#E8462F]"
                     : "border-transparent text-[#B0A49C] hover:text-[#7A6E68]"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5 shrink-0" />
+                <Icon className="w-4 h-4 shrink-0" />
                 {t.label}
               </button>
             );
