@@ -333,15 +333,35 @@ export default function MerchantProfilPage() {
 
         {/* TAB: BILLING */}
         {activeTab === 'billing' && (() => {
-          // --- Mock billing data (à connecter à la vraie API plus tard) ---
-          const revenueGenerated = 1284; // CA généré ce mois via relances (€)
-          const commissionRate = 12;     // taux de commission appliqué (%)
-          const commissionAmount = Math.round(revenueGenerated * commissionRate / 100);
+          // ── Pas d'endpoint billing/commission disponible côté backend ──
+          // Les données réelles (CA relances mois en cours, taux de commission)
+          // seront connectées dès que l'endpoint /merchant/billing sera créé.
+          // En attendant : état vide explicite, pas de valeur inventée.
+          const revenueGenerated: number | null = null;
+          const commissionRate: number | null = null;
+          const commissionAmount: number | null =
+            revenueGenerated != null && commissionRate != null
+              ? Math.round(((revenueGenerated as number) * (commissionRate as number)) / 100)
+              : null;
 
-          // Anneau SVG : rayon 36, circonférence ≈ 226.2
-          const radius = 36;
+          // Formatted display values (avoids TS narrowing inside JSX)
+          const revenueDisplay = revenueGenerated != null
+            ? `${(revenueGenerated as number).toLocaleString('fr-FR')} €`
+            : null;
+          const commissionAmountDisplay = commissionAmount != null
+            ? `${(commissionAmount as number).toLocaleString('fr-FR')} €`
+            : null;
+          const commissionRateDisplay = commissionRate != null
+            ? `${commissionRate as number}%`
+            : null;
+
+          // Anneau SVG : rayon 38, circonférence ≈ 238.8
+          const radius = 38;
           const circumference = 2 * Math.PI * radius;
-          const offset = circumference * (1 - commissionRate / 100);
+          const offset = commissionRate != null
+            ? circumference * (1 - commissionRate / 100)
+            : circumference;
+
 
           return (
             <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 animate-in fade-in duration-300">
@@ -378,33 +398,30 @@ export default function MerchantProfilPage() {
               </div>
 
               {/* ── Colonne latérale ── */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-[14px]">
 
                 {/* Card 1 : Revenu généré ce mois */}
-                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[22px] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[18px]">
                   <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-2">Revenu généré ce mois</p>
-                  <p className="text-[28px] font-bold text-[#C31F3C] leading-none mb-1">
-                    {revenueGenerated.toLocaleString('fr-FR')} €
+                  <p className={`text-[22px] font-medium leading-none mb-1 ${revenueDisplay ? 'text-[#C31F3C]' : 'text-[#A39C9F]'}`}>
+                    {revenueDisplay ?? '—'}
                   </p>
-                  <p className="text-[12px] text-[#A39C9F] mt-1.5 leading-snug">Grâce aux relances automatiques Retenza</p>
+                  <p className="text-[12px] text-[#A39C9F] mt-1.5 leading-snug">
+                    {revenueDisplay ? 'Grâce aux relances automatiques Retenza' : 'Pas encore de données ce mois-ci'}
+                  </p>
                 </div>
 
                 {/* Card 2 : Anneau de commission */}
-                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[22px] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col items-center gap-3">
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[18px] flex flex-col items-center gap-3">
                   <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] self-start">Commission ce mois</p>
-                  <div className="relative w-[88px] h-[88px]">
-                    <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+                  <div className="relative w-[90px] h-[90px]">
+                    <svg viewBox="0 0 90 90" className="w-full h-full -rotate-90">
+                      <circle cx="45" cy="45" r={radius} fill="none" stroke="#E9E4DD" strokeWidth="6" />
                       <circle
-                        cx="44" cy="44" r={radius}
+                        cx="45" cy="45" r={radius}
                         fill="none"
-                        stroke="#E9E4DD"
-                        strokeWidth="8"
-                      />
-                      <circle
-                        cx="44" cy="44" r={radius}
-                        fill="none"
-                        stroke="#C31F3C"
-                        strokeWidth="8"
+                        stroke={commissionRateDisplay ? '#C31F3C' : '#E9E4DD'}
+                        strokeWidth="6"
                         strokeLinecap="round"
                         strokeDasharray={circumference}
                         strokeDashoffset={offset}
@@ -412,33 +429,37 @@ export default function MerchantProfilPage() {
                       />
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-[18px] font-bold text-[#17151A]">{commissionRate}%</span>
+                      <span className="text-[16px] font-bold text-[#17151A]">
+                        {commissionRateDisplay ?? '—'}
+                      </span>
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-[12.5px] font-semibold text-[#17151A]">{commissionAmount.toLocaleString('fr-FR')} €</p>
+                    <p className={`text-[12.5px] font-semibold ${commissionAmountDisplay ? 'text-[#17151A]' : 'text-[#A39C9F]'}`}>
+                      {commissionAmountDisplay ?? 'Données indisponibles'}
+                    </p>
                     <p className="text-[11.5px] text-[#A39C9F] mt-0.5">Taux appliqué au CA généré</p>
                   </div>
                 </div>
 
                 {/* Card 3 : Aucun engagement */}
-                <div className="bg-[#F5D7CD] border border-[#EFC1B4] rounded-xl p-[22px]">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full bg-[#C31F3C] flex items-center justify-center shrink-0">
-                      <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 text-white fill-current"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z"/></svg>
+                <div className="bg-[#FBEAE6] border border-[#F0D0C7] rounded-xl p-[18px]">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-[22px] h-[22px] rounded-full bg-[#C31F3C] flex items-center justify-center shrink-0">
+                      <svg viewBox="0 0 16 16" className="w-3 h-3 text-white fill-current"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z"/></svg>
                     </div>
-                    <h3 className="text-[14px] font-bold text-[#17151A]">Aucun engagement</h3>
+                    <h3 className="text-[13.5px] font-bold text-[#17151A]">Aucun engagement</h3>
                   </div>
                   <p className="text-[12.5px] text-[#736C72] leading-relaxed">
                     Vous pouvez changer ou résilier votre plan à tout moment, sans frais ni préavis.
                   </p>
                 </div>
 
+
               </div>
             </div>
           );
         })()}
-
 
         {/* TAB: SECURITY */}
         {activeTab === 'security' && (
