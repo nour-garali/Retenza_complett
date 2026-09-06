@@ -1,4 +1,4 @@
-﻿const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const openingHourSchema = new mongoose.Schema(
   {
@@ -78,6 +78,16 @@ const commerceSchema = new mongoose.Schema(
       type: String,
       unique: true,
       sparse: true, // Uniquement dfini une fois le commerce activ
+    },
+    // ─── Plan Résultat — taux de commission à la performance ─────────────────
+    // Taux appliqué par Retenza sur le CA des achats validés du mois.
+    // Défaut : 8 %. Modifiable par l'admin via le back-office.
+    // Valeur entre 0 et 1 (ex. 0.08 = 8 %).
+    commissionRate: {
+      type: Number,
+      default: 0.08,
+      min: 0,
+      max: 1,
     },
     // Google Wallet integration
     walletClassId: {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { getMerchantQr } from '@/services/merchantDashboardActions';
+import { getMerchantQr, getMerchantBillingStats } from '@/services/merchantDashboardActions';
 import QRCode from 'react-qr-code';
 import PageHeader from '@/components/PageHeader';
 import { 
@@ -62,6 +62,10 @@ export default function MerchantProfilPage() {
   const [qrCodeData, setQrCodeData] = useState<string | null>(null);
   const [isLoadingQr, setIsLoadingQr] = useState(false);
 
+  // Billing State
+  const [billingStats, setBillingStats] = useState<any>(null);
+  const [isLoadingBilling, setIsLoadingBilling] = useState(false);
+
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -98,6 +102,19 @@ export default function MerchantProfilPage() {
       });
     }
   }, [activeTab, qrCodeData, isLoadingQr]);
+
+  useEffect(() => {
+    if (activeTab === 'billing' && !billingStats && !isLoadingBilling) {
+      setIsLoadingBilling(true);
+      getMerchantBillingStats().then((res) => {
+        setBillingStats(res);
+      }).catch(err => {
+        console.error("Error fetching billing stats", err);
+      }).finally(() => {
+        setIsLoadingBilling(false);
+      });
+    }
+  }, [activeTab, billingStats, isLoadingBilling]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -333,22 +350,16 @@ export default function MerchantProfilPage() {
 
         {/* TAB: BILLING */}
         {activeTab === 'billing' && (() => {
-          // ── Pas d'endpoint billing/commission disponible côté backend ──
-          // Les données réelles (CA relances mois en cours, taux de commission)
-          // seront connectées dès que l'endpoint /merchant/billing sera créé.
-          // En attendant : état vide explicite, pas de valeur inventée.
-          const revenueGenerated: number | null = null;
-          const commissionRate: number | null = null;
-          const commissionAmount: number | null =
-            revenueGenerated != null && commissionRate != null
-              ? Math.round(((revenueGenerated as number) * (commissionRate as number)) / 100)
-              : null;
+          const hasDataThisMonth = billingStats?.hasDataThisMonth || false;
+          const revenueGenerated: number | null = billingStats?.revenueThisMonth ?? null;
+          const commissionRate: number | null = billingStats?.commissionRate ? Math.round(billingStats.commissionRate * 100) : null;
+          const commissionAmount: number | null = billingStats?.commissionThisMonth ?? null;
 
           // Formatted display values (avoids TS narrowing inside JSX)
-          const revenueDisplay = revenueGenerated != null
+          const revenueDisplay = hasDataThisMonth && revenueGenerated != null
             ? `${(revenueGenerated as number).toLocaleString('fr-FR')} €`
             : null;
-          const commissionAmountDisplay = commissionAmount != null
+          const commissionAmountDisplay = hasDataThisMonth && commissionAmount != null
             ? `${(commissionAmount as number).toLocaleString('fr-FR')} €`
             : null;
           const commissionRateDisplay = commissionRate != null
@@ -400,14 +411,14 @@ export default function MerchantProfilPage() {
               {/* ── Colonne latérale ── */}
               <div className="flex flex-col gap-[14px]">
 
-                {/* Card 1 : Revenu généré ce mois */}
+                {/* Card 1 : Chiffre d'affaires du mois */}
                 <div className="bg-white border border-[#E9E4DD] rounded-xl p-[18px]">
-                  <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-2">Revenu généré ce mois</p>
+                  <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-2">Chiffre d&apos;affaires du mois</p>
                   <p className={`text-[22px] font-medium leading-none mb-1 ${revenueDisplay ? 'text-[#C31F3C]' : 'text-[#A39C9F]'}`}>
                     {revenueDisplay ?? '—'}
                   </p>
                   <p className="text-[12px] text-[#A39C9F] mt-1.5 leading-snug">
-                    {revenueDisplay ? 'Grâce aux relances automatiques Retenza' : 'Pas encore de données ce mois-ci'}
+                    {revenueDisplay ? 'Total des achats validés ce mois-ci' : 'Pas encore de données ce mois-ci'}
                   </p>
                 </div>
 

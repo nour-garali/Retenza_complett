@@ -25,6 +25,7 @@ const {
   completeOnboarding,
 } = require('../controllers/merchantController');
 const { getDashboardStats } = require('../controllers/dashboardController');
+const { getBillingStats } = require('../controllers/billingController');
 const validate = require('../middleware/validate');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -38,6 +39,36 @@ router.put('/onboarding', completeOnboarding);
 // ─── Dashboard ─────────────────────────────────────────────────────
 
 router.get('/dashboard', getDashboardStats);
+
+// ─── Billing (facturation à la performance) ────────────────────────
+
+/**
+ * @swagger
+ * /api/merchant/billing:
+ *   get:
+ *     summary: Données de facturation du mois en cours
+ *     description: CA des achats validés du mois calendaire, taux de commission, et montant dû.
+ *     tags: [Commerçant - Facturation]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Données de facturation
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 revenueThisMonth: 3240.50
+ *                 commissionRate: 0.08
+ *                 commissionThisMonth: 259.24
+ *                 nextChargeDate: "2026-10-01"
+ *                 hasDataThisMonth: true
+ *                 purchaseCount: 47
+ *                 periodLabel: "septembre 2026"
+ */
+router.get('/billing', getBillingStats);
+
 
 // ─── Incidents ─────────────────────────────────────────────────────
 

@@ -37,6 +37,17 @@ export async function getMerchantDashboardStats() {
   }
 }
 
+export async function getMerchantBillingStats() {
+  try {
+    const data = await fetchWithAuth('/merchant/billing', { cache: 'no-store' });
+    if (!data.success) throw new Error(data.message);
+    return data.data;
+  } catch (error) {
+    console.error('Erreur getMerchantBillingStats:', error);
+    return null;
+  }
+}
+
 export async function getMerchantClients() {
   try {
     const data = await fetchWithAuth('/merchant/clients', { cache: 'no-store' });

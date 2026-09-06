@@ -10,8 +10,9 @@ import {
 } from 'recharts';
 
 interface MerchantHomeContentProps {
-  user: User | null;
-  stats: any;
+  user: any;
+  stats?: any;
+  billingStats?: any;
 }
 
 type Period = '7j' | '30j' | '12m';
@@ -114,7 +115,7 @@ const renderActiveShape = (props: any) => {
 /* ──────────────────────────────────────
    MAIN COMPONENT
 ────────────────────────────────────── */
-export default function MerchantHomeContent({ user, stats }: MerchantHomeContentProps) {
+export default function MerchantHomeContent({ user, stats, billingStats }: MerchantHomeContentProps) {
   const router = useRouter();
   const [period, setPeriod] = useState<Period>('30j');
   const [isChanging, setIsChanging] = useState(false);
@@ -135,6 +136,11 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
   const atRisk       = hasStats ? (stats?.atRiskClients ?? 0) : demoAtRisk;
   const loyaltyRate  = hasStats ? (stats?.loyaltyRate ?? 0) : demoLoyaltyRate;
   const totalRevenue = hasStats ? (stats?.totalRevenue ?? 0) : demoTotalRevenue;
+  
+  // Format the commission rate (e.g. 0.08 -> 8%)
+  const commissionRateStr = billingStats?.commissionRate != null
+    ? `${Math.round(billingStats.commissionRate * 100)} %`
+    : '5 à 10 %';
 
   const demoNewClientsForPeriod = period === '7j' ? 45 : period === '30j' ? 180 : demoTotalClients;
   const newClientsForPeriod = hasStats ? (
@@ -267,7 +273,7 @@ export default function MerchantHomeContent({ user, stats }: MerchantHomeContent
           <div className="flex items-start justify-between mb-2">
             <div>
               <h2 className="font-bricolage font-bold text-[18px] text-[#1B100C]">CA additionnel généré</h2>
-              <p className="text-[13px] text-[#9C8B82] mt-1">Mesuré et traçable — commission 5 à 10 %.</p>
+              <p className="text-[13px] text-[#9C8B82] mt-1">Mesuré et traçable — commission {commissionRateStr}.</p>
             </div>
             <span className="px-3.5 py-1.5 rounded-full bg-[#EEF3E8] text-[#4d632c] text-[12px] font-bold border border-[#d8e3cc] shrink-0 shadow-sm">
               +30 % de retour
