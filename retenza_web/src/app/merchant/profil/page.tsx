@@ -474,33 +474,79 @@ export default function MerchantProfilPage() {
 
           {/* TAB: SECURITY */}
           {activeTab === 'security' && (
-            <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 max-w-md">
-              <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-5 animate-in fade-in duration-300">
               
-              <div className="space-y-5">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
-                  <input 
-                    type="password" 
-                    className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
-                    placeholder="••••••••"
-                  />
-                </div>
+              {/* ── Colonne Principale (Gauche) ── */}
+              <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
                 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
-                  <input 
-                    type="password" 
-                    className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
-                    placeholder="••••••••"
-                  />
+                <div className="space-y-5 max-w-md">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
+                    <input 
+                      type="password" 
+                      className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
+                    <input 
+                      type="password" 
+                      className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                      placeholder="••••••••"
+                    />
+                  </div>
+
+                  <div className="pt-2">
+                    <button className="px-6 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[13px] font-bold rounded-xl transition-colors shadow-sm cursor-pointer">
+                      Sauvegarder
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Colonne Latérale (Droite) ── */}
+              <div className="flex flex-col gap-[16px]">
+                
+                {/* Card 1 : État de la connexion */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[20px] shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className="w-[8px] h-[8px] rounded-full bg-[#C31F3C] shadow-[0_0_8px_rgba(195,31,60,0.6)] animate-pulse"></div>
+                    <h3 className="text-[15px] font-bold text-[#17151A]">État de la connexion</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-1">Dernière connexion</p>
+                      <p className="text-[14px] text-[#17151A] font-medium">—</p>
+                    </div>
+                    <div>
+                      <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-1">Adresse IP</p>
+                      <p className="text-[14px] text-[#17151A] font-medium">—</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="pt-2">
-                  <button className="px-6 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[13px] font-bold rounded-xl transition-colors shadow-sm cursor-pointer">
-                    Sauvegarder
-                  </button>
+                {/* Card 2 : Bonnes pratiques */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[20px] shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Lock className="w-[16px] h-[16px] text-[#C31F3C]" />
+                    <h3 className="text-[14px] font-bold text-[#17151A]">Bonnes pratiques</h3>
+                  </div>
+                  <ul className="text-[12.5px] text-[#736C72] leading-relaxed space-y-2">
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#C31F3C] mt-0.5">•</span>
+                      <span>Utilisez un mot de passe unique contenant des chiffres et caractères spéciaux.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#C31F3C] mt-0.5">•</span>
+                      <span>Déconnectez-vous toujours des appareils publics après utilisation.</span>
+                    </li>
+                  </ul>
                 </div>
+
               </div>
             </div>
           )}
