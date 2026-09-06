@@ -13,6 +13,18 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     await logoutAction();
@@ -134,11 +146,56 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
           </div>
 
           {/* Right icons */}
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="flex items-center gap-3 ml-auto relative" ref={dropdownRef}>
             <AINotificationBell />
-            <div className="w-9 h-9 rounded-xl bg-[#FFF5F2] border border-[#DD2C1F]/10 flex items-center justify-center text-[#DD2C1F] font-bold text-[13px] shadow-sm cursor-pointer">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-9 h-9 rounded-xl bg-[#FFF5F2] border border-[#DD2C1F]/10 flex items-center justify-center text-[#DD2C1F] font-bold text-[13px] shadow-sm cursor-pointer hover:bg-[#FBEAE6] transition-colors focus:outline-none focus:ring-2 focus:ring-[#DD2C1F]/20"
+            >
               {initials}
-            </div>
+            </button>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-12 w-56 bg-white border border-[#E9E4DD] rounded-xl shadow-lg z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="px-4 py-3 border-b border-[#E9E4DD]">
+                  <p className="text-[14px] font-bold text-[#17151A] truncate">{commerceName}</p>
+                  <p className="text-[12px] text-[#736C72] truncate">{user?.email || 'Commerçant'}</p>
+                </div>
+                
+                <div className="py-1.5">
+                  <Link 
+                    href="/merchant/profil" 
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2 text-[13.5px] font-medium text-[#17151A] hover:bg-[#F7F5F2] transition-colors"
+                  >
+                    <User className="w-4 h-4 text-[#736C72]" />
+                    Voir le profil
+                  </Link>
+                  <Link 
+                    href="/merchant/parametres/avances" 
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2 text-[13.5px] font-medium text-[#17151A] hover:bg-[#F7F5F2] transition-colors"
+                  >
+                    <Settings className="w-4 h-4 text-[#736C72]" />
+                    Paramètres
+                  </Link>
+                </div>
+
+                <div className="border-t border-[#E9E4DD] py-1.5">
+                  <button 
+                    onClick={() => {
+                      setIsDropdownOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full flex items-center gap-2.5 px-4 py-2 text-[13.5px] font-bold text-[#C31F3C] hover:bg-[#FBEAE6] transition-colors text-left"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Déconnexion
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </header>
 
