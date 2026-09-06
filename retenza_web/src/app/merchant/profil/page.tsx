@@ -561,11 +561,11 @@ export default function MerchantProfilPage() {
                   <ul className="text-[12.5px] text-[#736C72] leading-relaxed space-y-2">
                     <li className="flex items-start gap-2">
                       <span className="text-[#C31F3C] mt-0.5">•</span>
-                      <span>Utilisez un mot de passe unique contenant des chiffres et caractères spéciaux.</span>
+                      <span>Utilisez un mot de passe fort et unique.</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-[#C31F3C] mt-0.5">•</span>
-                      <span>Déconnectez-vous toujours des appareils publics après utilisation.</span>
+                      <span>Déconnectez-vous des appareils publics.</span>
                     </li>
                   </ul>
                 </div>
