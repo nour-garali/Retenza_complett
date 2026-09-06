@@ -646,7 +646,6 @@ export default function MerchantProfilPage() {
                   onClick={handleCopyQrUrl}
                   className="flex items-center gap-2 bg-[#F5D7CD]/50 hover:bg-[#F5D7CD]/80 transition-colors px-4 py-1.5 rounded-full mb-5 cursor-pointer"
                 >
-                  <Copy className="w-3.5 h-3.5 text-[#C31F3C]" />
                   <span className="text-[#C31F3C] font-bold tracking-[0.15em] text-[12px] uppercase">
                     {((typeof qrCodeData === 'object' && qrCodeData) ? (qrCodeData as any).merchantCode : null) || 'CODE QR'}
                   </span>
