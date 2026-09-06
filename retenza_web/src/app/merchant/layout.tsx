@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { logoutAction } from '@/services/authActions';
-import { LayoutDashboard, Users, Gift, ShoppingBag, Megaphone, LogOut, Menu, X, Search, Bell, User, BarChart2, Sparkles, Clock, MessageSquare, Bot, Globe, ShieldAlert, TrendingUp, Settings } from 'lucide-react';
+import { globalSearch } from '@/services/merchantDashboardActions';
+import { LayoutDashboard, Users, Gift, ShoppingBag, Megaphone, LogOut, Menu, X, Search, Bell, User, BarChart2, Sparkles, Clock, MessageSquare, Bot, Globe, ShieldAlert, TrendingUp, Settings, ChevronRight } from 'lucide-react';
 
 import AINotificationBell from '@/components/AINotificationBell';
 
@@ -15,16 +16,50 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+  
+  // Search State
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchResults, setSearchResults] = React.useState<any[]>([]);
+  const [isSearching, setIsSearching] = React.useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = React.useState(false);
+  const searchRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchDropdown(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Search Debounce Effect
+  React.useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length > 0) {
+        setIsSearching(true);
+        try {
+          const results = await globalSearch(searchQuery);
+          setSearchResults(results);
+          setShowSearchDropdown(true);
+        } catch (err) {
+          console.error("Search error", err);
+          setSearchResults([]);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+        setShowSearchDropdown(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
 
   const handleLogout = async () => {
     await logoutAction();
@@ -134,14 +169,53 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
           </button>
 
           {/* Search */}
-          <div className="flex-1 max-w-[340px]">
+          <div className="flex-1 max-w-[340px]" ref={searchRef}>
             <div className="relative">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => {
+                  if (searchQuery.trim().length > 0) setShowSearchDropdown(true);
+                }}
                 className="w-full bg-white border border-gray-200/80 rounded-xl py-2.5 pl-10 pr-4 text-[13px] text-[#1B100C] placeholder-gray-400 outline-none focus:border-[#DD2C1F] focus:ring-2 focus:ring-[#DD2C1F]/10 transition-all shadow-sm"
               />
+
+              {/* Search Dropdown */}
+              {showSearchDropdown && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E9E4DD] rounded-xl shadow-lg z-50 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[300px] overflow-y-auto">
+                  {isSearching ? (
+                    <div className="p-4 text-center text-[13px] text-gray-500 animate-pulse">Recherche en cours...</div>
+                  ) : searchResults.length > 0 ? (
+                    <div className="py-2">
+                      {searchResults.map((res: any) => (
+                        <Link
+                          key={res.id}
+                          href={res.url}
+                          onClick={() => {
+                            setShowSearchDropdown(false);
+                            setSearchQuery('');
+                          }}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#F7F5F2] transition-colors group"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[13.5px] font-semibold text-[#17151A] truncate group-hover:text-[#DD2C1F] transition-colors">{res.title}</p>
+                            <p className="text-[12px] text-[#736C72] truncate mt-0.5">{res.subtitle}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{res.type}</span>
+                            <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#DD2C1F] transition-colors" />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-4 text-center text-[13px] text-gray-500">Aucun résultat trouvé</div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

@@ -15,10 +15,12 @@ const testRoutes = require('./testRoutes');
 const publicRoutes = require('./publicRoutes');
 const otpRoutes = require('./otpRoutes');
 const partnershipRoutes = require('./partnershipRoutes');
+const searchRoutes = require('./searchRoutes');
 
 const router = express.Router();
 
 router.use('/auth', authRoutes);
+router.use('/search', searchRoutes);
 router.use('/commerces', commerceRoutes);
 router.use('/qrcodes', qrCodeRoutes);
 router.use('/clients', clientRoutes);

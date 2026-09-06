@@ -121,3 +121,9 @@ export async function createMerchantCampaign(payload: any) {
     return { success: false, message: error.message };
   }
 }
+
+export async function globalSearch(query: string) {
+  if (!query) return [];
+  const res = await fetchWithAuth(`/search?q=${encodeURIComponent(query)}`);
+  return res.data || [];
+}
