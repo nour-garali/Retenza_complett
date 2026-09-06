@@ -332,39 +332,113 @@ export default function MerchantProfilPage() {
         )}
 
         {/* TAB: BILLING */}
-        {activeTab === 'billing' && (
-          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 max-w-3xl">
-            <div className="flex flex-col gap-6">
-              <div>
-                <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Plan Résultat</h3>
-                <p className="text-[14px] text-[#736C72] leading-relaxed">
-                  Vous êtes actuellement sur la tarification à la performance. Vous ne payez que lorsque Retenza vous fait gagner de l'argent de manière prouvée.
-                </p>
-              </div>
+        {activeTab === 'billing' && (() => {
+          // --- Mock billing data (à connecter à la vraie API plus tard) ---
+          const revenueGenerated = 1284; // CA généré ce mois via relances (€)
+          const commissionRate = 12;     // taux de commission appliqué (%)
+          const commissionAmount = Math.round(revenueGenerated * commissionRate / 100);
 
-              <div className="p-4 rounded-xl bg-[#F7F4EF] border border-[#E9E4DD] text-[#17151A] flex items-start gap-3">
-                <Info className="w-5 h-5 text-[#736C72] shrink-0" />
-                <p className="text-[13px] font-medium mt-0.5">Les commissions sont prélevées mensuellement sur le chiffre d'affaires généré par les relances automatiques.</p>
-              </div>
+          // Anneau SVG : rayon 36, circonférence ≈ 226.2
+          const radius = 36;
+          const circumference = 2 * Math.PI * radius;
+          const offset = circumference * (1 - commissionRate / 100);
 
-              <div>
-                <h3 className="text-[16px] font-bold text-[#17151A] mb-4 mt-2">Moyen de paiement</h3>
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between py-3 border-b border-[#E9E4DD]">
-                    <div className="flex items-center gap-3">
-                      <CreditCard className="w-5 h-5 text-[#736C72]" />
-                      <div>
-                        <p className="text-[14px] font-semibold text-[#17151A]">Visa terminant par 4242</p>
-                        <p className="text-[12px] text-[#736C72]">Expire en 12/2028</p>
+          return (
+            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 animate-in fade-in duration-300">
+
+              {/* ── Colonne principale ── */}
+              <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-6">
+                <div>
+                  <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Plan Résultat</h3>
+                  <p className="text-[14px] text-[#736C72] leading-relaxed">
+                    Vous êtes actuellement sur la tarification à la performance. Vous ne payez que lorsque Retenza vous fait gagner de l&apos;argent de manière prouvée.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#F7F4EF] border border-[#E9E4DD] text-[#17151A] flex items-start gap-3">
+                  <Info className="w-5 h-5 text-[#736C72] shrink-0" />
+                  <p className="text-[13px] font-medium mt-0.5">Les commissions sont prélevées mensuellement sur le chiffre d&apos;affaires généré par les relances automatiques.</p>
+                </div>
+
+                <div>
+                  <h3 className="text-[16px] font-bold text-[#17151A] mb-4 mt-2">Moyen de paiement</h3>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between py-3 border-b border-[#E9E4DD]">
+                      <div className="flex items-center gap-3">
+                        <CreditCard className="w-5 h-5 text-[#736C72]" />
+                        <div>
+                          <p className="text-[14px] font-semibold text-[#17151A]">Visa terminant par 4242</p>
+                          <p className="text-[12px] text-[#736C72]">Expire en 12/2028</p>
+                        </div>
                       </div>
+                      <button className="text-[13px] font-semibold text-[#C31F3C] hover:underline cursor-pointer">Modifier</button>
                     </div>
-                    <button className="text-[13px] font-semibold text-[#C31F3C] hover:underline cursor-pointer">Modifier</button>
                   </div>
                 </div>
               </div>
+
+              {/* ── Colonne latérale ── */}
+              <div className="flex flex-col gap-4">
+
+                {/* Card 1 : Revenu généré ce mois */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[22px] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                  <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-2">Revenu généré ce mois</p>
+                  <p className="text-[28px] font-bold text-[#C31F3C] leading-none mb-1">
+                    {revenueGenerated.toLocaleString('fr-FR')} €
+                  </p>
+                  <p className="text-[12px] text-[#A39C9F] mt-1.5 leading-snug">Grâce aux relances automatiques Retenza</p>
+                </div>
+
+                {/* Card 2 : Anneau de commission */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[22px] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col items-center gap-3">
+                  <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] self-start">Commission ce mois</p>
+                  <div className="relative w-[88px] h-[88px]">
+                    <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+                      <circle
+                        cx="44" cy="44" r={radius}
+                        fill="none"
+                        stroke="#E9E4DD"
+                        strokeWidth="8"
+                      />
+                      <circle
+                        cx="44" cy="44" r={radius}
+                        fill="none"
+                        stroke="#C31F3C"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                        className="transition-all duration-700"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-[18px] font-bold text-[#17151A]">{commissionRate}%</span>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[12.5px] font-semibold text-[#17151A]">{commissionAmount.toLocaleString('fr-FR')} €</p>
+                    <p className="text-[11.5px] text-[#A39C9F] mt-0.5">Taux appliqué au CA généré</p>
+                  </div>
+                </div>
+
+                {/* Card 3 : Aucun engagement */}
+                <div className="bg-[#F5D7CD] border border-[#EFC1B4] rounded-xl p-[22px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 rounded-full bg-[#C31F3C] flex items-center justify-center shrink-0">
+                      <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 text-white fill-current"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z"/></svg>
+                    </div>
+                    <h3 className="text-[14px] font-bold text-[#17151A]">Aucun engagement</h3>
+                  </div>
+                  <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                    Vous pouvez changer ou résilier votre plan à tout moment, sans frais ni préavis.
+                  </p>
+                </div>
+
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
+
 
         {/* TAB: SECURITY */}
         {activeTab === 'security' && (
