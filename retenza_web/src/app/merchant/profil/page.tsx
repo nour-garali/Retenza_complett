@@ -28,24 +28,24 @@ function InfoGridCell({
   linkHref?: string;
 }) {
   return (
-    <div className="flex items-center gap-4 py-4 sm:py-5">
-      <div className="w-11 h-11 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0 text-[#C31F3C]">
-        <Icon className="w-5 h-5" />
+    <div className="flex items-center gap-3.5 py-3.5 sm:py-4">
+      <div className="w-9 h-9 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0 text-[#C31F3C]">
+        <Icon className="w-4 h-4" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[13px] font-semibold text-[#736C72]">{label}</p>
+        <p className="text-[12.5px] font-semibold text-[#736C72]">{label}</p>
         {isLink ? (
           <a
             href={linkHref || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[15px] font-bold text-[#C31F3C] hover:underline flex items-center gap-1.5 truncate mt-0.5"
+            className="text-[14px] font-semibold text-[#C31F3C] hover:underline flex items-center gap-1.5 truncate mt-0.5"
           >
             <span className="truncate">{value}</span>
-            <ExternalLink className="w-4 h-4 shrink-0 text-[#C31F3C]" />
+            <ExternalLink className="w-3.5 h-3.5 shrink-0 text-[#C31F3C]" />
           </a>
         ) : (
-          <p className="text-[15px] font-bold text-[#17151A] truncate mt-0.5">
+          <p className="text-[14px] font-semibold text-[#17151A] truncate mt-0.5">
             {value}
           </p>
         )}
@@ -161,10 +161,10 @@ export default function MerchantProfilPage() {
         breadcrumb="Profil"
       />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-8 pb-16 w-full flex flex-col gap-6">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 pb-16 w-full flex flex-col gap-5">
         
         {/* ─── 1. CARD D'IDENTITÉ ─── */}
-        <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-7 shadow-xs flex flex-col gap-6">
+        <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
             
             {/* Avatar + Main Info */}
@@ -173,43 +173,43 @@ export default function MerchantProfilPage() {
               <div className="relative shrink-0">
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#F5D7CD] border-2 border-white shadow-xs flex items-center justify-center overflow-hidden cursor-pointer group"
+                  className="w-20 h-20 rounded-full bg-[#F5D7CD] border border-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center overflow-hidden cursor-pointer group"
                 >
                   {savedLogo ? (
                     <img src={savedLogo} alt="Logo" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-4xl sm:text-5xl font-extrabold text-[#C31F3C]">
+                    <span className="text-3xl sm:text-4xl font-bold text-[#C31F3C]">
                       {initials}
                     </span>
                   )}
                   <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Camera className="w-6 h-6 text-white" />
+                    <Camera className="w-5 h-5 text-white" />
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white border border-[#E9E4DD] shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-white border border-[#E9E4DD] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer"
                   title="Changer la photo"
                 >
-                  <Camera className="w-4 h-4 text-[#17151A]" />
+                  <Camera className="w-3.5 h-3.5 text-[#17151A]" />
                 </button>
               </div>
 
               {/* Title, Badge, Contacts */}
               <div className="flex flex-col gap-2 min-w-0">
-                <h2 className="text-xl sm:text-2xl font-extrabold text-[#17151A] tracking-tight">
+                <h2 className="text-lg sm:text-xl font-bold text-[#17151A] tracking-tight">
                   {commerceName}
                 </h2>
 
                 <div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F5D7CD]/70 text-[#C31F3C] text-xs font-bold">
-                    <Store className="w-3.5 h-3.5" />
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F5D7CD]/70 text-[#C31F3C] text-[11px] font-semibold">
+                    <Store className="w-3 h-3" />
                     Commerçant Partenaire
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#17151A] flex-wrap mt-0.5">
+                <div className="flex items-center gap-2.5 text-[12px] sm:text-[13px] font-medium text-[#17151A] flex-wrap mt-0.5">
                   <div className="flex items-center gap-1.5">
                     <Mail className="w-4 h-4 text-[#736C72]" />
                     <span>{email}</span>
@@ -227,7 +227,7 @@ export default function MerchantProfilPage() {
             <div className="shrink-0 self-start sm:self-center">
               <button
                 onClick={openEditDrawer}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#F5D7CD] bg-white hover:bg-[#F5D7CD]/20 text-[#8A1329] text-xs font-bold transition-all shadow-2xs hover:border-[#C31F3C]"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#F5D7CD] bg-white hover:bg-[#F5D7CD]/20 text-[#8A1329] text-[13px] font-semibold transition-all shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:border-[#C31F3C]"
               >
                 <Pencil className="w-3.5 h-3.5 text-[#C31F3C]" />
                 Modifier les infos
@@ -238,35 +238,35 @@ export default function MerchantProfilPage() {
           {/* Bottom 3-column metadata strip */}
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E9E4DD] border border-[#E9E4DD] rounded-xl bg-white overflow-hidden">
             {/* Adresse */}
-            <div className="p-3.5 sm:px-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-2xs">
+            <div className="p-3 sm:px-4 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-semibold text-[#736C72] uppercase tracking-wider">Adresse</p>
-                <p className="text-xs sm:text-sm font-bold text-[#17151A] truncate">{editForm.address}</p>
+                <p className="text-[11px] font-medium text-[#736C72] uppercase tracking-wider">Adresse</p>
+                <p className="text-[13px] sm:text-[14px] font-semibold text-[#17151A] truncate">{editForm.address}</p>
               </div>
             </div>
 
             {/* Secteur d'activité */}
-            <div className="p-3.5 sm:px-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-2xs">
+            <div className="p-3 sm:px-4 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <Tag className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-semibold text-[#736C72] uppercase tracking-wider">Secteur d&apos;activité</p>
-                <p className="text-xs sm:text-sm font-bold text-[#17151A] truncate">Café / Restauration</p>
+                <p className="text-[11px] font-medium text-[#736C72] uppercase tracking-wider">Secteur d&apos;activité</p>
+                <p className="text-[13px] sm:text-[14px] font-semibold text-[#17151A] truncate">Café / Restauration</p>
               </div>
             </div>
 
             {/* Membre depuis */}
-            <div className="p-3.5 sm:px-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-2xs">
+            <div className="p-3 sm:px-4 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <Calendar className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-[11px] font-semibold text-[#736C72] uppercase tracking-wider">Membre depuis</p>
-                <p className="text-xs sm:text-sm font-bold text-[#17151A] truncate">Janvier 2026</p>
+                <p className="text-[11px] font-medium text-[#736C72] uppercase tracking-wider">Membre depuis</p>
+                <p className="text-[13px] sm:text-[14px] font-semibold text-[#17151A] truncate">Janvier 2026</p>
               </div>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default function MerchantProfilPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as Tab)}
-                className={`pb-3 text-sm font-bold border-b-2 -mb-px transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                className={`pb-3 text-[13.5px] font-semibold border-b-2 -mb-px transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
                   isActive
                     ? 'border-[#C31F3C] text-[#C31F3C]'
                     : 'border-transparent text-[#736C72] hover:text-[#17151A]'
@@ -301,23 +301,23 @@ export default function MerchantProfilPage() {
 
         {/* ─── 3. CONTENU ONGLET ACTIF ─── */}
         {activeTab === 'overview' && (
-          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-xs animate-in fade-in duration-300">
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300">
             {/* Row 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 border-b border-[#E9E4DD]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 border-b border-[#E9E4DD]">
               <InfoGridCell icon={Building2} label="Nom de l'établissement" value={commerceName} />
               <InfoGridCell icon={User} label="Responsable" value={responsibleName} />
               <InfoGridCell icon={Phone} label="Téléphone de contact" value={phone} />
             </div>
 
             {/* Row 2 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 border-b border-[#E9E4DD]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 border-b border-[#E9E4DD]">
               <InfoGridCell icon={Mail} label="Adresse e-mail pro" value={email} />
               <InfoGridCell icon={MapPin} label="Adresse postale" value={editForm.address} />
               <InfoGridCell icon={Calendar} label="Date de souscription" value="Janvier 2026" />
             </div>
 
             {/* Row 3 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
               <InfoGridCell icon={Hash} label="Numéro SIRET" value="123 456 789 00012" />
               <InfoGridCell icon={Briefcase} label="Secteur d'activité" value="Café / Restauration" />
               <InfoGridCell 
@@ -333,7 +333,7 @@ export default function MerchantProfilPage() {
 
         {/* TAB: BILLING */}
         {activeTab === 'billing' && (
-          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-xs animate-in fade-in duration-300 max-w-3xl">
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 max-w-3xl">
             <div className="flex flex-col gap-6">
               <div>
                 <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Plan Résultat</h3>
@@ -368,7 +368,7 @@ export default function MerchantProfilPage() {
 
         {/* TAB: SECURITY */}
         {activeTab === 'security' && (
-          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-xs animate-in fade-in duration-300 max-w-md">
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 max-w-md">
             <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
             
             <div className="space-y-5">
@@ -401,7 +401,7 @@ export default function MerchantProfilPage() {
 
         {/* TAB: QR CODE */}
         {activeTab === 'qrcode' && (
-          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-8 sm:p-12 shadow-xs animate-in fade-in duration-300 max-w-2xl mx-auto flex flex-col items-center">
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 max-w-2xl mx-auto flex flex-col items-center">
             <div className="bg-white p-6 rounded-2xl border border-[#E9E4DD] shadow-sm mb-6 inline-block">
               {isLoadingQr ? (
                 <div className="w-[220px] h-[220px] flex items-center justify-center text-gray-400 text-sm font-medium animate-pulse">Génération...</div>
@@ -437,37 +437,37 @@ export default function MerchantProfilPage() {
         )}
 
         {/* ─── 4. BANDEAU DE CONFIANCE (3 CARDS) ─── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
           {/* Card 1: Compte vérifié */}
-          <div className="bg-[#E7F4E6] border border-[#d2e8d0] rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-white/70 border border-[#2C6E30]/10 flex items-center justify-center shrink-0">
+          <div className="bg-[#EDF7ED] border border-[#D4EED4] rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#2C6E30]/10 flex items-center justify-center shrink-0">
               <ShieldCheck className="w-5 h-5 text-[#2C6E30]" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm font-bold text-[#17151A]">Compte vérifié</h3>
-              <p className="text-xs text-[#736C72] mt-0.5">Votre compte est actif et vérifié.</p>
+              <h3 className="text-[14px] font-semibold text-[#2C6E30]">Compte vérifié</h3>
+              <p className="text-[12px] text-[#736C72] mt-0.5">Votre compte est actif et vérifié.</p>
             </div>
           </div>
 
           {/* Card 2: Données sécurisées */}
-          <div className="bg-[#E3EAFB] border border-[#ccd9f7] rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-white/70 border border-[#3555C4]/10 flex items-center justify-center shrink-0">
+          <div className="bg-[#EEF2FC] border border-[#D6E0F5] rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#3555C4]/10 flex items-center justify-center shrink-0">
               <Shield className="w-5 h-5 text-[#3555C4]" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm font-bold text-[#17151A]">Données sécurisées</h3>
-              <p className="text-xs text-[#736C72] mt-0.5">Vos informations sont protégées.</p>
+              <h3 className="text-[14px] font-semibold text-[#3555C4]">Données sécurisées</h3>
+              <p className="text-[12px] text-[#736C72] mt-0.5">Vos informations sont protégées.</p>
             </div>
           </div>
 
           {/* Card 3: Assistance dédiée */}
-          <div className="bg-[#EFE7FA] border border-[#dfd2f5] rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-white/70 border border-[#6B3FA0]/10 flex items-center justify-center shrink-0">
+          <div className="bg-[#F3EEFA] border border-[#DFD1F0] rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#6B3FA0]/10 flex items-center justify-center shrink-0">
               <Headphones className="w-5 h-5 text-[#6B3FA0]" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm font-bold text-[#17151A]">Assistance dédiée</h3>
-              <p className="text-xs text-[#736C72] mt-0.5">Besoin d&apos;aide ? Contactez-nous.</p>
+              <h3 className="text-[14px] font-semibold text-[#6B3FA0]">Assistance dédiée</h3>
+              <p className="text-[12px] text-[#736C72] mt-0.5">Besoin d&apos;aide ? Contactez-nous.</p>
             </div>
           </div>
         </div>
