@@ -6,28 +6,50 @@ import { getMerchantQr } from '@/services/merchantDashboardActions';
 import QRCode from 'react-qr-code';
 import PageHeader from '@/components/PageHeader';
 import { 
-  Store, Phone, Mail, MapPin, Edit2, Shield, CreditCard, 
-  Camera, Settings, X, Save, Upload, Info, QrCode, Copy
+  Store, Phone, Mail, MapPin, Pencil, Calendar, Tag, ExternalLink,
+  Building2, User, Hash, Briefcase, Link2, FileText, Lock, QrCode,
+  ShieldCheck, Shield, Headphones, Camera, X, Save, Upload, Info, 
+  CreditCard, Copy
 } from 'lucide-react';
 
 type Tab = 'overview' | 'billing' | 'security' | 'qrcode';
 
-function DataField({ label, value }: { label: string; value: string | React.ReactNode }) {
+function InfoGridCell({
+  icon: Icon,
+  label,
+  value,
+  isLink = false,
+  linkHref,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: React.ReactNode;
+  isLink?: boolean;
+  linkHref?: string;
+}) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-[13px] font-semibold text-gray-500">{label}</span>
-      <span className="text-[14px] font-medium text-gray-900">{value}</span>
-    </div>
-  );
-}
-
-function Chip({ icon: Icon, text, highlight = false }: { icon: React.ElementType, text: string, highlight?: boolean }) {
-  return (
-    <div className="flex items-center gap-2">
-      <div className={`w-6 h-6 rounded-full flex items-center justify-center ${highlight ? 'bg-[#FCE7DD]' : 'bg-gray-100'}`}>
-        <Icon className={`w-3 h-3 ${highlight ? 'text-[#D73E26]' : 'text-gray-500'}`} />
+    <div className="flex items-center gap-4 py-4 sm:py-5">
+      <div className="w-11 h-11 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0 text-[#C31F3C]">
+        <Icon className="w-5 h-5" />
       </div>
-      <span className={`text-[13px] font-medium ${highlight ? 'text-[#D73E26]' : 'text-gray-600'}`}>{text}</span>
+      <div className="min-w-0 flex-1">
+        <p className="text-[13px] font-semibold text-[#736C72]">{label}</p>
+        {isLink ? (
+          <a
+            href={linkHref || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[15px] font-bold text-[#C31F3C] hover:underline flex items-center gap-1.5 truncate mt-0.5"
+          >
+            <span className="truncate">{value}</span>
+            <ExternalLink className="w-4 h-4 shrink-0 text-[#C31F3C]" />
+          </a>
+        ) : (
+          <p className="text-[15px] font-bold text-[#17151A] truncate mt-0.5">
+            {value}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -45,7 +67,7 @@ export default function MerchantProfilPage() {
   const [editForm, setEditForm] = useState({
     commerceName: '',
     phone: '',
-    address: '',
+    address: '12 Rue de la Paix, 75002 Paris',
   });
   const [isSaving, setIsSaving] = useState(false);
   
@@ -56,11 +78,11 @@ export default function MerchantProfilPage() {
 
   useEffect(() => {
     if (user) {
-      setEditForm({
+      setEditForm(prev => ({
+        ...prev,
         commerceName: (user as any).commerceName || 'Mon Commerce',
-        phone: (user as any).phone || '',
-        address: '12 Rue de la Paix, 75002 Paris', // mock address
-      });
+        phone: (user as any).phone || '25441177',
+      }));
     }
   }, [user]);
 
@@ -84,10 +106,7 @@ export default function MerchantProfilPage() {
       reader.onloadend = () => {
         const result = reader.result as string;
         setLogoPreview(result);
-        
-        if (!isEditModalOpen) {
-          setSavedLogo(result);
-        }
+        setSavedLogo(result);
       };
       reader.readAsDataURL(file);
     }
@@ -121,10 +140,12 @@ export default function MerchantProfilPage() {
     setIsEditModalOpen(true);
   };
 
-  const commerceName = (user as any)?.commerceName || 'Mon Commerce';
+  const commerceName = editForm.commerceName || (user as any)?.commerceName || 'Mon Commerce';
   const initials = commerceName.charAt(0).toUpperCase() || 'M';
-  const email = user?.email || 'contact@commerce.com';
-  const phone = (user as any)?.phone || 'Non renseigné';
+  const email = user?.email || 'imen@gmail.com';
+  const phone = editForm.phone || (user as any)?.phone || '25441177';
+  const responsibleName = `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || (user as any)?.name || 'cozyy ,';
+  const customUrl = `retenza.app/c/${commerceName.toLowerCase().replace(/\s+/g, '') || 'moncommerce'}`;
 
   const handleCopyQrUrl = () => {
     const urlToCopy = typeof qrCodeData === 'string' ? 'https://retenza.app' : ((qrCodeData as any)?.url || 'https://retenza.app');
@@ -133,228 +154,326 @@ export default function MerchantProfilPage() {
   };
 
   return (
-    <>
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F7F4EF]">
       <PageHeader
         title="Mon Profil & Commerce"
         subtitle="Gérez les informations de votre établissement."
         breadcrumb="Profil"
       />
-      {/* Full bleed background matching header color */}
-      <div className="-mt-8 -mx-6 lg:-mx-8 -mb-12 bg-[#F7F5F2] min-h-[calc(100vh-72px)] pb-16">
-        
-        {/* 1. Cover Banner */}
-        <div className="max-w-[1040px] mx-auto px-6 lg:px-8 pt-6 lg:pt-8">
-          <div className="h-40 bg-gradient-to-r from-[#FFF5F2] to-[#FFF8F5] relative overflow-hidden rounded-3xl border border-[#FCE7DD]/60">
-            <div className="absolute right-[10%] -bottom-12 w-48 h-48 border border-[#FCE7DD] rounded-full" />
-            <div className="absolute right-[25%] -bottom-6 w-32 h-32 border border-[#FCE7DD] rounded-full" />
-          </div>
-        </div>
 
-        {/* 2. Content Container */}
-        <div className="max-w-[1040px] mx-auto px-6 lg:px-8">
-          
-          {/* Avatar & Header Info */}
-          <div className="pb-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 pb-16 w-full flex flex-col gap-6">
+        
+        {/* ─── 1. CARD D'IDENTITÉ ─── */}
+        <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-7 shadow-xs flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
             
-            <div className="flex justify-between items-end mb-6">
-              <div className="-mt-16 relative ml-2 sm:ml-6">
-                <div className="w-32 h-32 rounded-full bg-[#FCE7DD] text-[#D73E26] flex items-center justify-center text-4xl font-bricolage font-bold border-[6px] border-white shadow-sm overflow-hidden relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            {/* Avatar + Main Info */}
+            <div className="flex items-center gap-5">
+              {/* Avatar circle with overlaid camera button */}
+              <div className="relative shrink-0">
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#F5D7CD] border-2 border-white shadow-xs flex items-center justify-center overflow-hidden cursor-pointer group"
+                >
                   {savedLogo ? (
                     <img src={savedLogo} alt="Logo" className="w-full h-full object-cover" />
                   ) : (
-                    initials
+                    <span className="text-4xl sm:text-5xl font-extrabold text-[#C31F3C]">
+                      {initials}
+                    </span>
                   )}
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Camera className="w-8 h-8 text-white mb-1" />
-                    <span className="text-white text-[11px] font-semibold">Changer</span>
+                  <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Camera className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white border border-[#E9E4DD] shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer"
+                  title="Changer la photo"
+                >
+                  <Camera className="w-4 h-4 text-[#17151A]" />
+                </button>
+              </div>
+
+              {/* Title, Badge, Contacts */}
+              <div className="flex flex-col gap-2 min-w-0">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#17151A] tracking-tight">
+                  {commerceName}
+                </h2>
+
+                <div>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F5D7CD]/70 text-[#C31F3C] text-xs font-bold">
+                    <Store className="w-3.5 h-3.5" />
+                    Commerçant Partenaire
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-[#17151A] flex-wrap mt-0.5">
+                  <div className="flex items-center gap-1.5">
+                    <Mail className="w-4 h-4 text-[#736C72]" />
+                    <span>{email}</span>
+                  </div>
+                  <span className="text-[#E9E4DD]">|</span>
+                  <div className="flex items-center gap-1.5">
+                    <Phone className="w-4 h-4 text-[#736C72]" />
+                    <span>{phone}</span>
                   </div>
                 </div>
               </div>
-              
-              <button 
+            </div>
+
+            {/* Modifier les infos Button */}
+            <div className="shrink-0 self-start sm:self-center">
+              <button
                 onClick={openEditDrawer}
-                className="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-xl text-[13px] font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm bg-white mt-4 sm:mt-0"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#F5D7CD] bg-white hover:bg-[#F5D7CD]/20 text-[#8A1329] text-xs font-bold transition-all shadow-2xs hover:border-[#C31F3C]"
               >
-                <Edit2 className="w-4 h-4" /> Modifier les infos
+                <Pencil className="w-3.5 h-3.5 text-[#C31F3C]" />
+                Modifier les infos
               </button>
             </div>
-
-            {/* Name & Bio */}
-            <div className="mb-6 ml-2 sm:ml-6">
-              <h1 className="text-[28px] font-bold text-gray-900 mb-2">{commerceName}</h1>
-              <p className="text-[14px] text-gray-500 max-w-2xl leading-relaxed">
-                Gérez les informations de votre point de vente, vos coordonnées de facturation et vos paramètres de sécurité. 
-                Ces informations garantissent le bon fonctionnement de votre programme de fidélité Retenza.
-              </p>
-            </div>
-
-            {/* Information Chips */}
-            <div className="flex flex-wrap items-center gap-6 ml-2 sm:ml-6">
-              <Chip icon={Mail} text={email} />
-              <Chip icon={Phone} text={phone} />
-              <Chip icon={Store} text="Commerçant Partenaire" highlight />
-            </div>
-
           </div>
 
-          {/* 3. Subtle Inner Tabs */}
-          <div className="flex gap-8 border-b border-gray-100 ml-2 sm:ml-6 overflow-x-auto no-scrollbar">
-            {[
-              { id: 'overview', label: 'Informations générales' },
-              { id: 'billing', label: 'Facturation & Plan' },
-              { id: 'security', label: 'Sécurité & Accès' },
-              { id: 'qrcode', label: 'Code QR & PLV' }
-            ].map(tab => (
+          {/* Bottom 3-column metadata strip */}
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E9E4DD] border border-[#E9E4DD] rounded-xl bg-white overflow-hidden">
+            {/* Adresse */}
+            <div className="p-3.5 sm:px-5 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-2xs">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold text-[#736C72] uppercase tracking-wider">Adresse</p>
+                <p className="text-xs sm:text-sm font-bold text-[#17151A] truncate">{editForm.address}</p>
+              </div>
+            </div>
+
+            {/* Secteur d'activité */}
+            <div className="p-3.5 sm:px-5 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-2xs">
+                <Tag className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold text-[#736C72] uppercase tracking-wider">Secteur d&apos;activité</p>
+                <p className="text-xs sm:text-sm font-bold text-[#17151A] truncate">Café / Restauration</p>
+              </div>
+            </div>
+
+            {/* Membre depuis */}
+            <div className="p-3.5 sm:px-5 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-2xs">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold text-[#736C72] uppercase tracking-wider">Membre depuis</p>
+                <p className="text-xs sm:text-sm font-bold text-[#17151A] truncate">Janvier 2026</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ─── 2. BARRE D'ONGLETS ─── */}
+        <div className="flex gap-6 sm:gap-8 border-b border-[#E9E4DD] overflow-x-auto no-scrollbar pb-0">
+          {[
+            { id: 'overview', label: 'Informations générales', icon: MapPin },
+            { id: 'billing', label: 'Facturation & Plan', icon: FileText },
+            { id: 'security', label: 'Sécurité & Accès', icon: Lock },
+            { id: 'qrcode', label: 'Code QR & PLV', icon: QrCode },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as Tab)}
-                className={`pb-4 text-[14px] font-semibold transition-colors border-b-2 -mb-px whitespace-nowrap ${
-                  activeTab === tab.id 
-                    ? 'border-[#D73E26] text-[#D73E26]' 
-                    : 'border-transparent text-gray-500 hover:text-gray-800'
+                className={`pb-3 text-sm font-bold border-b-2 -mb-px transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                  isActive
+                    ? 'border-[#C31F3C] text-[#C31F3C]'
+                    : 'border-transparent text-[#736C72] hover:text-[#17151A]'
                 }`}
               >
+                <Icon className="w-4 h-4 shrink-0" />
                 {tab.label}
               </button>
-            ))}
+            );
+          })}
+        </div>
+
+        {/* ─── 3. CONTENU ONGLET ACTIF ─── */}
+        {activeTab === 'overview' && (
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-xs animate-in fade-in duration-300">
+            {/* Row 1 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 border-b border-[#E9E4DD]">
+              <InfoGridCell icon={Building2} label="Nom de l'établissement" value={commerceName} />
+              <InfoGridCell icon={User} label="Responsable" value={responsibleName} />
+              <InfoGridCell icon={Phone} label="Téléphone de contact" value={phone} />
+            </div>
+
+            {/* Row 2 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 border-b border-[#E9E4DD]">
+              <InfoGridCell icon={Mail} label="Adresse e-mail pro" value={email} />
+              <InfoGridCell icon={MapPin} label="Adresse postale" value={editForm.address} />
+              <InfoGridCell icon={Calendar} label="Date de souscription" value="Janvier 2026" />
+            </div>
+
+            {/* Row 3 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
+              <InfoGridCell icon={Hash} label="Numéro SIRET" value="123 456 789 00012" />
+              <InfoGridCell icon={Briefcase} label="Secteur d'activité" value="Café / Restauration" />
+              <InfoGridCell 
+                icon={Link2} 
+                label="Lien personnalisé" 
+                value={customUrl}
+                isLink
+                linkHref={`https://${customUrl}`}
+              />
+            </div>
           </div>
+        )}
 
-          {/* 4. Tab Content Area */}
-          <div className="py-10 ml-2 sm:ml-6">
-            
-            {/* TAB: OVERVIEW */}
-            {activeTab === 'overview' && (
-              <div className="animate-in fade-in duration-300">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12">
-                  <DataField label="Nom de l'établissement" value={commerceName} />
-                  <DataField label="Responsable" value={`${user?.firstName || ''} ${user?.lastName || ''}`.trim() || '—'} />
-                  <DataField label="Téléphone de contact" value={phone} />
-                  
-                  <DataField label="Adresse e-mail pro" value={email} />
-                  <DataField label="Adresse postale" value={editForm.address} />
-                  <DataField label="Date de souscription" value="Janvier 2026" />
-
-                  <DataField label="Numéro SIRET" value="123 456 789 00012" />
-                  <DataField label="Secteur d'activité" value="Café / Restauration" />
-                  <DataField label="Lien personnalisé" value={<span className="text-[#D73E26] hover:underline cursor-pointer">retenza.app/c/{commerceName.toLowerCase().replace(/\s+/g, '')}</span>} />
-                </div>
+        {/* TAB: BILLING */}
+        {activeTab === 'billing' && (
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-xs animate-in fade-in duration-300 max-w-3xl">
+            <div className="flex flex-col gap-6">
+              <div>
+                <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Plan Résultat</h3>
+                <p className="text-[14px] text-[#736C72] leading-relaxed">
+                  Vous êtes actuellement sur la tarification à la performance. Vous ne payez que lorsque Retenza vous fait gagner de l'argent de manière prouvée.
+                </p>
               </div>
-            )}
 
-            {/* TAB: BILLING */}
-            {activeTab === 'billing' && (
-              <div className="animate-in fade-in duration-300 max-w-3xl">
-                <div className="flex flex-col gap-6">
-                  <div>
-                    <h3 className="text-[16px] font-bold text-gray-900 mb-2">Plan Résultat</h3>
-                    <p className="text-[14px] text-gray-500 leading-relaxed">
-                      Vous êtes actuellement sur la tarification à la performance. Vous ne payez que lorsque Retenza vous fait gagner de l'argent de manière prouvée.
-                    </p>
-                  </div>
+              <div className="p-4 rounded-xl bg-[#F7F4EF] border border-[#E9E4DD] text-[#17151A] flex items-start gap-3">
+                <Info className="w-5 h-5 text-[#736C72] shrink-0" />
+                <p className="text-[13px] font-medium mt-0.5">Les commissions sont prélevées mensuellement sur le chiffre d'affaires généré par les relances automatiques.</p>
+              </div>
 
-                  <div className="p-4 rounded-xl bg-gray-50 text-gray-700 flex items-start gap-3">
-                    <Info className="w-5 h-5 text-gray-400 shrink-0" />
-                    <p className="text-[13px] font-medium mt-0.5">Les commissions sont prélevées mensuellement sur le chiffre d'affaires généré par les relances automatiques.</p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-[16px] font-bold text-gray-900 mb-6 mt-4">Moyen de paiement</h3>
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                          <CreditCard className="w-5 h-5 text-gray-400" />
-                          <div>
-                            <p className="text-[14px] font-medium text-gray-900">Visa terminant par 4242</p>
-                            <p className="text-[12px] text-gray-500">Expire en 12/2028</p>
-                          </div>
-                        </div>
-                        <button className="text-[13px] font-semibold text-gray-500 hover:text-gray-900">Modifier</button>
+              <div>
+                <h3 className="text-[16px] font-bold text-[#17151A] mb-4 mt-2">Moyen de paiement</h3>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between py-3 border-b border-[#E9E4DD]">
+                    <div className="flex items-center gap-3">
+                      <CreditCard className="w-5 h-5 text-[#736C72]" />
+                      <div>
+                        <p className="text-[14px] font-semibold text-[#17151A]">Visa terminant par 4242</p>
+                        <p className="text-[12px] text-[#736C72]">Expire en 12/2028</p>
                       </div>
                     </div>
+                    <button className="text-[13px] font-semibold text-[#C31F3C] hover:underline cursor-pointer">Modifier</button>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+        )}
 
-            {/* TAB: SECURITY */}
-            {activeTab === 'security' && (
-              <div className="animate-in fade-in duration-300 max-w-md">
-                <h3 className="text-[16px] font-bold text-gray-900 mb-6">Mettre à jour le mot de passe</h3>
-                
-                <div className="space-y-6">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-gray-500">Mot de passe actuel</label>
-                    <input 
-                      type="password" 
-                      className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                  
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-gray-500">Nouveau mot de passe</label>
-                    <input 
-                      type="password" 
-                      className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent"
-                      placeholder="••••••••"
-                    />
-                  </div>
-
-                  <div className="pt-4">
-                    <button className="px-6 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white text-[13px] font-semibold rounded-xl transition-colors shadow-sm">
-                      Sauvegarder
-                    </button>
-                  </div>
-                </div>
+        {/* TAB: SECURITY */}
+        {activeTab === 'security' && (
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-xs animate-in fade-in duration-300 max-w-md">
+            <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
+            
+            <div className="space-y-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
+                <input 
+                  type="password" 
+                  className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                  placeholder="••••••••"
+                />
               </div>
-            )}
-
-            {/* TAB: QR CODE */}
-            {activeTab === 'qrcode' && (
-              <div className="animate-in fade-in duration-300 max-w-2xl mx-auto">
-                <div className="bg-white rounded-[32px] border border-[#EDE5DF] p-8 sm:p-12 shadow-sm flex flex-col items-center">
-                  {/* QR Code Area */}
-                  <div className="bg-white p-6 rounded-3xl border border-[#EDE5DF] shadow-[0_8px_24px_rgba(24,16,11,0.04)] mb-8 inline-block">
-                    {isLoadingQr ? (
-                      <div className="w-[240px] h-[240px] flex items-center justify-center text-gray-400 text-sm font-medium animate-pulse">Génération...</div>
-                    ) : (
-                      <QRCode 
-                        value={(typeof qrCodeData === 'object' && qrCodeData ? (qrCodeData as any).url : qrCodeData) || 'https://retenza.app'} 
-                        size={240}
-                        fgColor="#18100B"
-                        bgColor="#FFFFFF"
-                        level="H"
-                      />
-                    )}
-                  </div>
-
-                  <div className="bg-[#FBE9E7] px-6 py-3 rounded-full mb-6">
-                    <p className="text-[#D0392A] font-space font-bold tracking-[0.2em] text-xl">
-                      {((typeof qrCodeData === 'object' && qrCodeData) ? (qrCodeData as any).merchantCode : null) || 'CODE'}
-                    </p>
-                  </div>
-
-                  <p className="text-[#6B5B52] text-sm text-center max-w-sm mb-10">
-                    Demandez à vos clients de scanner ce QR Code avec leur application Retenza pour s'inscrire à votre programme et cumuler des avantages.
-                  </p>
-
-                  <button 
-                    onClick={handleCopyQrUrl}
-                    className="w-full sm:w-auto px-8 py-4 bg-gradient-to-br from-[#E04030] to-[#9E2B1E] text-white rounded-2xl font-bold flex items-center justify-center gap-3 shadow-[0_8px_20px_rgba(208,57,42,0.25)] hover:scale-[1.02] transition-transform"
-                  >
-                    <Copy className="w-5 h-5" />
-                    Copier le lien
-                  </button>
-                </div>
+              
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
+                <input 
+                  type="password" 
+                  className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                  placeholder="••••••••"
+                />
               </div>
-            )}
 
+              <div className="pt-2">
+                <button className="px-6 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[13px] font-bold rounded-xl transition-colors shadow-sm cursor-pointer">
+                  Sauvegarder
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
+        {/* TAB: QR CODE */}
+        {activeTab === 'qrcode' && (
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-8 sm:p-12 shadow-xs animate-in fade-in duration-300 max-w-2xl mx-auto flex flex-col items-center">
+            <div className="bg-white p-6 rounded-2xl border border-[#E9E4DD] shadow-sm mb-6 inline-block">
+              {isLoadingQr ? (
+                <div className="w-[220px] h-[220px] flex items-center justify-center text-gray-400 text-sm font-medium animate-pulse">Génération...</div>
+              ) : (
+                <QRCode 
+                  value={(typeof qrCodeData === 'object' && qrCodeData ? (qrCodeData as any).url : qrCodeData) || 'https://retenza.app'} 
+                  size={220}
+                  fgColor="#17151A"
+                  bgColor="#FFFFFF"
+                  level="H"
+                />
+              )}
+            </div>
+
+            <div className="bg-[#F5D7CD]/70 px-6 py-2.5 rounded-full mb-4 border border-[#F5D7CD]">
+              <p className="text-[#C31F3C] font-bold tracking-[0.2em] text-lg">
+                {((typeof qrCodeData === 'object' && qrCodeData) ? (qrCodeData as any).merchantCode : null) || 'CODE'}
+              </p>
+            </div>
+
+            <p className="text-[#736C72] text-sm text-center max-w-sm mb-8">
+              Demandez à vos clients de scanner ce QR Code avec leur application Retenza pour s&apos;inscrire à votre programme et cumuler des avantages.
+            </p>
+
+            <button 
+              onClick={handleCopyQrUrl}
+              className="w-full sm:w-auto px-8 py-3 bg-[#C31F3C] hover:bg-[#8A1329] text-white rounded-xl font-bold flex items-center justify-center gap-2.5 shadow-sm transition-all cursor-pointer"
+            >
+              <Copy className="w-4 h-4" />
+              Copier le lien
+            </button>
+          </div>
+        )}
+
+        {/* ─── 4. BANDEAU DE CONFIANCE (3 CARDS) ─── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+          {/* Card 1: Compte vérifié */}
+          <div className="bg-[#E7F4E6] border border-[#d2e8d0] rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-white/70 border border-[#2C6E30]/10 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-5 h-5 text-[#2C6E30]" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold text-[#17151A]">Compte vérifié</h3>
+              <p className="text-xs text-[#736C72] mt-0.5">Votre compte est actif et vérifié.</p>
+            </div>
+          </div>
+
+          {/* Card 2: Données sécurisées */}
+          <div className="bg-[#E3EAFB] border border-[#ccd9f7] rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-white/70 border border-[#3555C4]/10 flex items-center justify-center shrink-0">
+              <Shield className="w-5 h-5 text-[#3555C4]" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold text-[#17151A]">Données sécurisées</h3>
+              <p className="text-xs text-[#736C72] mt-0.5">Vos informations sont protégées.</p>
+            </div>
+          </div>
+
+          {/* Card 3: Assistance dédiée */}
+          <div className="bg-[#EFE7FA] border border-[#dfd2f5] rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-white/70 border border-[#6B3FA0]/10 flex items-center justify-center shrink-0">
+              <Headphones className="w-5 h-5 text-[#6B3FA0]" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold text-[#17151A]">Assistance dédiée</h3>
+              <p className="text-xs text-[#736C72] mt-0.5">Besoin d&apos;aide ? Contactez-nous.</p>
+            </div>
           </div>
         </div>
+
       </div>
-      
+
       {/* Hidden file input for Logo Upload */}
       <input 
         type="file" 
@@ -373,16 +492,16 @@ export default function MerchantProfilPage() {
           />
           
           <div 
-            className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-gray-100 flex flex-col animate-in slide-in-from-right duration-300"
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-[#E9E4DD] flex flex-col animate-in slide-in-from-right duration-300"
           >
-            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+            <div className="flex items-center justify-between px-8 py-6 border-b border-[#E9E4DD]">
               <div>
-                <h2 className="text-[20px] font-bricolage font-bold text-[#1B100C]">Modifier le point de vente</h2>
-                <p className="text-[13px] text-gray-500 mt-1">Mettez à jour vos informations publiques.</p>
+                <h2 className="text-[20px] font-bold text-[#17151A]">Modifier le point de vente</h2>
+                <p className="text-[13px] text-[#736C72] mt-1">Mettez à jour vos informations publiques.</p>
               </div>
               <button 
                 onClick={() => setIsEditModalOpen(false)}
-                className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -392,8 +511,8 @@ export default function MerchantProfilPage() {
               <div className="space-y-6">
                 
                 {/* Logo Preview */}
-                <div className="flex items-center gap-4 mb-8">
-                   <div className="w-16 h-16 rounded-full bg-[#FCE7DD] text-[#D73E26] flex items-center justify-center text-xl font-bricolage font-bold border-2 border-white shadow-sm overflow-hidden shrink-0">
+                <div className="flex items-center gap-4 mb-6">
+                   <div className="w-16 h-16 rounded-full bg-[#F5D7CD] text-[#C31F3C] flex items-center justify-center text-xl font-bold border-2 border-white shadow-sm overflow-hidden shrink-0">
                     {logoPreview ? (
                       <img src={logoPreview} alt="Preview" className="w-full h-full object-cover" />
                     ) : (
@@ -404,7 +523,7 @@ export default function MerchantProfilPage() {
                      <button 
                        type="button" 
                        onClick={() => fileInputRef.current?.click()}
-                       className="text-[13px] font-semibold text-[#D73E26] hover:text-[#C0321C] transition-colors flex items-center gap-1.5"
+                       className="text-[13px] font-semibold text-[#C31F3C] hover:underline transition-colors flex items-center gap-1.5 cursor-pointer"
                      >
                        <Upload className="w-3.5 h-3.5" /> Changer le logo
                      </button>
@@ -413,42 +532,42 @@ export default function MerchantProfilPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[13px] font-semibold text-gray-700">Nom du commerce</label>
+                  <label className="text-[13px] font-semibold text-[#17151A]">Nom du commerce</label>
                   <input 
                     type="text" 
                     required
                     value={editForm.commerceName}
                     onChange={e => setEditForm({...editForm, commerceName: e.target.value})}
-                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[13px] font-semibold text-gray-700">Adresse complète</label>
+                  <label className="text-[13px] font-semibold text-[#17151A]">Adresse complète</label>
                   <input 
                     type="text" 
                     value={editForm.address}
                     onChange={e => setEditForm({...editForm, address: e.target.value})}
                     placeholder="Ex: 12 Rue de la Paix, 75002 Paris"
-                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[13px] font-semibold text-gray-700">Numéro de téléphone</label>
+                  <label className="text-[13px] font-semibold text-[#17151A]">Numéro de téléphone</label>
                   <input 
                     type="tel" 
                     value={editForm.phone}
                     onChange={e => setEditForm({...editForm, phone: e.target.value})}
                     placeholder="Ex: 01 23 45 67 89"
-                    className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
                   />
                 </div>
                 
                 <div className="space-y-2 opacity-70">
-                  <label className="text-[13px] font-semibold text-gray-700 flex items-center justify-between">
+                  <label className="text-[13px] font-semibold text-[#17151A] flex items-center justify-between">
                     Adresse e-mail pro
-                    <span className="text-[11px] font-normal text-gray-400 bg-gray-200 px-2 py-0.5 rounded-full">Lecture seule</span>
+                    <span className="text-[11px] font-normal text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">Lecture seule</span>
                   </label>
                   <input 
                     type="email" 
@@ -460,19 +579,19 @@ export default function MerchantProfilPage() {
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+            <div className="p-6 border-t border-[#E9E4DD] bg-[#F7F4EF]/50">
               <form onSubmit={handleSaveProfile} className="flex items-center gap-3">
                 <button 
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
+                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-gray-600 bg-white border border-[#E9E4DD] hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
                 >
                   Annuler
                 </button>
                 <button 
                   type="submit"
                   disabled={isSaving}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#D73E26] hover:bg-[#C0321C] text-white text-[14px] font-semibold shadow-md shadow-[#D73E26]/20 transition-all disabled:opacity-70 disabled:shadow-none"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[14px] font-bold shadow-md transition-all disabled:opacity-70 cursor-pointer"
                 >
                   {isSaving ? (
                      <Upload className="w-4 h-4 animate-spin" />
@@ -486,6 +605,6 @@ export default function MerchantProfilPage() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
