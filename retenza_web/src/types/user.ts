@@ -18,6 +18,8 @@ export interface User {
   phone?: string;
   commerce?: string | Commerce;
   isOnboardingComplete?: boolean;
+  lastLoginAt?: string;
+  lastLoginIp?: string;
 }
 
 // Helper to safely get the commerce name regardless of whether it's populated or just an ID

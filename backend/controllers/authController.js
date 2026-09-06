@@ -18,6 +18,8 @@ const buildAuthResponse = (user) => ({
       lastName: user.lastName,
       phone: user.phone,
       commerce: user.commerce,
+      lastLoginAt: user.lastLoginAt,
+      lastLoginIp: user.lastLoginIp,
     },
     token: generateToken(user._id, user.role),
   },
@@ -160,6 +162,11 @@ exports.login = asyncHandler(async (req, res) => {
       message: 'Votre compte a été suspendu. Contactez le support Retenza.',
     });
   }
+
+  // ── Mise à jour du tracking de connexion ──────────────────────────────────
+  user.lastLoginAt = new Date();
+  user.lastLoginIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
+  await user.save({ validateBeforeSave: false });
 
   res.json({
     ...buildAuthResponse(user),

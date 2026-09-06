@@ -473,8 +473,17 @@ export default function MerchantProfilPage() {
           })()}
 
           {/* TAB: SECURITY */}
-          {activeTab === 'security' && (
-            <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-5 animate-in fade-in duration-300">
+        {activeTab === 'security' && (() => {
+          const lastLoginDisplay = user?.lastLoginAt 
+            ? new Date(user.lastLoginAt).toLocaleDateString('fr-FR', { 
+                day: 'numeric', month: 'long', year: 'numeric', 
+                hour: '2-digit', minute: '2-digit'
+              }) 
+            : 'Pas encore de données';
+          const ipDisplay = user?.lastLoginIp || 'Pas encore de données';
+
+          return (
+            <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-5 items-start animate-in fade-in duration-300">
               
               {/* ── Colonne Principale (Gauche) ── */}
               <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
@@ -520,11 +529,15 @@ export default function MerchantProfilPage() {
                   <div className="space-y-4">
                     <div>
                       <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-1">Dernière connexion</p>
-                      <p className="text-[14px] text-[#17151A] font-medium">—</p>
+                      <p className={`text-[14px] font-medium ${user?.lastLoginAt ? 'text-[#17151A]' : 'text-[#A39C9F] italic'}`}>
+                        {lastLoginDisplay}
+                      </p>
                     </div>
                     <div>
                       <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-1">Adresse IP</p>
-                      <p className="text-[14px] text-[#17151A] font-medium">—</p>
+                      <p className={`text-[14px] font-medium ${user?.lastLoginIp ? 'text-[#17151A]' : 'text-[#A39C9F] italic'}`}>
+                        {ipDisplay}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -549,7 +562,8 @@ export default function MerchantProfilPage() {
 
               </div>
             </div>
-          )}
+          );
+        })()}
 
           {/* TAB: QR CODE */}
           {activeTab === 'qrcode' && (

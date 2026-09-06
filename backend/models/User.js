@@ -64,6 +64,8 @@ const userSchema = new mongoose.Schema(
     isOnboardingComplete: { type: Boolean, default: false },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    lastLoginAt: Date,
+    lastLoginIp: String,
     commerce: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Commerce',
