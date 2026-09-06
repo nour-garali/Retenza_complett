@@ -439,7 +439,7 @@ export default function MerchantProfilPage() {
         {/* ─── 4. BANDEAU DE CONFIANCE (3 CARDS) ─── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
           {/* Card 1: Compte vérifié */}
-          <div className="bg-[#E7E2DA] border border-[#D8D1C5] rounded-xl p-5 flex items-center gap-4">
+          <div className="bg-[#EDE9E1] border border-[#DFD9CD] rounded-xl p-5 flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center shrink-0">
               <ShieldCheck className="w-[18px] h-[18px] text-[#C31F3C]" strokeWidth={2} />
             </div>
@@ -450,7 +450,7 @@ export default function MerchantProfilPage() {
           </div>
 
           {/* Card 2: Données sécurisées */}
-          <div className="bg-[#E7E2DA] border border-[#D8D1C5] rounded-xl p-5 flex items-center gap-4">
+          <div className="bg-[#EDE9E1] border border-[#DFD9CD] rounded-xl p-5 flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center shrink-0">
               <Lock className="w-[18px] h-[18px] text-[#C31F3C]" strokeWidth={2} />
             </div>
@@ -461,7 +461,7 @@ export default function MerchantProfilPage() {
           </div>
 
           {/* Card 3: Assistance dédiée */}
-          <div className="bg-[#E7E2DA] border border-[#D8D1C5] rounded-xl p-5 flex items-center gap-4">
+          <div className="bg-[#EDE9E1] border border-[#DFD9CD] rounded-xl p-5 flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center shrink-0">
               <Headphones className="w-[18px] h-[18px] text-[#C31F3C]" strokeWidth={2} />
             </div>
