@@ -57,6 +57,10 @@ function InfoGridCell({
 export default function MerchantProfilPage() {
   const { user, login } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('overview');
+  
+  // Security Tab State
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   // QR Code State
   const [qrCodeData, setQrCodeData] = useState<string | null>(null);
@@ -494,6 +498,9 @@ export default function MerchantProfilPage() {
                     <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
                     <input 
                       type="password" 
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      autoComplete="new-password"
                       className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
                       placeholder="••••••••"
                     />
@@ -503,6 +510,9 @@ export default function MerchantProfilPage() {
                     <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
                     <input 
                       type="password" 
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      autoComplete="new-password"
                       className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
                       placeholder="••••••••"
                     />
