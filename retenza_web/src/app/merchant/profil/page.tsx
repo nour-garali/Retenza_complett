@@ -439,35 +439,35 @@ export default function MerchantProfilPage() {
         {/* ─── 4. BANDEAU DE CONFIANCE (3 CARDS) ─── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
           {/* Card 1: Compte vérifié */}
-          <div className="bg-[#EDF7ED] border border-[#D4EED4] rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#2C6E30]/10 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-5 h-5 text-[#2C6E30]" />
+          <div className="bg-white border border-[#E9E4DD] rounded-[10px] p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="w-[34px] h-[34px] rounded-full bg-[#F5D7CD] flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4 h-4 text-[#8A1329]" strokeWidth={2} />
             </div>
             <div className="min-w-0">
-              <h3 className="text-[14px] font-semibold text-[#2C6E30]">Compte vérifié</h3>
-              <p className="text-[12px] text-[#736C72] mt-0.5">Votre compte est actif et vérifié.</p>
+              <h3 className="text-[14px] font-bold text-[#17151A]">Compte vérifié</h3>
+              <p className="text-[12.5px] font-normal text-[#736C72] mt-0.5">Votre compte est actif et vérifié.</p>
             </div>
           </div>
 
           {/* Card 2: Données sécurisées */}
-          <div className="bg-[#EEF2FC] border border-[#D6E0F5] rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#3555C4]/10 flex items-center justify-center shrink-0">
-              <Shield className="w-5 h-5 text-[#3555C4]" />
+          <div className="bg-white border border-[#E9E4DD] rounded-[10px] p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="w-[34px] h-[34px] rounded-full bg-[#F5D7CD] flex items-center justify-center shrink-0">
+              <Lock className="w-4 h-4 text-[#8A1329]" strokeWidth={2} />
             </div>
             <div className="min-w-0">
-              <h3 className="text-[14px] font-semibold text-[#3555C4]">Données sécurisées</h3>
-              <p className="text-[12px] text-[#736C72] mt-0.5">Vos informations sont protégées.</p>
+              <h3 className="text-[14px] font-bold text-[#17151A]">Données sécurisées</h3>
+              <p className="text-[12.5px] font-normal text-[#736C72] mt-0.5">Vos informations sont protégées.</p>
             </div>
           </div>
 
           {/* Card 3: Assistance dédiée */}
-          <div className="bg-[#F3EEFA] border border-[#DFD1F0] rounded-2xl p-3.5 sm:p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#6B3FA0]/10 flex items-center justify-center shrink-0">
-              <Headphones className="w-5 h-5 text-[#6B3FA0]" />
+          <div className="bg-white border border-[#E9E4DD] rounded-[10px] p-4 flex items-center gap-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="w-[34px] h-[34px] rounded-full bg-[#F5D7CD] flex items-center justify-center shrink-0">
+              <Headphones className="w-4 h-4 text-[#8A1329]" strokeWidth={2} />
             </div>
             <div className="min-w-0">
-              <h3 className="text-[14px] font-semibold text-[#6B3FA0]">Assistance dédiée</h3>
-              <p className="text-[12px] text-[#736C72] mt-0.5">Besoin d&apos;aide ? Contactez-nous.</p>
+              <h3 className="text-[14px] font-bold text-[#17151A]">Assistance dédiée</h3>
+              <p className="text-[12.5px] font-normal text-[#736C72] mt-0.5">Besoin d&apos;aide ? Contactez-nous.</p>
             </div>
           </div>
         </div>
