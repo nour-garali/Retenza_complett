@@ -9,7 +9,7 @@ import {
   Store, Phone, Mail, MapPin, Pencil, Calendar, Tag, ExternalLink,
   Building2, User, Hash, Briefcase, Link2, FileText, Lock, QrCode,
   ShieldCheck, Shield, Headphones, Camera, X, Save, Upload, Info, 
-  CreditCard, Copy
+  CreditCard, Copy, Zap, TrendingUp, CornerRightDown
 } from 'lucide-react';
 
 type Tab = 'overview' | 'billing' | 'security' | 'qrcode';
@@ -575,42 +575,142 @@ export default function MerchantProfilPage() {
           );
         })()}
 
-          {/* TAB: QR CODE */}
-          {activeTab === 'qrcode' && (
-            <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 max-w-2xl mx-auto flex flex-col items-center">
-              <div className="bg-white p-6 rounded-2xl border border-[#E9E4DD] shadow-sm mb-6 inline-block">
-                {isLoadingQr ? (
-                  <div className="w-[220px] h-[220px] flex items-center justify-center text-gray-400 text-sm font-medium animate-pulse">Génération...</div>
-                ) : (
-                  <QRCode 
-                    value={(typeof qrCodeData === 'object' && qrCodeData ? (qrCodeData as any).url : qrCodeData) || 'https://retenza.app'} 
-                    size={220}
-                    fgColor="#17151A"
-                    bgColor="#FFFFFF"
-                    level="H"
-                  />
-                )}
+        {/* TAB: QR CODE */}
+        {activeTab === 'qrcode' && (
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-0 lg:divide-x divide-[#E9E4DD]">
+              
+              {/* ── Colonne 1 : Avantages ── */}
+              <div className="flex flex-col gap-6 lg:pr-8 justify-center">
+                
+                {/* Avantage 1 */}
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0">
+                    <Zap className="w-5 h-5 text-[#C31F3C]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] font-bold text-[#17151A] mb-1">Accès rapide</h4>
+                    <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                      Vos clients scannent le QR code pour accéder directement à votre application Retenza.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Avantage 2 */}
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-5 h-5 text-[#C31F3C]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] font-bold text-[#17151A] mb-1">Simple & sécurisé</h4>
+                    <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                      Un accès rapide, fiable et 100% sécurisé pour vos clients.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Avantage 3 */}
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0">
+                    <TrendingUp className="w-5 h-5 text-[#C31F3C]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[14px] font-bold text-[#17151A] mb-1">Plus d&apos;engagement</h4>
+                    <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                      Boostez votre visibilité et améliorez l&apos;expérience client.
+                    </p>
+                  </div>
+                </div>
+
               </div>
 
-              <div className="bg-[#F5D7CD]/70 px-6 py-2.5 rounded-full mb-4 border border-[#F5D7CD]">
-                <p className="text-[#C31F3C] font-bold tracking-[0.2em] text-lg">
-                  {((typeof qrCodeData === 'object' && qrCodeData) ? (qrCodeData as any).merchantCode : null) || 'CODE'}
+              {/* ── Colonne 2 : QR Code Central ── */}
+              <div className="flex flex-col items-center justify-center lg:px-8">
+                <div className="bg-white p-5 rounded-[20px] border border-[#E9E4DD] shadow-[0_2px_8px_rgba(0,0,0,0.06)] mb-5 inline-block">
+                  {isLoadingQr ? (
+                    <div className="w-[180px] h-[180px] flex items-center justify-center text-[#A39C9F] text-[13px] font-medium animate-pulse">
+                      Génération...
+                    </div>
+                  ) : (
+                    <QRCode 
+                      value={(typeof qrCodeData === 'object' && qrCodeData ? (qrCodeData as any).url : qrCodeData) || 'https://retenza.app'} 
+                      size={180}
+                      fgColor="#17151A"
+                      bgColor="#FFFFFF"
+                      level="H"
+                    />
+                  )}
+                </div>
+
+                <button
+                  onClick={handleCopyQrUrl}
+                  className="flex items-center gap-2 bg-[#F5D7CD]/50 hover:bg-[#F5D7CD]/80 transition-colors px-4 py-1.5 rounded-full mb-5 cursor-pointer"
+                >
+                  <Copy className="w-3.5 h-3.5 text-[#C31F3C]" />
+                  <span className="text-[#C31F3C] font-bold tracking-[0.15em] text-[12px] uppercase">
+                    {((typeof qrCodeData === 'object' && qrCodeData) ? (qrCodeData as any).merchantCode : null) || 'CODE QR'}
+                  </span>
+                </button>
+
+                <p className="text-[#736C72] text-[12.5px] text-center max-w-[260px] leading-relaxed mb-6">
+                  Demandez à vos clients de scanner ce QR Code avec leur application Retenza pour s&apos;inscrire à votre programme et cumuler des avantages.
                 </p>
+
+                <button 
+                  onClick={handleCopyQrUrl}
+                  className="w-full sm:w-auto px-8 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer text-[13.5px]"
+                >
+                  <Copy className="w-4 h-4" />
+                  Copier le lien
+                </button>
               </div>
 
-              <p className="text-[#736C72] text-sm text-center max-w-sm mb-8">
-                Demandez à vos clients de scanner ce QR Code avec leur application Retenza pour s&apos;inscrire à votre programme et cumuler des avantages.
-              </p>
+              {/* ── Colonne 3 : Illustration ── */}
+              <div className="hidden lg:flex flex-col items-center justify-center lg:pl-8 relative min-h-[300px]">
+                
+                {/* Decorative Confetti Background */}
+                <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                  <div className="absolute w-20 h-20 bg-[#F5D7CD]/30 rounded-[40px] blur-xl top-8 right-4"></div>
+                  <div className="absolute w-32 h-24 bg-[#F5D7CD]/20 rounded-[50px] blur-2xl bottom-4 left-4"></div>
+                  {/* SVG Sparks */}
+                  <svg className="absolute w-full h-full text-[#F5D7CD]" viewBox="0 0 200 200" fill="none">
+                    <path d="M20 70 Q 30 60 40 70" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M160 120 Q 170 110 180 120" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    <circle cx="150" cy="50" r="3" fill="currentColor" />
+                    <circle cx="40" cy="140" r="4" fill="currentColor" />
+                  </svg>
+                </div>
 
-              <button 
-                onClick={handleCopyQrUrl}
-                className="w-full sm:w-auto px-8 py-3 bg-[#C31F3C] hover:bg-[#8A1329] text-white rounded-xl font-bold flex items-center justify-center gap-2.5 shadow-sm transition-all cursor-pointer"
-              >
-                <Copy className="w-4 h-4" />
-                Copier le lien
-              </button>
+                {/* Text & Arrow */}
+                <div className="absolute top-2 right-4 transform rotate-[-8deg] flex flex-col items-end z-20">
+                  <p className="font-fraunces italic font-bold text-[#C31F3C] text-[20px] leading-[1.1] text-right w-[180px]">
+                    Votre application à portée de scan
+                  </p>
+                  <CornerRightDown className="w-5 h-5 text-[#C31F3C] mt-1 mr-8 opacity-80" strokeWidth={2.5} />
+                </div>
+
+                {/* Phone Mockup */}
+                <div className="w-[130px] h-[260px] bg-white rounded-[24px] border-[5px] border-[#FBEAE6] shadow-[12px_24px_40px_rgba(195,31,60,0.06)] transform rotate-12 flex flex-col items-center pt-8 px-4 relative z-10 mt-14">
+                  {/* Screen inner content */}
+                  <div className="w-full h-full border border-[#E9E4DD] rounded-[14px] bg-[#F7F4EF]/40 flex flex-col items-center pt-6 gap-5">
+                    {/* Fake QR */}
+                    <div className="w-14 h-14 bg-[#F5D7CD]/50 rounded-xl flex items-center justify-center shadow-sm">
+                      <QrCode className="w-7 h-7 text-[#C31F3C]" />
+                    </div>
+                    {/* Fake text lines */}
+                    <div className="flex flex-col gap-2.5 w-full items-center mt-2">
+                      <div className="w-12 h-1.5 bg-[#E9E4DD] rounded-full"></div>
+                      <div className="w-16 h-1.5 bg-[#E9E4DD] rounded-full"></div>
+                      <div className="w-14 h-1.5 bg-[#E9E4DD] rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
-          )}
+          </div>
+        )}
         </div>
 
         {/* ─── 4. BANDEAU DE CONFIANCE (3 CARDS) ─── */}
