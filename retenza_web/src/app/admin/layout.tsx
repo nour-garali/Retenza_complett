@@ -62,10 +62,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-5 py-5 border-b border-white/5">
-          <div className="w-8 h-8 rounded-lg bg-[#D85A30] flex items-center justify-center shrink-0 shadow-lg shadow-[#D85A30]/40">
+          <div className="w-8 h-8 rounded-lg bg-[#DD2C1F] flex items-center justify-center shrink-0 shadow-lg shadow-[#DD2C1F]/40">
             <span className="text-white font-bricolage font-bold text-sm">R</span>
           </div>
-          <span className="font-bricolage font-bold text-[18px] text-[#D85A30] tracking-tight">retenza.</span>
+          <span className="font-bricolage font-bold text-[18px] text-[#DD2C1F] tracking-tight">retenza.</span>
           <button className="lg:hidden ml-auto text-white/40 hover:text-white" onClick={() => setIsSidebarOpen(false)}>
             <X className="w-4 h-4" />
           </button>
@@ -82,11 +82,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={() => setIsSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
                   isActive
-                    ? 'bg-[#D85A30]/15 text-[#D85A30] font-semibold'
+                    ? 'bg-[#DD2C1F]/15 text-[#DD2C1F] font-semibold'
                     : 'text-white/45 hover:text-white/80 hover:bg-white/5'
                 }`}
               >
-                <item.icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#D85A30]' : 'text-white/40'}`} />
+                <item.icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#DD2C1F]' : 'text-white/40'}`} />
                 {item.name}
               </Link>
             );
@@ -96,7 +96,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Bottom — user card */}
         <div className="px-3 pb-4 border-t border-white/5 pt-4">
           <Link href="/admin/profil" className="flex items-center gap-3 px-2 py-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer">
-            <div className="w-9 h-9 rounded-xl bg-[#D85A30] flex items-center justify-center text-white font-bold text-[13px] shrink-0 shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-[#DD2C1F] flex items-center justify-center text-white font-bold text-[13px] shrink-0 shadow-sm">
               {initials}
             </div>
             <div className="overflow-hidden">
@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <input
                 type="text"
                 placeholder="Rechercher..."
-                className="w-full bg-white border border-gray-200/80 rounded-xl py-2.5 pl-10 pr-4 text-[13px] text-[#1B100C] placeholder-gray-400 outline-none focus:border-[#D85A30] focus:ring-2 focus:ring-[#D85A30]/10 transition-all shadow-sm"
+                className="w-full bg-white border border-gray-200/80 rounded-xl py-2.5 pl-10 pr-4 text-[13px] text-[#1B100C] placeholder-gray-400 outline-none focus:border-[#DD2C1F] focus:ring-2 focus:ring-[#DD2C1F]/10 transition-all shadow-sm"
               />
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <NotificationBell />
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-9 h-9 rounded-xl bg-[#FFF5F2] border border-[#D85A30]/10 flex items-center justify-center text-[#D85A30] font-bold text-[13px] shadow-sm cursor-pointer hover:bg-[#FBEAE6] transition-colors focus:outline-none focus:ring-2 focus:ring-[#D85A30]/20"
+              className="w-9 h-9 rounded-xl bg-[#FFF5F2] border border-[#DD2C1F]/10 flex items-center justify-center text-[#DD2C1F] font-bold text-[13px] shadow-sm cursor-pointer hover:bg-[#FBEAE6] transition-colors focus:outline-none focus:ring-2 focus:ring-[#DD2C1F]/20"
             >
               {initials}
             </button>
@@ -177,7 +177,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className="border-t border-[#E9E4DD] py-1.5">
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2.5 px-4 py-2 text-[13px] text-[#D85A30] font-medium hover:bg-[#FFF5F2] transition-colors w-full text-left"
+                    className="flex items-center gap-2.5 px-4 py-2 text-[13px] text-[#DD2C1F] font-medium hover:bg-[#FFF5F2] transition-colors w-full text-left"
                   >
                     <LogOut className="w-4 h-4" />
                     Déconnexion
@@ -195,9 +195,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute right-0 top-0 h-full w-72 select-none opacity-[0.06]">
               <svg viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-0 top-0 h-full w-full">
-                <path d="M300 0 C220 40, 200 80, 300 120" stroke="#D85A30" strokeWidth="60" strokeLinecap="round" fill="none"/>
-                <path d="M300 0 C240 30, 230 70, 300 110" stroke="#D85A30" strokeWidth="30" strokeLinecap="round" fill="none"/>
-                <path d="M280 20 C230 50, 220 80, 280 120" stroke="#D85A30" strokeWidth="20" strokeLinecap="round" fill="none"/>
+                <path d="M300 0 C220 40, 200 80, 300 120" stroke="#DD2C1F" strokeWidth="60" strokeLinecap="round" fill="none"/>
+                <path d="M300 0 C240 30, 230 70, 300 110" stroke="#DD2C1F" strokeWidth="30" strokeLinecap="round" fill="none"/>
+                <path d="M280 20 C230 50, 220 80, 280 120" stroke="#DD2C1F" strokeWidth="20" strokeLinecap="round" fill="none"/>
               </svg>
             </div>
           </div>
@@ -208,7 +208,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <nav className="flex items-center gap-1.5 mb-2.5">
               <span className="text-[12px] text-gray-400 font-medium">Dashboard Admin</span>
               <span className="text-[12px] text-gray-300 mx-0.5">/</span>
-              <span className="text-[12px] text-[#D85A30] font-semibold">
+              <span className="text-[12px] text-[#DD2C1F] font-semibold">
                 {activeItem.name}
               </span>
             </nav>
@@ -220,7 +220,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <span className="text-[#1B100C]">
                     {activeItem.name === "Vue d'ensemble" ? "Tableau de Bord " : activeItem.name === "Partenaires" ? "Gestion des " : activeItem.name === "Paramètres" ? "Configuration " : "Mon "}
                   </span>
-                  <span className="text-[#D85A30]">
+                  <span className="text-[#DD2C1F]">
                     {activeItem.name === "Vue d'ensemble" ? "Système" : activeItem.name === "Partenaires" ? "Commerçants" : activeItem.name === "Paramètres" ? "Globale" : "Profil"}
                   </span>
                 </h1>
@@ -247,7 +247,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     href={item.href}
                     className={`flex items-center gap-1.5 px-1 py-3 mr-5 text-[13px] font-semibold border-b-2 transition-colors whitespace-nowrap ${
                       isActive
-                        ? "border-[#D85A30] text-[#D85A30]"
+                        ? "border-[#DD2C1F] text-[#DD2C1F]"
                         : "border-transparent text-gray-400 hover:text-gray-600"
                     }`}
                   >
