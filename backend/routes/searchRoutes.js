@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, authorize } = require('../middlewares/auth');
+const { protect, authorize } = require('../middleware/auth');
 const { globalSearch } = require('../controllers/searchController');
 
 router.use(protect);
