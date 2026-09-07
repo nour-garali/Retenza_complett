@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  Users, Zap, TrendingUp, Store, Search, Bell,
+  Users, Zap, TrendingUp, Store, Search,
   MoreHorizontal, ArrowUpRight, ChevronDown, ChevronRight,
   Activity, ShieldCheck, Target, BarChart2
 } from 'lucide-react';
@@ -11,7 +11,6 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar
 } from 'recharts';
-import NotificationBell from './components/NotificationBell';
 
 interface AdminHomeContentProps { stats: any; commerces: any[] }
 
@@ -117,54 +116,14 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
      RENDER
   ══════════════════════════════════════════════ */
   return (
-    <div className="min-h-screen font-inter" style={{ background: '#EEF1F8' }}>
-
-      {/* ─── TOPBAR ───────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200/80 shadow-sm">
-        <div className="max-w-[1500px] mx-auto h-[60px] px-7 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <Link href="/admin" className="flex items-center gap-2.5 no-underline">
-              <div className="w-8 h-8 rounded-xl bg-[#D73E26] flex items-center justify-center shadow-md shadow-red-200">
-                <span className="text-white font-bricolage font-black text-[14px]">R</span>
-              </div>
-              <span className="font-bricolage font-bold text-[18px] text-[#1E2B4A] tracking-tight">retenza</span>
-              <span className="text-[9px] font-bold text-slate-400 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full tracking-widest uppercase">Admin</span>
-            </Link>
-            <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-              <input
-                placeholder="Rechercher…"
-                className="h-9 pl-9 pr-4 bg-slate-50 border border-slate-200 rounded-xl text-[12px] text-slate-700 placeholder-slate-400 outline-none focus:border-[#D73E26]/40 focus:ring-2 focus:ring-[#D73E26]/10 transition-all w-56 font-inter"
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <NotificationBell />
-            <div className="w-px h-5 bg-slate-200" />
-            <div className="flex items-center gap-2.5 cursor-pointer">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1E2B4A] to-[#2d4080] flex items-center justify-center shadow-md">
-                <span className="text-white text-[13px] font-bold">A</span>
-              </div>
-              <div className="hidden sm:block leading-tight">
-                <p className="text-[13px] font-semibold text-[#1E2B4A]">Admin Retenza</p>
-                <p className="text-[10px] text-slate-400">Super Admin</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="font-inter">
 
       {/* ─── MAIN ─────────────────────────────────── */}
-      <main className="max-w-[1500px] mx-auto px-7 py-8 space-y-6">
+      <div className="space-y-6">
 
-        {/* Page title */}
+        {/* Action bar */}
         <div className="flex items-end justify-between">
-          <div>
-            <h1 className="font-bricolage text-[28px] font-bold text-[#1E2B4A] tracking-tight leading-none">Dashboard</h1>
-            <p className="text-[12px] text-slate-400 mt-1.5 font-medium">
-              {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-            </p>
-          </div>
+          <div />
           <Link href="/admin/partenaires"
             className="no-underline h-9 px-5 flex items-center gap-2 bg-[#1E2B4A] hover:bg-[#162038] text-white text-[12px] font-semibold rounded-xl transition-all shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30">
             <Store className="w-3.5 h-3.5" />
@@ -570,7 +529,7 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
           </div>
         </div>
 
-      </main>
+      </div>
     </div>
   );
 }
