@@ -5,7 +5,7 @@ import {
   Target, CheckCircle2, Loader2,
   Bell, ShieldCheck, Users, FileText, Save, RotateCcw,
   ChevronDown, Store, TrendingUp,
-  Clock, ChevronRight, Lightbulb, Sliders, Pencil
+  Clock, ChevronRight, Lightbulb, Settings, Zap
 } from 'lucide-react';
 import { updateAdminSettingsAction, NotificationPreferences } from '@/services/adminDashboardActions';
 import { useRouter } from 'next/navigation';
@@ -147,7 +147,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
               {/* Header */}
               <div className="flex items-start gap-3.5">
                 <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
-                  <Sliders className="w-5 h-5" />
+                  <Settings className="w-5 h-5" />
                 </div>
                 <div>
                   <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
@@ -236,7 +236,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3.5">
                   <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
-                    <Pencil className="w-4 h-4" />
+                    <Zap className="w-5 h-5" />
                   </div>
                   <div>
                     <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
@@ -261,19 +261,19 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                       <circle
                         cx="50"
                         cy="50"
-                        r="38"
+                        r="40"
                         stroke="#F1F5F9"
-                        strokeWidth="8"
+                        strokeWidth="4"
                         fill="none"
                       />
                       <circle
                         cx="50"
                         cy="50"
-                        r="38"
+                        r="40"
                         stroke="#DD2C1F"
-                        strokeWidth="8"
-                        strokeDasharray={2 * Math.PI * 38}
-                        strokeDashoffset={2 * Math.PI * 38 * (1 - progressPercentage / 100)}
+                        strokeWidth="4"
+                        strokeDasharray={2 * Math.PI * 40}
+                        strokeDashoffset={2 * Math.PI * 40 * (1 - progressPercentage / 100)}
                         strokeLinecap="round"
                         fill="none"
                         className="transition-all duration-700 ease-out"
@@ -306,12 +306,9 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                         <p className="text-[13px] font-bold text-slate-800">{currentPartners}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-0.5">
-                        <span className="text-xs">↑</span> +12%
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-emerald-600" />
-                    </div>
+                    <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-0.5">
+                      <span className="text-xs">↑</span> +12%
+                    </span>
                   </div>
 
                   {/* En progression */}
