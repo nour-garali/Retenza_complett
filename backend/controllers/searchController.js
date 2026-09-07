@@ -1,4 +1,4 @@
-const asyncHandler = require('../middleware/asyncHandler');
+const asyncHandler = require('../utils/asyncHandler');
 const LoyaltyAccount = require('../models/LoyaltyAccount');
 const GuestLoyaltyCard = require('../models/GuestLoyaltyCard');
 const Client = require('../models/Client');
