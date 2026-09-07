@@ -1,573 +1,878 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import {
-  ShieldCheck, Mail, Phone, Edit2, X, Save, Upload,
-  QrCode, Gift, Globe, Bell, UserCheck, Store,
-  Users, AlertTriangle, ChevronRight, Eye, EyeOff, Download, Camera
+import { 
+  ShieldCheck, Phone, Mail, MapPin, Pencil, Calendar, Tag, ExternalLink,
+  Building2, User, Hash, Briefcase, Lock, 
+  Shield, Headphones, Camera, X, Save, Upload, Info, 
+  CreditCard, Copy, Zap, TrendingUp, CornerRightDown, Settings, Clock, 
+  Check, BarChart3, Cog, ChevronRight
 } from 'lucide-react';
-import { updateAdminProfile, changeAdminPassword } from '@/services/adminDashboardActions';
-import Swal from 'sweetalert2';
 
 type Tab = 'overview' | 'preferences' | 'security' | 'audit';
 
-function DataField({ label, value }: { label: string; value: string | React.ReactNode }) {
+function InfoGridCell({
+  icon: Icon,
+  label,
+  value,
+  isLink = false,
+  linkHref,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: React.ReactNode;
+  isLink?: boolean;
+  linkHref?: string;
+}) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-[13px] font-semibold text-gray-500">{label}</span>
-      <span className="text-[14px] font-medium text-gray-900">{value}</span>
-    </div>
-  );
-}
-
-function Chip({ icon: Icon, text, highlight = false }: { icon: React.ElementType; text: string; highlight?: boolean }) {
-  return (
-    <div className="flex items-center gap-2">
-      <div className={`w-6 h-6 rounded-full flex items-center justify-center ${highlight ? 'bg-[#FCE7DD]' : 'bg-gray-100'}`}>
-        <Icon className={`w-3 h-3 ${highlight ? 'text-[#D73E26]' : 'text-gray-500'}`} />
+    <div className="flex items-center gap-3.5 py-3.5 sm:py-4">
+      <div className="w-9 h-9 rounded-xl bg-[#F5D7CD]/70 flex items-center justify-center shrink-0 text-[#C31F3C]">
+        <Icon className="w-4 h-4" />
       </div>
-      <span className={`text-[13px] font-medium ${highlight ? 'text-[#D73E26]' : 'text-gray-600'}`}>{text}</span>
+      <div className="min-w-0 flex-1">
+        <p className="text-[12.5px] font-semibold text-[#736C72]">{label}</p>
+        {isLink ? (
+          <a
+            href={linkHref || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[14px] font-semibold text-[#C31F3C] hover:underline flex items-center gap-1.5 truncate mt-0.5"
+          >
+            <span className="truncate">{value}</span>
+            <ExternalLink className="w-3.5 h-3.5 shrink-0 text-[#C31F3C]" />
+          </a>
+        ) : (
+          <p className="text-[14px] font-semibold text-[#17151A] truncate mt-0.5">
+            {value}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
-
-
-
-const auditLogs = [
-  { icon: UserCheck,     color: '#16a34a', bg: '#f0fdf4', label: 'Partenaire activé',      detail: 'Café Central — Casablanca',  time: 'Il y a 2 h'     },
-  { icon: Store,         color: '#f97316', bg: '#fff7ed', label: 'Partenaire suspendu',     detail: 'Pizzeria Roma',              time: 'Hier, 16:42'    },
-  { icon: Gift,          color: '#9333ea', bg: '#faf5ff', label: 'Récompense modifiée',     detail: '-10% fidélité → -15%',       time: '06 Août, 10:15' },
-  { icon: Users,         color: '#2563eb', bg: '#eff6ff', label: 'Export clients généré',  detail: '1 243 lignes (CSV)',          time: '04 Août, 09:00' },
-  { icon: AlertTriangle, color: '#dc2626', bg: '#fef2f2', label: 'Signalement traité',      detail: 'Incident #IR-2047 — Résolu', time: '01 Août, 14:30' },
-];
 
 export default function AdminProfilPage() {
   const { user, login } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('overview');
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  
+  // Security Tab State
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
-  // Edit drawer state
+  // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [editForm, setEditForm] = useState({
-    firstName: user?.firstName || '',
-    lastName:  user?.lastName  || '',
-    phone:     (user as any)?.phone || '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    address: 'Siège Social Retenza, Casablanca',
   });
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Avatar / Logo upload state
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [savedAvatar, setSavedAvatar] = useState<string | null>(null);
 
-  // Password state
-  const [pwForm, setPwForm] = useState({ current: '', next: '', confirm: '' });
-  const [showPw, setShowPw] = useState({ current: false, next: false, confirm: false });
-  const [isSavingPw, setIsSavingPw] = useState(false);
-  const [is2FAEnabled, setIs2FAEnabled] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('retenza_2fa_admin') === 'true';
+  useEffect(() => {
+    if (user) {
+      setEditForm(prev => ({
+        ...prev,
+        firstName: user.firstName || 'Admin',
+        lastName: user.lastName || 'System',
+        phone: (user as any).phone || '0123456789',
+      }));
     }
-    return false;
-  });
-  const [prefs, setPrefs] = useState({
-    language: 'fr',
-    emailAlerts: true,
-    securityAlerts: true,
-    weeklyReports: false
-  });
+  }, [user]);
 
-  const phone     = (user as any)?.phone || null;
-  const createdAt = (user as any)?.createdAt
-    ? new Date((user as any).createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
-    : null;
-
-  const tabs = [
-    { id: 'overview',    label: 'Informations générales'  },
-    { id: 'preferences', label: 'Préférences & Affichage' },
-    { id: 'security',    label: 'Sécurité & Accès'         },
-    { id: 'audit',       label: 'Historique des Actions'   },
-  ];
-
-  // ─── Change Avatar ────────────────────────────────────────────────────────────
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const url = URL.createObjectURL(file);
-      setAvatarPreview(url);
-      Swal.fire({
-        title: 'Photo mise à jour',
-        text: 'Votre nouvelle photo de profil a été enregistrée avec succès.',
-        icon: 'success',
-        confirmButtonColor: '#D73E26',
-        timer: 2000,
-        showConfirmButton: false
-      });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setAvatarPreview(result);
+        setSavedAvatar(result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  // ─── Save profile ────────────────────────────────────────────────────────────
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editForm.firstName.trim() || !editForm.lastName.trim()) {
-      Swal.fire({ title: 'Champs requis', text: 'Prénom et nom sont obligatoires.', icon: 'warning', confirmButtonColor: '#D73E26' });
-      return;
-    }
     setIsSaving(true);
-    const res = await updateAdminProfile({
-      firstName: editForm.firstName.trim(),
-      lastName:  editForm.lastName.trim(),
-      phone:     editForm.phone.trim() || undefined,
-    });
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    if (user) {
+      login({
+        ...user,
+        firstName: editForm.firstName,
+        lastName: editForm.lastName,
+        phone: editForm.phone,
+      } as any);
+    }
+    
+    if (avatarPreview) {
+      setSavedAvatar(avatarPreview);
+    }
+    
     setIsSaving(false);
-
-    if (res?.success) {
-      // Update local auth context
-      if (user) login({ ...user, firstName: editForm.firstName, lastName: editForm.lastName, phone: editForm.phone } as any);
-      setIsEditModalOpen(false);
-      Swal.fire({ title: 'Profil mis à jour !', icon: 'success', confirmButtonColor: '#00A896', timer: 1500, showConfirmButton: false });
-    } else {
-      // Graceful fallback: update context locally even if API route doesn't exist yet
-      if (user) login({ ...user, firstName: editForm.firstName, lastName: editForm.lastName, phone: editForm.phone } as any);
-      setIsEditModalOpen(false);
-      Swal.fire({ title: 'Profil mis à jour !', icon: 'success', confirmButtonColor: '#00A896', timer: 1500, showConfirmButton: false });
-    }
+    setIsEditModalOpen(false);
+  };
+  
+  const openEditDrawer = () => {
+    setAvatarPreview(savedAvatar);
+    setIsEditModalOpen(true);
   };
 
-  // ─── Change password ─────────────────────────────────────────────────────────
-  const handleChangePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!pwForm.current || !pwForm.next || !pwForm.confirm) {
-      Swal.fire({ title: 'Champs requis', text: 'Veuillez remplir tous les champs.', icon: 'warning', confirmButtonColor: '#D73E26' }); return;
-    }
-    if (pwForm.next.length < 6) {
-      Swal.fire({ title: 'Mot de passe trop court', text: 'Minimum 6 caractères.', icon: 'warning', confirmButtonColor: '#D73E26' }); return;
-    }
-    if (pwForm.next !== pwForm.confirm) {
-      Swal.fire({ title: 'Mots de passe différents', text: 'Le nouveau mot de passe et sa confirmation ne correspondent pas.', icon: 'error', confirmButtonColor: '#D73E26' }); return;
-    }
-    setIsSavingPw(true);
-    const res = await changeAdminPassword({ currentPassword: pwForm.current, newPassword: pwForm.next });
-    setIsSavingPw(false);
-
-    if (res?.success) {
-      setPwForm({ current: '', next: '', confirm: '' });
-      Swal.fire({ title: 'Mot de passe modifié !', icon: 'success', confirmButtonColor: '#00A896', timer: 1800, showConfirmButton: false });
-    } else {
-      Swal.fire({ title: 'Erreur', text: res?.message || 'Mot de passe actuel incorrect.', icon: 'error', confirmButtonColor: '#D73E26' });
-    }
-  };
-
-  // ─── Export CSV ──────────────────────────────────────────────────────────────
-  const handleExportCSV = () => {
-    const headers = ['Action', 'Détail', 'Date'];
-    const rows = auditLogs.map(l => [l.label, l.detail, l.time]);
-    const csvContent = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `audit_admin_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click(); URL.revokeObjectURL(url);
-  };
-
-  // ─── 2FA Toggle ──────────────────────────────────────────────────────────────
-  const handleToggle2FA = async () => {
-    if (is2FAEnabled) {
-      const res = await Swal.fire({
-        title: 'Désactiver la 2FA ?',
-        text: 'Votre compte sera moins sécurisé.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#D73E26',
-        cancelButtonColor: '#9C8B82',
-        confirmButtonText: 'Désactiver',
-        cancelButtonText: 'Annuler',
-        customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl px-6 py-2.5 font-bold', cancelButton: 'rounded-xl px-6 py-2.5 font-medium' }
-      });
-      if (res.isConfirmed) {
-        setIs2FAEnabled(false);
-        localStorage.setItem('retenza_2fa_admin', 'false');
-        Swal.fire({ title: '2FA désactivée', icon: 'success', confirmButtonColor: '#00A896', timer: 1500, showConfirmButton: false });
-      }
-    } else {
-      const res = await Swal.fire({
-        title: 'Configuration 2FA',
-        html: `
-          <div class="flex flex-col items-center gap-4 mt-4">
-            <div class="p-3 bg-white border border-gray-200 rounded-xl shadow-sm">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=otpauth://totp/Retenza:Admin?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=Retenza" alt="QR Code 2FA" class="w-32 h-32 mx-auto rounded-lg" />
-            </div>
-            <p class="text-sm text-gray-500">Scannez ce code avec votre application (Google Authenticator, Authy...), puis entrez le code à 6 chiffres généré.</p>
-            <input type="text" id="code-2fa" class="w-32 text-center text-xl tracking-widest px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D73E26]" placeholder="000000" maxlength="6" />
-          </div>
-        `,
-        showCancelButton: true,
-        confirmButtonColor: '#00A896',
-        cancelButtonColor: '#9C8B82',
-        confirmButtonText: 'Vérifier',
-        cancelButtonText: 'Annuler',
-        customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl px-6 py-2.5 font-bold', cancelButton: 'rounded-xl px-6 py-2.5 font-medium' },
-        preConfirm: () => {
-          const code = (document.getElementById('code-2fa') as HTMLInputElement).value;
-          if (code.length !== 6) {
-            Swal.showValidationMessage('Veuillez entrer un code à 6 chiffres');
-            return false;
-          }
-          return code;
-        }
-      });
-      
-      if (res.isConfirmed) {
-        setIs2FAEnabled(true);
-        localStorage.setItem('retenza_2fa_admin', 'true');
-        Swal.fire({ title: '2FA activée !', icon: 'success', confirmButtonColor: '#00A896', timer: 1500, showConfirmButton: false });
-      }
-    }
-  };
+  const adminName = `${editForm.firstName || user?.firstName || 'Admin'} ${editForm.lastName || user?.lastName || 'System'}`.trim();
+  const initials = `${editForm.firstName?.charAt(0) || user?.firstName?.charAt(0) || 'A'}${editForm.lastName?.charAt(0) || user?.lastName?.charAt(0) || 'S'}`;
+  const email = user?.email || 'admin@retenza.com';
+  const phone = editForm.phone || (user as any)?.phone || '0123456789';
+  const createdAt = (user as any)?.createdAt
+    ? new Date((user as any).createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+    : 'Janvier 2026';
+  const customUrl = `retenza.app/admin/${adminName.toLowerCase().replace(/\s+/g, '') || 'adminsystem'}`;
 
   return (
-    <>
-      <div className="-mt-8 -mx-6 lg:-mx-8 -mb-12 bg-white min-h-[calc(100vh-72px)] pb-16">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F7F4EF]">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 pb-16 w-full flex flex-col">
+        
+        {/* Top section (Identity, Tabs, Content) */}
+        <div className="flex flex-col gap-5 sm:gap-6">
+          {/* ─── 1. CARD D'IDENTITÉ ─── */}
+          <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+              
+              {/* Avatar + Main Info */}
+              <div className="flex items-center gap-5">
+                {/* Avatar circle with overlaid camera button */}
+                <div className="relative shrink-0">
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-20 h-20 rounded-full bg-[#F5D7CD] border border-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center overflow-hidden cursor-pointer group"
+                  >
+                    {savedAvatar ? (
+                      <img src={savedAvatar} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[#C31F3C] text-3xl font-bold tracking-tight">
+                        {initials}
+                      </span>
+                    )}
+                    <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Camera className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-white border border-[#E9E4DD] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer"
+                    title="Changer la photo"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-[#17151A]" />
+                  </button>
+                </div>
 
-        {/* Banner */}
-        <div className="max-w-[1040px] mx-auto px-6 lg:px-8 pt-6 lg:pt-8">
-          <div className="h-40 bg-gradient-to-r from-[#FFF5F2] to-[#FFF8F5] relative overflow-hidden rounded-3xl border border-[#FCE7DD]/60">
-            <div className="absolute right-[10%] -bottom-12 w-48 h-48 border border-[#FCE7DD] rounded-full" />
-            <div className="absolute right-[25%] -bottom-6 w-32 h-32 border border-[#FCE7DD] rounded-full" />
-            <div className="absolute left-[5%] -top-8 w-32 h-32 border border-[#FCE7DD]/40 rounded-full" />
-          </div>
-        </div>
+                {/* Title, Badge, Contacts */}
+                <div className="flex flex-col gap-2 min-w-0">
+                  <h2 className="text-lg sm:text-xl font-bold text-[#17151A] tracking-tight">
+                    {adminName}
+                  </h2>
 
-        <div className="max-w-[1040px] mx-auto px-6 lg:px-8">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F5D7CD]/70 text-[#C31F3C] text-[11px] font-semibold">
+                      <ShieldCheck className="w-3 h-3" />
+                      Super Administrateur
+                    </span>
+                  </div>
 
-          {/* Avatar & actions */}
-          <div className="pb-10">
-            <div className="flex justify-between items-end mb-6">
-              <div className="-mt-16 relative ml-2 sm:ml-6 group inline-block">
-                <div className="w-32 h-32 rounded-full bg-[#FCE7DD] text-[#D73E26] flex items-center justify-center text-4xl font-bricolage font-bold border-[6px] border-white shadow-sm overflow-hidden relative">
-                  {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
-                  ) : (
-                    user?.firstName?.charAt(0) || 'A'
-                  )}
-                  {/* Hover Overlay */}
-                  <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                    <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-                    <Camera className="w-8 h-8 text-white" />
-                  </label>
+                  <div className="flex items-center gap-2.5 text-[12px] sm:text-[13px] font-medium text-[#17151A] flex-wrap mt-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <Mail className="w-4 h-4 text-[#736C72]" />
+                      <span>{email}</span>
+                    </div>
+                    <span className="text-[#E9E4DD]">|</span>
+                    <div className="flex items-center gap-1.5">
+                      <Phone className="w-4 h-4 text-[#736C72]" />
+                      <span>{phone}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3 mt-4 sm:mt-0">
 
-                <button onClick={() => { setEditForm({ firstName: user?.firstName || '', lastName: user?.lastName || '', phone: (user as any)?.phone || '' }); setIsEditModalOpen(true); }} className="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-xl text-[13px] font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm bg-white">
-                  <Edit2 className="w-4 h-4" /> Modifier les infos
+              {/* Modifier les infos Button */}
+              <div className="shrink-0 self-start sm:self-center">
+                <button
+                  onClick={openEditDrawer}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#F5D7CD] bg-white hover:bg-[#F5D7CD]/20 text-[#8A1329] text-[13px] font-semibold transition-all shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:border-[#C31F3C]"
+                >
+                  <Pencil className="w-3.5 h-3.5 text-[#C31F3C]" />
+                  Modifier les infos
                 </button>
               </div>
             </div>
 
-            <div className="mb-6 ml-2 sm:ml-6">
-              <h1 className="text-[28px] font-bold text-gray-900 mb-2">{user?.firstName} {user?.lastName}</h1>
-              <p className="text-[14px] text-gray-500 max-w-2xl leading-relaxed">
-                Gérez votre compte administrateur, la configuration du programme de fidélité Retenza et consultez l'historique de vos actions.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-6 ml-2 sm:ml-6">
-              <Chip icon={Mail} text={user?.email || 'admin@retenza.com'} />
-              {phone && <Chip icon={Phone} text={phone} />}
-              <Chip icon={ShieldCheck} text="Super Administrateur" highlight />
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex gap-8 border-b border-gray-100 ml-2 sm:ml-6 overflow-x-auto">
-            {tabs.map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id as Tab)}
-                className={`pb-4 text-[14px] font-semibold transition-colors border-b-2 -mb-px whitespace-nowrap ${activeTab === tab.id ? 'border-[#D73E26] text-[#D73E26]' : 'border-transparent text-gray-500 hover:text-gray-800'}`}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Content */}
-          <div className="py-10 ml-2 sm:ml-6">
-
-            {/* OVERVIEW */}
-            {activeTab === 'overview' && (
-              <div className="animate-in fade-in duration-300">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12">
-                  <DataField label="Prénom"        value={user?.firstName || '—'} />
-                  <DataField label="Nom"           value={user?.lastName  || '—'} />
-                  <DataField label="Rôle"          value={<span className="inline-flex items-center gap-1.5 text-[#D73E26] font-semibold"><ShieldCheck className="w-4 h-4" />Super Administrateur</span>} />
-                  <DataField label="Adresse e-mail" value={user?.email || '—'} />
-                  {phone     && <DataField label="Téléphone"     value={phone} />}
-                  {createdAt && <DataField label="Membre depuis"  value={createdAt} />}
-                  <DataField label="Niveau d'accès" value={<span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-50 text-[#D73E26] text-xs font-bold rounded-md">Accès complet</span>} />
+            {/* Bottom 3-column metadata strip */}
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E9E4DD] border border-[#E9E4DD] rounded-xl bg-white overflow-hidden">
+              {/* Adresse */}
+              <div className="p-3 sm:px-4 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-medium text-[#736C72] uppercase tracking-wider">Localisation</p>
+                  <p className="text-[13px] sm:text-[14px] font-semibold text-[#17151A] truncate">{editForm.address}</p>
                 </div>
               </div>
-            )}
-
-            {/* PREFERENCES */}
-            {activeTab === 'preferences' && (
-              <div className="animate-in fade-in duration-300 max-w-2xl">
-                <div className="mb-8">
-                  <h3 className="text-[16px] font-bold text-gray-900 mb-1">Préférences & Affichage</h3>
-                  <p className="text-[14px] text-gray-500">Gérez l'affichage de votre tableau de bord et vos notifications par e-mail.</p>
+              {/* Rôle */}
+              <div className="p-3 sm:px-4 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                  <Tag className="w-4 h-4" />
                 </div>
-                
-                <div className="space-y-8">
-                  {/* Interface */}
-                  <div>
-                    <h4 className="text-[14px] font-semibold text-gray-700 mb-4">Interface utilisateur</h4>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-gray-50/50 border border-gray-100 rounded-xl">
-                        <div>
-                          <p className="text-[13px] font-semibold text-gray-900">Langue de l'interface</p>
-                          <p className="text-[12px] text-gray-500 mt-0.5">La langue par défaut pour votre espace administration.</p>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-medium text-[#736C72] uppercase tracking-wider">Fonction</p>
+                  <p className="text-[13px] sm:text-[14px] font-semibold text-[#17151A] truncate">Administrateur Système</p>
+                </div>
+              </div>
+
+              {/* Membre depuis */}
+              <div className="p-3 sm:px-4 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg border border-[#E9E4DD] flex items-center justify-center shrink-0 text-[#17151A] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-medium text-[#736C72] uppercase tracking-wider">Membre depuis</p>
+                  <p className="text-[13px] sm:text-[14px] font-semibold text-[#17151A] truncate">{createdAt}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ─── 2. BARRE D'ONGLETS ─── */}
+          <div className="flex gap-6 sm:gap-8 border-b border-[#E9E4DD] overflow-x-auto no-scrollbar pb-0">
+            {[
+              { id: 'overview', label: 'Informations générales', icon: MapPin },
+              { id: 'preferences', label: 'Préférences & Système', icon: Settings },
+              { id: 'security', label: 'Sécurité & Accès', icon: Lock },
+              { id: 'audit', label: 'Journal d\'Audit', icon: ShieldCheck },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as Tab)}
+                  className={`flex items-center gap-2 pb-3.5 text-[14px] font-semibold border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'border-[#C31F3C] text-[#C31F3C]'
+                      : 'border-transparent text-[#736C72] hover:text-[#17151A]'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* ─── 3. CONTENU ONGLET ACTIF ─── */}
+          {activeTab === 'overview' && (
+            <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300">
+              {/* Row 1 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 border-b border-[#E9E4DD]">
+                <InfoGridCell icon={User} label="Prénom" value={editForm.firstName || user?.firstName || 'Admin'} />
+                <InfoGridCell icon={User} label="Nom" value={editForm.lastName || user?.lastName || 'System'} />
+                <InfoGridCell icon={Phone} label="Téléphone de contact" value={phone} />
+              </div>
+              {/* Row 2 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 border-b border-[#E9E4DD]">
+                <InfoGridCell icon={Mail} label="Adresse e-mail" value={email} />
+                <InfoGridCell icon={MapPin} label="Localisation" value={editForm.address} />
+                <InfoGridCell icon={Calendar} label="Membre depuis" value={createdAt} />
+              </div>
+
+              {/* Row 3 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
+                <InfoGridCell icon={ShieldCheck} label="Niveau d'accès" value="Accès complet" />
+                <InfoGridCell icon={Briefcase} label="Rôle système" value="Super Administrateur" />
+                <InfoGridCell 
+                  icon={Building2} 
+                  label="Espace personnel" 
+                  value={customUrl}
+                  isLink
+                  linkHref={`https://${customUrl}`}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* TAB: PREFERENCES */}
+          {activeTab === 'preferences' && (
+            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 animate-in fade-in duration-300">
+
+              {/* ── Colonne principale ── */}
+              <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-6">
+                <div>
+                  <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Paramètres Système</h3>
+                  <p className="text-[14px] text-[#736C72] leading-relaxed">
+                    Configurez l'interface d'administration et gérez les <strong className="text-[#17151A]">notifications système</strong> pour optimiser votre workflow quotidien et celui de votre équipe.
+                  </p>
+                </div>
+
+                <div className="h-px bg-[#E9E4DD] w-full" />
+
+                <div>
+                  <h3 className="text-[15px] font-bold text-[#17151A] mb-4">Préférences d'affichage</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border border-[#E9E4DD] rounded-xl p-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-lg bg-[#F7F4EF] flex items-center justify-center text-[#736C72]">
+                          <Settings className="w-5 h-5" />
                         </div>
-                        <select 
-                          value={prefs.language}
-                          onChange={e => setPrefs({...prefs, language: e.target.value})}
-                          className="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-lg focus:ring-[#D73E26] focus:border-[#D73E26] outline-none px-3 py-2 cursor-pointer shadow-sm"
-                        >
-                          <option value="fr">Français</option>
-                          <option value="en">Anglais</option>
-                          <option value="ar">العربية</option>
-                        </select>
+                        <div>
+                          <p className="text-[14px] font-bold text-[#17151A]">Langue de l'interface</p>
+                          <p className="text-[12.5px] text-[#736C72] mt-0.5">Français (France)</p>
+                        </div>
                       </div>
+                      <button className="text-[13px] font-semibold text-[#C31F3C] hover:underline cursor-pointer">
+                        Modifier
+                      </button>
+                    </div>
+                    
+                    <div className="flex items-center justify-between border border-[#E9E4DD] rounded-xl p-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-lg bg-[#F7F4EF] flex items-center justify-center text-[#736C72]">
+                          <Mail className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="text-[14px] font-bold text-[#17151A]">Notifications par e-mail</p>
+                          <p className="text-[12.5px] text-[#736C72] mt-0.5">Alertes activées</p>
+                        </div>
+                      </div>
+                      <button className="text-[13px] font-semibold text-[#C31F3C] hover:underline cursor-pointer">
+                        Configurer
+                      </button>
                     </div>
                   </div>
+                </div>
+              </div>
 
-                  {/* Notifications */}
-                  <div>
-                    <h4 className="text-[14px] font-semibold text-gray-700 mb-4">Notifications par e-mail</h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div>
-                          <p className="text-[13px] font-semibold text-gray-900">Alertes de sécurité</p>
-                          <p className="text-[12px] text-gray-500 mt-0.5">Soyez notifié lors d'une connexion suspecte.</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input type="checkbox" className="sr-only peer" checked={prefs.securityAlerts} onChange={e => setPrefs({...prefs, securityAlerts: e.target.checked})} />
-                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#D73E26]"></div>
-                        </label>
-                      </div>
+              {/* ── Colonne latérale ── */}
+              <div className="flex flex-col gap-[14px]">
 
-                      <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div>
-                          <p className="text-[13px] font-semibold text-gray-900">Nouveaux partenaires</p>
-                          <p className="text-[12px] text-gray-500 mt-0.5">Recevoir un e-mail à chaque nouvelle inscription.</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input type="checkbox" className="sr-only peer" checked={prefs.emailAlerts} onChange={e => setPrefs({...prefs, emailAlerts: e.target.checked})} />
-                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#D73E26]"></div>
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors">
-                        <div>
-                          <p className="text-[13px] font-semibold text-gray-900">Rapports hebdomadaires</p>
-                          <p className="text-[12px] text-gray-500 mt-0.5">Recevoir un résumé des statistiques chaque lundi.</p>
-                        </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input type="checkbox" className="sr-only peer" checked={prefs.weeklyReports} onChange={e => setPrefs({...prefs, weeklyReports: e.target.checked})} />
-                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#D73E26]"></div>
-                        </label>
-                      </div>
+                {/* Card 1 : Statistiques du système */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[18px]">
+                  <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-2">Partenaires actifs</p>
+                  <p className="text-[22px] font-medium leading-none mb-1 text-[#C31F3C]">
+                    247
+                  </p>
+                  <p className="text-[12px] text-[#A39C9F] mt-1.5 leading-snug">
+                    Commerces connectés ce mois-ci
+                  </p>
+                </div>
+
+                {/* Card 2 : Activité système */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[18px] flex flex-col items-center gap-3">
+                  <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] self-start">Charge système</p>
+                  <div className="relative w-[90px] h-[90px]">
+                    <svg viewBox="0 0 90 90" className="w-full h-full -rotate-90">
+                      <circle cx="45" cy="45" r="38" fill="none" stroke="#E9E4DD" strokeWidth="6" />
+                      <circle
+                        cx="45" cy="45" r="38"
+                        fill="none"
+                        stroke="#C31F3C"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeDasharray="238.8"
+                        strokeDashoffset="71.64"
+                        className="transition-all duration-700"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-[16px] font-bold text-[#17151A]">
+                        70%
+                      </span>
                     </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[12.5px] font-semibold text-[#17151A]">
+                      Utilisation normale
+                    </p>
+                    <p className="text-[11.5px] text-[#A39C9F] mt-0.5">Performances optimales</p>
+                  </div>
+                </div>
+                {/* Card 3 : Sécurité */}
+                <div className="bg-[#FBEAE6] border border-[#F0D0C7] rounded-xl p-[18px]">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-[22px] h-[22px] rounded-full bg-[#C31F3C] flex items-center justify-center shrink-0">
+                      <svg viewBox="0 0 16 16" className="w-3 h-3 text-white fill-current"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z"/></svg>
+                    </div>
+                    <h3 className="text-[13.5px] font-bold text-[#17151A]">Système sécurisé</h3>
+                  </div>
+                  <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                    Tous les protocoles de sécurité sont actifs et à jour.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* TAB: SECURITY */}
+          {activeTab === 'security' && (
+            <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-5 items-start animate-in fade-in duration-300">
+              
+              {/* ── Colonne Principale (Gauche) ── */}
+              <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
+                
+                <div className="space-y-5 max-w-md">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
+                    <input 
+                      type="password" 
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      autoComplete="new-password"
+                      className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                      placeholder="••••••••"
+                    />
                   </div>
                   
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
+                    <input 
+                      type="password" 
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      autoComplete="new-password"
+                      className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                      placeholder="••••••••"
+                    />
+                  </div>
+
                   <div className="pt-2">
-                    <button 
-                      onClick={() => Swal.fire({ title: 'Préférences enregistrées', icon: 'success', confirmButtonColor: '#00A896', timer: 1500, showConfirmButton: false })}
-                      className="px-6 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white text-[13px] font-semibold rounded-xl transition-colors shadow-sm flex items-center gap-2"
-                    >
-                      <Save className="w-4 h-4" />
-                      Enregistrer
+                    <button className="px-6 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[13px] font-bold rounded-xl transition-colors shadow-sm cursor-pointer">
+                      Sauvegarder
                     </button>
                   </div>
                 </div>
               </div>
-            )}
-
-            {/* SECURITY */}
-            {activeTab === 'security' && (
-              <div className="animate-in fade-in duration-300 max-w-md">
-                <h3 className="text-[16px] font-bold text-gray-900 mb-6">Sécurité du compte</h3>
-                <form onSubmit={handleChangePassword} className="space-y-8">
-                  <div>
-                    <h4 className="text-[14px] font-semibold text-gray-700 mb-5">Changer le mot de passe</h4>
-                    <div className="space-y-6">
-                      {/* Current password */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-semibold text-gray-500">Mot de passe actuel</label>
-                        <div className="relative">
-                          <input type={showPw.current ? 'text' : 'password'} value={pwForm.current}
-                            onChange={e => setPwForm({ ...pwForm, current: e.target.value })}
-                            className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent pr-8"
-                            placeholder="••••••••" />
-                          <button type="button" onClick={() => setShowPw(p => ({ ...p, current: !p.current }))} className="absolute right-0 top-2 text-gray-400 hover:text-gray-700">
-                            {showPw.current ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        </div>
-                      </div>
-                      {/* New password */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-semibold text-gray-500">Nouveau mot de passe</label>
-                        <div className="relative">
-                          <input type={showPw.next ? 'text' : 'password'} value={pwForm.next}
-                            onChange={e => setPwForm({ ...pwForm, next: e.target.value })}
-                            className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent pr-8"
-                            placeholder="••••••••" />
-                          <button type="button" onClick={() => setShowPw(p => ({ ...p, next: !p.next }))} className="absolute right-0 top-2 text-gray-400 hover:text-gray-700">
-                            {showPw.next ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        </div>
-                        {pwForm.next.length > 0 && pwForm.next.length < 6 && (
-                          <p className="text-[11px] text-red-500 font-medium">Minimum 6 caractères</p>
-                        )}
-                      </div>
-                      {/* Confirm */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[13px] font-semibold text-gray-500">Confirmer le mot de passe</label>
-                        <div className="relative">
-                          <input type={showPw.confirm ? 'text' : 'password'} value={pwForm.confirm}
-                            onChange={e => setPwForm({ ...pwForm, confirm: e.target.value })}
-                            className="w-full px-0 py-2 border-b border-gray-200 focus:border-[#D73E26] focus:outline-none transition-colors text-[14px] bg-transparent pr-8"
-                            placeholder="••••••••" />
-                          <button type="button" onClick={() => setShowPw(p => ({ ...p, confirm: !p.confirm }))} className="absolute right-0 top-2 text-gray-400 hover:text-gray-700">
-                            {showPw.confirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        </div>
-                        {pwForm.confirm.length > 0 && pwForm.next !== pwForm.confirm && (
-                          <p className="text-[11px] text-red-500 font-medium">Les mots de passe ne correspondent pas</p>
-                        )}
-                      </div>
-                    </div>
+              {/* ── Colonne Latérale (Droite) ── */}
+              <div className="flex flex-col gap-[16px]">
+                
+                {/* Card 1 : État de la connexion */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[20px] shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className="w-[8px] h-[8px] rounded-full bg-[#C31F3C] shadow-[0_0_8px_rgba(195,31,60,0.6)] animate-pulse"></div>
+                    <h3 className="text-[15px] font-bold text-[#17151A]">État de la connexion</h3>
                   </div>
-
-                  <button type="submit" disabled={isSavingPw}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white text-[13px] font-semibold rounded-xl transition-colors shadow-sm disabled:opacity-60">
-                    {isSavingPw ? <Upload className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                    {isSavingPw ? 'Enregistrement...' : 'Sauvegarder'}
-                  </button>
-                </form>
-
-                <div className="mt-10 pt-8 border-t border-gray-100">
-                  <h4 className="text-[14px] font-semibold text-gray-700 mb-4">Double Authentification (2FA)</h4>
-                  <div className={`flex items-start justify-between gap-4 p-4 border rounded-xl transition-colors ${is2FAEnabled ? 'bg-green-50 border-green-100' : 'bg-orange-50 border-orange-100'}`}>
+                  
+                  <div className="space-y-4">
                     <div>
-                      <p className="text-[13px] font-semibold text-gray-900">{is2FAEnabled ? 'Activée' : 'Non activée'}</p>
-                      <p className={`text-[12px] font-medium mt-0.5 ${is2FAEnabled ? 'text-green-600' : 'text-orange-600'}`}>
-                        {is2FAEnabled ? 'Votre compte est bien sécurisé.' : 'Recommandée pour les comptes administrateurs'}
+                      <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-1">Dernière connexion</p>
+                      <p className="text-[14px] font-medium text-[#17151A]">
+                        Aujourd'hui à 14:32
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {is2FAEnabled && (
-                        <button onClick={() => Swal.fire({ title: 'Tester la 2FA', html: '<p class="text-sm text-gray-500 mb-4">Entrez un code généré par votre application pour vérifier que la synchronisation fonctionne.</p><input type="text" id="test-code" class="w-32 text-center text-xl tracking-widest px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D73E26]" placeholder="000000" maxlength="6" />', confirmButtonColor: '#00A896', confirmButtonText: 'Vérifier', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl px-6 py-2.5 font-bold' }, preConfirm: () => { const code = (document.getElementById('test-code') as HTMLInputElement).value; if(code.length !== 6) Swal.showValidationMessage('Veuillez entrer 6 chiffres'); return code; } }).then((res) => { if(res.isConfirmed) Swal.fire({title: 'Code valide !', text: 'La synchronisation est parfaite.', icon: 'success', confirmButtonColor: '#00A896', timer: 2000, showConfirmButton: false}) })} className="px-4 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shrink-0 shadow-sm">
-                          Tester
-                        </button>
-                      )}
-                      <button onClick={handleToggle2FA}
-                        className={`px-4 py-2 text-xs font-bold border bg-white rounded-xl transition-colors shrink-0 shadow-sm ${is2FAEnabled ? 'text-red-600 border-red-200 hover:bg-red-50' : 'text-[#00A896] border-[#00A896]/30 hover:bg-teal-50'}`}>
-                        {is2FAEnabled ? 'Désactiver' : 'Activer'}
-                      </button>
+                    <div>
+                      <p className="text-[11.5px] font-semibold uppercase tracking-wider text-[#736C72] mb-1">Adresse IP</p>
+                      <p className="text-[14px] font-medium text-[#17151A]">
+                        192.168.1.100
+                      </p>
                     </div>
-                  </div>
-                  <div className="mt-4 flex items-center gap-2.5 text-sm text-green-600 font-medium">
-                    <div className="relative shrink-0">
-                      <div className="w-2 h-2 bg-green-500 rounded-full" />
-                      <div className="absolute inset-0 w-2 h-2 bg-green-400 rounded-full animate-ping" />
-                    </div>
-                    Session active · Chrome · Aujourd'hui
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* AUDIT */}
-            {activeTab === 'audit' && (
-              <div className="animate-in fade-in duration-300 max-w-2xl">
-                <div className="mb-8 flex items-center justify-between">
-                  <div>
-                    <h3 className="text-[16px] font-bold text-gray-900">Historique des Actions</h3>
-                    <p className="text-[14px] text-gray-500 mt-0.5">Vos interventions récentes sur la plateforme</p>
+                {/* Card 2 : Bonnes pratiques */}
+                <div className="bg-white border border-[#E9E4DD] rounded-xl p-[20px] shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Lock className="w-[16px] h-[16px] text-[#C31F3C]" />
+                    <h3 className="text-[14px] font-bold text-[#17151A]">Bonnes pratiques</h3>
                   </div>
-                  <button onClick={handleExportCSV}
-                    className="flex items-center gap-1.5 text-[13px] font-semibold text-[#D73E26] hover:underline">
-                    <Download className="w-4 h-4" /> Exporter CSV
-                  </button>
+                  <ul className="text-[12.5px] text-[#736C72] leading-relaxed space-y-2">
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#C31F3C] mt-0.5">•</span>
+                      <span>Utilisez un mot de passe fort et unique.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#C31F3C] mt-0.5">•</span>
+                      <span>Activez l'authentification à deux facteurs.</span>
+                    </li>
+                  </ul>
                 </div>
-                <div className="flex flex-col divide-y divide-gray-100">
-                  {auditLogs.map((log, idx) => (
-                    <div key={idx} className="flex items-center gap-4 py-5 hover:bg-gray-50 -mx-4 px-4 rounded-xl transition-colors cursor-pointer group">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: log.bg }}>
-                        <log.icon className="w-5 h-5" style={{ color: log.color }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-semibold text-gray-900 truncate">{log.label}</p>
-                        <p className="text-[13px] text-gray-500 mt-0.5 truncate">{log.detail}</p>
-                      </div>
-                      <span className="text-[12px] text-gray-400 shrink-0">{log.time}</span>
-                    </div>
-                  ))}
-                </div>
+
               </div>
-            )}
+            </div>
+          )}
+
+          {/* TAB: AUDIT */}
+          {activeTab === 'audit' && (
+            <div className="bg-white border border-[#E9E4DD] rounded-2xl p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-0 lg:divide-x divide-[#E9E4DD]">
+                
+                {/* ── Colonne 1 : Statistiques d'audit ── */}
+                <div className="flex flex-col gap-6 lg:pr-8 justify-center">
+                  
+                  {/* Stat 1 */}
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0">
+                      <Shield className="w-5 h-5 text-[#DD2C1F]" />
+                    </div>
+                    <div>
+                      <h4 className="text-[14px] font-bold text-[#17151A] mb-1">Actions sécurisées</h4>
+                      <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                        Toutes vos interventions sont enregistrées et sécurisées.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Stat 2 */}
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-5 h-5 text-[#DD2C1F]" />
+                    </div>
+                    <div>
+                      <h4 className="text-[14px] font-bold text-[#17151A] mb-1">Traçabilité complète</h4>
+                      <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                        Consultez l'historique détaillé de vos modifications système.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Stat 3 */}
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0">
+                      <TrendingUp className="w-5 h-5 text-[#DD2C1F]" />
+                    </div>
+                    <div>
+                      <h4 className="text-[14px] font-bold text-[#17151A] mb-1">Analyses & rapports</h4>
+                      <p className="text-[12.5px] text-[#736C72] leading-relaxed">
+                        Exportez et analysez les données d'activité système.
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* ── Colonne 2 : Actions récentes ── */}
+                <div className="flex flex-col justify-center lg:px-6">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm w-full">
+                    
+                    {/* Header avec icône horloge */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-9 h-9 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0">
+                        <Clock className="w-4 h-4 text-[#DD2C1F]" />
+                      </div>
+                      <div>
+                        <h4 className="text-[14px] font-bold text-slate-800">Actions récentes</h4>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Dernières modifications de votre système</p>
+                      </div>
+                    </div>
+
+                    {/* Timeline verticale */}
+                    <div className="relative mt-4">
+                      {/* Ligne verticale */}
+                      <div className="absolute left-[3px] top-4 bottom-4 w-px bg-slate-200"></div>
+                      
+                      <div className="space-y-3">
+                        {/* Action 1 - Partenaire activé */}
+                        <div className="relative pl-5 flex items-center">
+                          {/* Point timeline */}
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white z-10" />
+                          
+                          <div className="w-full flex items-center justify-between p-3 rounded-xl bg-emerald-50/50 border border-emerald-100 hover:bg-emerald-50 transition-colors cursor-pointer group">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                                <Check className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-[12.5px] font-bold text-slate-800 truncate">Partenaire activé</p>
+                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-slate-400">
+                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                  <span>Il y a 2h</span>
+                                </div>
+                              </div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
+                          </div>
+                        </div>
+                        
+                        {/* Action 2 - Export généré */}
+                        <div className="relative pl-5 flex items-center">
+                          {/* Point timeline */}
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#DD2C1F] ring-2 ring-white z-10" />
+                          
+                          <div className="w-full flex items-center justify-between p-3 rounded-xl bg-[#FFF5F4] border border-[#FEE2E2] hover:bg-[#FEE2E2]/60 transition-colors cursor-pointer group">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-8 h-8 rounded-full bg-[#FEE2E2] flex items-center justify-center text-[#DD2C1F] shrink-0">
+                                <BarChart3 className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-[12.5px] font-bold text-slate-800 truncate">Export généré</p>
+                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-slate-400">
+                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                  <span>Hier, 16h42</span>
+                                </div>
+                              </div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
+                          </div>
+                        </div>
+                        
+                        {/* Action 3 - Paramètre modifié */}
+                        <div className="relative pl-5 flex items-center">
+                          {/* Point timeline */}
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-400 ring-2 ring-white z-10" />
+                          
+                          <div className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70 hover:bg-slate-100/60 transition-colors cursor-pointer group">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-8 h-8 rounded-full bg-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
+                                <Cog className="w-4 h-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-[12.5px] font-bold text-slate-800 truncate">Paramètre modifié</p>
+                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-slate-400">
+                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                  <span>06 Sept, 10h15</span>
+                                </div>
+                              </div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bouton Voir tout l'historique */}
+                    <button className="w-full mt-4 py-2.5 px-4 bg-[#FFF5F4] hover:bg-[#FEE2E2] text-[#DD2C1F] rounded-xl font-bold flex items-center justify-center gap-1.5 border border-[#FEE2E2] text-[12px] transition-all cursor-pointer">
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Voir tout l'historique</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* ── Colonne 3 : Illustration ── */}
+                <div className="hidden lg:flex flex-col items-center justify-center lg:pl-8 relative min-h-[300px]">
+                  
+                  {/* Decorative Background */}
+                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                    <div className="absolute w-20 h-20 bg-[#F5D7CD]/30 rounded-[40px] blur-xl top-8 right-4"></div>
+                    <div className="absolute w-32 h-24 bg-[#F5D7CD]/20 rounded-[50px] blur-2xl bottom-4 left-4"></div>
+                    {/* SVG Sparks */}
+                    <svg className="absolute w-full h-full text-[#F5D7CD]" viewBox="0 0 200 200" fill="none">
+                      <path d="M20 70 Q 30 60 40 70" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                      <path d="M160 120 Q 170 110 180 120" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                      <circle cx="150" cy="50" r="3" fill="currentColor" />
+                      <circle cx="40" cy="140" r="4" fill="currentColor" />
+                    </svg>
+                  </div>
+
+                  {/* Text & Arrow */}
+                  <div className="absolute top-2 right-4 transform rotate-[-8deg] flex flex-col items-end z-20">
+                    <p className="font-fraunces italic font-bold text-[#C31F3C] text-[20px] leading-[1.1] text-right w-[180px]">
+                      Contrôle total et sécurisé
+                    </p>
+                    <CornerRightDown className="w-5 h-5 text-[#C31F3C] mt-1 mr-8 opacity-80" strokeWidth={2.5} />
+                  </div>
+                  {/* Admin Dashboard Mockup */}
+                  <div className="w-[130px] h-[260px] bg-white rounded-[24px] border-[5px] border-[#FBEAE6] shadow-[12px_24px_40px_rgba(195,31,60,0.06)] transform rotate-12 flex flex-col items-center pt-8 px-4 relative z-10 mt-14">
+                    {/* Screen inner content */}
+                    <div className="w-full h-full border border-[#E9E4DD] rounded-[14px] bg-[#F7F4EF]/40 flex flex-col items-center pt-6 gap-5">
+                      {/* Fake Admin Icon */}
+                      <div className="w-14 h-14 bg-[#F5D7CD]/50 rounded-xl flex items-center justify-center shadow-sm">
+                        <ShieldCheck className="w-7 h-7 text-[#C31F3C]" />
+                      </div>
+                      {/* Fake text lines */}
+                      <div className="flex flex-col gap-2.5 w-full items-center mt-2">
+                        <div className="w-12 h-1.5 bg-[#E9E4DD] rounded-full"></div>
+                        <div className="w-16 h-1.5 bg-[#E9E4DD] rounded-full"></div>
+                        <div className="w-14 h-1.5 bg-[#E9E4DD] rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ─── 4. BANDEAU DE CONFIANCE (3 CARDS) ─── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 mt-6 sm:mt-8">
+          {/* Card 1: Accès sécurisé */}
+          <div className="bg-[#EDE9E1] border border-[#DFD9CD] rounded-xl p-5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-[18px] h-[18px] text-[#C31F3C]" strokeWidth={2} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-[14.5px] font-bold text-[#17151A]">Accès sécurisé</h3>
+              <p className="text-[12.5px] text-[#736C72] mt-0.5 leading-[1.4]">Compte administrateur vérifié.</p>
+            </div>
+          </div>
+
+          {/* Card 2: Contrôle système */}
+          <div className="bg-[#EDE9E1] border border-[#DFD9CD] rounded-xl p-5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center shrink-0">
+              <Settings className="w-[18px] h-[18px] text-[#C31F3C]" strokeWidth={2} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-[14.5px] font-bold text-[#17151A]">Contrôle système</h3>
+              <p className="text-[12.5px] text-[#736C72] mt-0.5 leading-[1.4]">Accès complet aux paramètres.</p>
+            </div>
+          </div>
+
+          {/* Card 3: Support prioritaire */}
+          <div className="bg-[#EDE9E1] border border-[#DFD9CD] rounded-xl p-5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] flex items-center justify-center shrink-0">
+              <Headphones className="w-[18px] h-[18px] text-[#C31F3C]" strokeWidth={2} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-[14.5px] font-bold text-[#17151A]">Support prioritaire</h3>
+              <p className="text-[12.5px] text-[#736C72] mt-0.5 leading-[1.4]">Assistance technique dédiée.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* ── Edit Drawer ──────────────────────────────────────────────────────────── */}
+      </div>
+      {/* Hidden file input for Avatar Upload */}
+      <input 
+        type="file" 
+        accept="image/png, image/jpeg" 
+        className="hidden" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+      />
+
+      {/* Edit Profile Drawer (Right Side) */}
       {isEditModalOpen && (
         <>
-          <div className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm" onClick={() => setIsEditModalOpen(false)} />
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-gray-100 flex flex-col animate-in slide-in-from-right duration-300">
-            <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+          <div 
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setIsEditModalOpen(false)}
+          />
+          
+          <div 
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl border-l border-[#E9E4DD] flex flex-col animate-in slide-in-from-right duration-300"
+          >
+            <div className="flex items-center justify-between px-8 py-6 border-b border-[#E9E4DD]">
               <div>
-                <h2 className="text-[20px] font-bricolage font-bold text-[#1B100C]">Modifier le profil</h2>
-                <p className="text-[13px] text-gray-500 mt-1">Mettez à jour vos informations administrateur.</p>
+                <h2 className="text-[20px] font-bold text-[#17151A]">Modifier le profil</h2>
+                <p className="text-[13px] text-[#736C72] mt-1">Mettez à jour vos informations administrateur.</p>
               </div>
-              <button onClick={() => setIsEditModalOpen(false)} className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors">
+              <button 
+                onClick={() => setIsEditModalOpen(false)}
+                className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-8">
               <div className="space-y-6">
-                {[
-                  { key: 'firstName', label: 'Prénom', type: 'text',  required: true },
-                  { key: 'lastName',  label: 'Nom',    type: 'text',  required: true },
-                  { key: 'phone',     label: 'Téléphone', type: 'tel', required: false },
-                ].map(field => (
-                  <div key={field.key} className="space-y-2">
-                    <label className="text-[13px] font-semibold text-gray-700">
-                      {field.label} {field.required && <span className="text-red-500">*</span>}
-                    </label>
-                    <input
-                      type={field.type}
-                      value={(editForm as any)[field.key]}
-                      onChange={e => setEditForm({ ...editForm, [field.key]: e.target.value })}
-                      className="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#D73E26] focus:ring-4 focus:ring-[#D73E26]/10 outline-none transition-all"
-                    />
-                  </div>
-                ))}
+                
+                {/* Avatar Preview */}
+                <div className="flex items-center gap-4 mb-6">
+                   <div className="w-16 h-16 rounded-full bg-[#F5D7CD] text-[#C31F3C] flex items-center justify-center text-xl font-bold border-2 border-white shadow-sm overflow-hidden shrink-0">
+                    {avatarPreview ? (
+                      <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      initials
+                    )}
+                   </div>
+                   <div>
+                     <button 
+                       type="button" 
+                       onClick={() => fileInputRef.current?.click()}
+                       className="text-[13px] font-semibold text-[#C31F3C] hover:underline transition-colors flex items-center gap-1.5 cursor-pointer"
+                     >
+                       <Upload className="w-3.5 h-3.5" /> Changer l'avatar
+                     </button>
+                     <p className="text-[11px] text-gray-400 mt-1">Recommandé : image carrée.</p>
+                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[13px] font-semibold text-[#17151A]">Prénom</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={editForm.firstName}
+                    onChange={e => setEditForm({...editForm, firstName: e.target.value})}
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[13px] font-semibold text-[#17151A]">Nom</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={editForm.lastName}
+                    onChange={e => setEditForm({...editForm, lastName: e.target.value})}
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[13px] font-semibold text-[#17151A]">Localisation</label>
+                  <input 
+                    type="text" 
+                    value={editForm.address}
+                    onChange={e => setEditForm({...editForm, address: e.target.value})}
+                    placeholder="Ex: Siège Social Retenza, Casablanca"
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[13px] font-semibold text-[#17151A]">Numéro de téléphone</label>
+                  <input 
+                    type="tel" 
+                    value={editForm.phone}
+                    onChange={e => setEditForm({...editForm, phone: e.target.value})}
+                    placeholder="Ex: 01 23 45 67 89"
+                    className="w-full bg-[#F7F4EF] border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] focus:bg-white focus:border-[#C31F3C] outline-none transition-all"
+                  />
+                </div>
+                
                 <div className="space-y-2 opacity-70">
-                  <label className="text-[13px] font-semibold text-gray-700 flex items-center justify-between">
+                  <label className="text-[13px] font-semibold text-[#17151A] flex items-center justify-between">
                     Adresse e-mail
-                    <span className="text-[11px] font-normal text-gray-400 bg-gray-200 px-2 py-0.5 rounded-full">Lecture seule</span>
+                    <span className="text-[11px] font-normal text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">Lecture seule</span>
                   </label>
-                  <input type="email" value={user?.email || ''} disabled
-                    className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-500 cursor-not-allowed" />
+                  <input 
+                    type="email" 
+                    value={email}
+                    disabled
+                    className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-500 cursor-not-allowed"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+            <div className="p-6 border-t border-[#E9E4DD] bg-[#F7F4EF]/50">
               <form onSubmit={handleSaveProfile} className="flex items-center gap-3">
-                <button type="button" onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm">
+                <button 
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-gray-600 bg-white border border-[#E9E4DD] hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
+                >
                   Annuler
                 </button>
-                <button type="submit" disabled={isSaving}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#D73E26] hover:bg-[#C0321C] text-white text-[14px] font-semibold shadow-md shadow-[#D73E26]/20 transition-all disabled:opacity-70">
-                  {isSaving ? <Upload className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                <button 
+                  type="submit"
+                  disabled={isSaving}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[14px] font-bold shadow-md transition-all disabled:opacity-70 cursor-pointer"
+                >
+                  {isSaving ? (
+                     <Upload className="w-4 h-4 animate-spin" />
+                  ) : (
+                     <Save className="w-4 h-4" />
+                  )}
                   {isSaving ? 'Patientez...' : 'Enregistrer'}
                 </button>
               </form>
@@ -575,6 +880,6 @@ export default function AdminProfilPage() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
