@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { logoutAction } from '@/services/authActions';
 import { globalSearch } from '@/services/merchantDashboardActions';
+import { SearchContext } from '@/contexts/SearchContext';
 import { LayoutDashboard, Users, Gift, ShoppingBag, Megaphone, LogOut, Menu, X, Search, Bell, User, BarChart2, Sparkles, Clock, MessageSquare, Bot, Globe, ShieldAlert, TrendingUp, Settings, ChevronRight } from 'lucide-react';
-
 import AINotificationBell from '@/components/AINotificationBell';
 
 export default function MerchantLayout({ children }: { children: React.ReactNode }) {
@@ -19,6 +19,7 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
   
   // Search State
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [isHandledLocally, setIsHandledLocally] = React.useState(false);
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [showSearchDropdown, setShowSearchDropdown] = React.useState(false);
@@ -39,6 +40,12 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
 
   // Search Debounce Effect
   React.useEffect(() => {
+    // If the active page handles search locally, don't trigger global API search
+    if (isHandledLocally) {
+      setShowSearchDropdown(false);
+      return;
+    }
+
     const delayDebounceFn = setTimeout(async () => {
       if (searchQuery.trim().length > 0) {
         setIsSearching(true);
@@ -59,7 +66,7 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery]);
+  }, [searchQuery, isHandledLocally]);
 
   const handleLogout = async () => {
     await logoutAction();
@@ -275,7 +282,9 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
 
         {/* Page content */}
         <main className="flex-1 px-6 lg:px-8 pt-8 pb-12 overflow-x-hidden">
-          {children}
+          <SearchContext.Provider value={{ searchQuery, setSearchQuery, isHandledLocally, setIsHandledLocally }}>
+            {children}
+          </SearchContext.Provider>
         </main>
       </div>
     </div>

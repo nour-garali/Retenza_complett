@@ -28,6 +28,7 @@ import {
   Link2
 } from "lucide-react";
 import { ToastContainer, useToast } from "@/components/Toast";
+import { useSearchContext } from "@/contexts/SearchContext";
 
 interface ClientData {
   client_db_id: string;
@@ -110,8 +111,14 @@ function ClientsContent() {
   const [loading, setLoading] = useState<boolean>(true);
   const [clients, setClients] = useState<ClientData[]>([]);
 
+  const { searchQuery, setSearchQuery, setIsHandledLocally } = useSearchContext();
+
+  useEffect(() => {
+    setIsHandledLocally(true);
+    return () => setIsHandledLocally(false);
+  }, [setIsHandledLocally]);
+
   // Filter States
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedValueTier, setSelectedValueTier] = useState<string>("all");
   const [selectedSegment, setSelectedSegment] = useState<string>("all");
   const [selectedChurnRisk, setSelectedChurnRisk] = useState<string>("all");

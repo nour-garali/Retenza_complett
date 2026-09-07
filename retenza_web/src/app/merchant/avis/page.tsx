@@ -30,6 +30,7 @@ import {
   Zap,
   Filter
 } from "lucide-react";
+import { useSearchContext } from "@/contexts/SearchContext";
 
 function FacebookIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -765,7 +766,7 @@ function AnalyzeTab() {
   const AlertIcon = alertCfg ? alertCfg.icon : CheckCircle2;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       {/* Formulaire */}
       <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] overflow-hidden">
         <div className="px-6 py-4 border-b border-[#EEE5DF] flex items-center justify-between">
@@ -981,112 +982,20 @@ function AnalyzeTab() {
       {/* Résultat */}
       <div ref={resultRef}>
         {!showResult && !loading && (
-          <div className="rounded-2xl shadow-sm border border-[#F5D7CD] overflow-hidden flex flex-col"
-            style={{ background: "linear-gradient(160deg, #FDF8F6 0%, #FDF3F0 60%, #FBE8E3 100%)" }}>
-
-            {/* Header */}
-            <div className="px-6 pt-6 pb-4 border-b border-[#F5D7CD]/60 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #FDECEA 0%, #F5C5BB 100%)", border: "1px solid #F5C5BB" }}>
-                <BrainCircuit className="w-5 h-5 text-[#E8462F]" />
-              </div>
-              <div>
-                <p className="text-[#1A1A1A] font-extrabold text-sm">Prêt à analyser</p>
-                <p className="text-[#7A6E68] text-[11px] mt-0.5">Saisissez l&apos;avis à gauche pour démarrer</p>
-              </div>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#EEE5DF] p-8 flex flex-col items-center justify-center text-center min-h-[400px]">
+            <div className="w-12 h-12 rounded-2xl bg-[#FAF3EE] border border-[#EEE5DF] flex items-center justify-center text-slate-400 mb-3">
+              <BrainCircuit className="w-6 h-6" />
             </div>
-
-            {/* Body */}
-            <div className="flex flex-col flex-1 px-6 py-5 gap-5">
-
-              {/* Inline SVG flow diagram */}
-              <div className="flex items-center justify-center gap-2">
-                <svg viewBox="0 0 320 48" className="w-full max-w-[300px]" xmlns="http://www.w3.org/2000/svg">
-                  {/* Step circles */}
-                  <circle cx="24" cy="24" r="20" fill="#FDECEA" stroke="#F5C5BB" strokeWidth="1.5"/>
-                  <text x="24" y="28" textAnchor="middle" fontSize="14" fill="#E8462F">①</text>
-                  <line x1="44" y1="24" x2="80" y2="24" stroke="#F5C5BB" strokeWidth="1.5" strokeDasharray="4 3"/>
-                  <circle cx="100" cy="24" r="20" fill="#FDECEA" stroke="#F5C5BB" strokeWidth="1.5"/>
-                  <text x="100" y="28" textAnchor="middle" fontSize="14" fill="#E8462F">②</text>
-                  <line x1="120" y1="24" x2="156" y2="24" stroke="#F5C5BB" strokeWidth="1.5" strokeDasharray="4 3"/>
-                  <circle cx="176" cy="24" r="20" fill="#FDECEA" stroke="#F5C5BB" strokeWidth="1.5"/>
-                  <text x="176" y="28" textAnchor="middle" fontSize="14" fill="#E8462F">③</text>
-                  <line x1="196" y1="24" x2="232" y2="24" stroke="#F5C5BB" strokeWidth="1.5" strokeDasharray="4 3"/>
-                  <circle cx="252" cy="24" r="20" fill="#FBE8E3" stroke="#E8462F" strokeWidth="1.5"/>
-                  <text x="252" y="28" textAnchor="middle" fontSize="14" fill="#E8462F">④</text>
-                </svg>
-              </div>
-              <div className="flex justify-between text-[9px] font-bold text-[#7A6E68] uppercase tracking-wide -mt-3 px-1">
-                <span className="w-12 text-center">Texte</span>
-                <span className="w-12 text-center">NLP</span>
-                <span className="w-12 text-center">Risque</span>
-                <span className="w-16 text-center">Insights</span>
-              </div>
-
-              {/* Mini feature cards — 2×2 grid */}
-              <div className="grid grid-cols-2 gap-3 flex-1">
-                {[
-                  {
-                    icon: (
-                      <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="10" cy="10" r="8" stroke="#E8462F" strokeWidth="1.5"/>
-                        <path d="M6.5 10.5c.8 1.2 6 1.2 7 0" stroke="#E8462F" strokeWidth="1.5" strokeLinecap="round"/>
-                        <circle cx="7.5" cy="8" r="1" fill="#E8462F"/>
-                        <circle cx="12.5" cy="8" r="1" fill="#E8462F"/>
-                      </svg>
-                    ),
-                    label: "Sentiment NLP",
-                    desc: "Positif · Négatif · Neutre",
-                  },
-                  {
-                    icon: (
-                      <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" stroke="#E8462F" strokeWidth="1.5" strokeLinejoin="round"/>
-                      </svg>
-                    ),
-                    label: "Risque Churn",
-                    desc: "Score 0–100 + alerte",
-                  },
-                  {
-                    icon: (
-                      <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="5" width="14" height="2" rx="1" fill="#E8462F"/>
-                        <rect x="3" y="9" width="10" height="2" rx="1" fill="#E8462F" opacity=".6"/>
-                        <rect x="3" y="13" width="7" height="2" rx="1" fill="#E8462F" opacity=".35"/>
-                      </svg>
-                    ),
-                    label: "Motifs clés",
-                    desc: "Tags extraits par IA",
-                  },
-                  {
-                    icon: (
-                      <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 14l4-8 3 5 2-3 3 6" stroke="#E8462F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    ),
-                    label: "Recommandations",
-                    desc: "Action CRM suggérée",
-                  },
-                ].map(({ icon, label, desc }) => (
-                  <div key={label}
-                    className="bg-white/80 rounded-xl border border-[#F5D7CD] p-3 flex flex-col gap-1.5 backdrop-blur-sm">
-                    <div className="w-7 h-7 rounded-lg bg-[#FDECEA] flex items-center justify-center">
-                      {icon}
-                    </div>
-                    <p className="text-[11px] font-bold text-[#1A1A1A] leading-tight">{label}</p>
-                    <p className="text-[10px] text-[#7A6E68]">{desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom hint */}
-              <div className="flex items-center gap-2 bg-white/60 rounded-xl border border-[#F5D7CD] px-3 py-2.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#E8462F] shrink-0" />
-                <p className="text-[10px] text-[#7A6E68] leading-snug">
-                  Modèle IA entraîné sur les avis e-commerce francophones — résultats en moins de 2 secondes.
-                </p>
-              </div>
-
+            <p className="text-[#1A1A1A] font-bold text-sm">Prêt à analyser</p>
+            <p className="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
+              Saisissez l&apos;avis à gauche pour calculer le sentiment, les motifs clés et le risque de churn.
+            </p>
+            <div className="mt-5 flex flex-wrap justify-center gap-1.5 text-[10px] font-bold">
+              {["Sentiment NLP", "Risque Churn", "Motifs clés", "Recommandations"].map((t) => (
+                <span key={t} className="bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md border border-slate-200">
+                  {t}
+                </span>
+              ))}
             </div>
           </div>
         )}
@@ -1228,7 +1137,9 @@ function HistoryTab() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [stats, setStats] = useState<HistoryStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  
+  const { searchQuery } = useSearchContext();
+  
   const [sentimentFilter, setSentimentFilter] = useState<"all" | "positif" | "neutre" | "negatif">("all");
   const [sourceFilter, setSourceFilter] = useState<"all" | "google" | "facebook">("all");
 
@@ -1262,8 +1173,8 @@ function HistoryTab() {
       return false;
     }
     // Recherche textuelle (email, extrait ou texte de l'avis)
-    if (searchTerm.trim()) {
-      const q = searchTerm.toLowerCase();
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
       const matchEmail = entry.client_email?.toLowerCase().includes(q);
       const matchText = entry.review_text?.toLowerCase().includes(q);
       const matchExtrait = entry.result.extrait_pertinent?.toLowerCase().includes(q);
@@ -1294,25 +1205,6 @@ function HistoryTab() {
 
         {/* Barre de filtre et recherche */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Recherche */}
-          <div className="relative flex-1 min-w-[180px]">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Rechercher email, extrait..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#FAF3EE] border border-[#EEE5DF] hover:border-slate-300 focus:border-[#E8462F] focus:bg-white text-xs font-medium text-slate-800 pl-8 pr-7 py-1.5 rounded-lg outline-none transition-all"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            )}
-          </div>
 
           {/* Filtre par Sentiment */}
           <select
@@ -1444,6 +1336,12 @@ function HistoryTab() {
 export default function AvisClientsPage() {
   const [activeTab, setActiveTab] = useState<"analyser" | "queue" | "historique">("analyser");
   const [queueCount, setQueueCount] = useState(0);
+  
+  const { setIsHandledLocally } = useSearchContext();
+  useEffect(() => {
+    setIsHandledLocally(true);
+    return () => setIsHandledLocally(false);
+  }, [setIsHandledLocally]);
 
   useEffect(() => {
     fetch(`${API}/sentiment/queue?statut=en_attente&limit=1`)

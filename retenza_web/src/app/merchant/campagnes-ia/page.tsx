@@ -27,6 +27,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import { ToastContainer, useToast } from "@/components/Toast";
+import { useSearchContext } from "@/contexts/SearchContext";
 
 interface ClientData {
   email: string;
@@ -72,6 +73,12 @@ function CampaignsContent() {
   const [loading, setLoading] = useState<boolean>(true);
   const [history, setHistory] = useState<CampaignHistoryItem[]>([]);
   const [historyFilter, setHistoryFilter] = useState<"all" | "manual" | "ai">("all");
+
+  const { searchQuery, setIsHandledLocally } = useSearchContext();
+  useEffect(() => {
+    setIsHandledLocally(true);
+    return () => setIsHandledLocally(false);
+  }, [setIsHandledLocally]);
 
   // Manual Campaign Form States
   const [subject, setSubject] = useState<string>("");
@@ -961,8 +968,19 @@ function CampaignsContent() {
               const isManualItem = (item: CampaignHistoryItem) => !isAiItem(item);
 
               const filteredHistory = history.filter((item) => {
-                if (historyFilter === "manual") return isManualItem(item);
-                if (historyFilter === "ai") return isAiItem(item);
+                if (historyFilter === "manual" && !isManualItem(item)) return false;
+                if (historyFilter === "ai" && !isAiItem(item)) return false;
+                
+                if (searchQuery.trim()) {
+                  const q = searchQuery.toLowerCase().trim();
+                  const nom = (item.client_nom || "").toLowerCase();
+                  const email = (item.client_email || "").toLowerCase();
+                  const subject = (item.subject || "").toLowerCase();
+                  if (!nom.includes(q) && !email.includes(q) && !subject.includes(q)) {
+                    return false;
+                  }
+                }
+                
                 return true;
               });
 
