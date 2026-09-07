@@ -237,26 +237,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="flex items-center gap-1 -mb-px overflow-x-auto no-scrollbar">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`flex items-center gap-1.5 px-1 py-3 mr-5 text-[13px] font-semibold border-b-2 transition-colors whitespace-nowrap ${
-                      isActive
-                        ? "border-[#DD2C1F] text-[#DD2C1F]"
-                        : "border-transparent text-gray-400 hover:text-gray-600"
-                    }`}
-                  >
-                    <item.icon className="w-3.5 h-3.5" />
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </div>
           </div>
         </header>
 
