@@ -1240,7 +1240,7 @@ function HistoryTab() {
         <div className="p-12 text-center">
           <Inbox className="w-10 h-10 text-slate-300 mx-auto mb-2 stroke-[1.5]" />
           <p className="text-[#1A1A1A] font-bold text-xs">
-            {searchTerm || sentimentFilter !== "all" || sourceFilter !== "all"
+            {searchQuery || sentimentFilter !== "all" || sourceFilter !== "all"
               ? "Aucun résultat pour cette recherche"
               : "Aucun avis analysé pour le moment"}
           </p>
