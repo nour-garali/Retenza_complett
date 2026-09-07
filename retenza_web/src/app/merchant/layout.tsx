@@ -88,9 +88,9 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
     { name: 'Avis Clients', href: '/merchant/avis', icon: MessageSquare },
     { name: 'Audit Chatbot', href: '/merchant/parametres/audit-moderation', icon: ShieldAlert },
     { name: 'Cross-Sell / Up-Sell', href: '/merchant/recommandations', icon: TrendingUp },
-    { name: 'Paramètres', href: '/merchant/parametres/avances', icon: Sparkles },
     { name: 'Récompenses', href: '/merchant/programme', icon: Gift },
     { name: 'Marketplace', href: '/merchant/marketplace', icon: ShoppingBag },
+    { name: 'Paramètres', href: '/merchant/parametres/avances', icon: Sparkles },
     { name: 'Profil', href: '/merchant/profil', icon: User },
   ];
 
