@@ -113,24 +113,18 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
       icon: ShieldCheck,
       title: 'Alertes de sécurité',
       description: "Soyez notifié lors d'une connexion suspecte.",
-      color: 'text-[#DD2C1F]',
-      bgColor: 'bg-red-50'
     },
     {
       key: 'newPartnerNotif' as keyof NotificationPreferences,
       icon: Users,
       title: 'Nouveaux partenaires',
       description: 'Recevoir un e-mail à chaque nouvelle inscription.',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50'
     },
     {
       key: 'weeklyReport' as keyof NotificationPreferences,
       icon: FileText,
       title: 'Rapports hebdomadaires',
       description: 'Recevoir un résumé des statistiques chaque lundi.',
-      color: 'text-slate-500',
-      bgColor: 'bg-slate-100'
     },
   ];
 
@@ -142,7 +136,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
           {/* COLONNE GAUCHE — Carte "Paramètres globaux" */}
-          <div className="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
+          <div className="bg-white rounded-xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
             <div>
               {/* Header */}
               <div className="flex items-start gap-3.5">
@@ -161,19 +155,19 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
 
               {/* Messages de statut */}
               {successGoal && (
-                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-xl border border-emerald-200 text-xs font-medium mt-4">
+                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-lg border border-emerald-200 text-xs font-medium mt-4">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   {successGoal}
                 </div>
               )}
               {errorGoal && (
-                <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-xl border border-red-200 mt-4">
+                <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-lg border border-red-200 mt-4">
                   {errorGoal}
                 </div>
               )}
 
               {/* Bloc encadré "Objectif d'acquisition" */}
-              <div className="mt-5 bg-[#FDF6F5] rounded-2xl border border-[#F8E3DE] p-5">
+              <div className="mt-5 bg-[#FDF6F5] rounded-lg border border-[#F8E3DE] p-5">
                 <div className="flex items-start gap-3.5">
                   <div className="w-9 h-9 rounded-full bg-[#FBEAE6] flex items-center justify-center shrink-0 text-[#DD2C1F]">
                     <Target className="w-4 h-4" />
@@ -191,7 +185,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
 
                 {/* Champ input */}
                 <div className="mt-5 flex items-center gap-3">
-                  <div className="flex items-center bg-white border border-slate-200/90 rounded-xl px-4 py-2.5 shadow-sm w-44 focus-within:border-[#DD2C1F] focus-within:ring-1 focus-within:ring-[#DD2C1F]">
+                  <div className="flex items-center bg-white border border-slate-200/90 rounded-lg px-4 py-2.5 shadow-sm w-44 focus-within:border-[#DD2C1F] focus-within:ring-1 focus-within:ring-[#DD2C1F]">
                     <input
                       type="number"
                       value={goal}
@@ -210,7 +204,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
               <button
                 type="submit"
                 disabled={isLoadingGoal}
-                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-xl text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
+                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-lg text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
               >
                 {isLoadingGoal ? (
                   <><Loader2 className="w-3.5 h-3.5 animate-spin" />Sauvegarde...</>
@@ -221,7 +215,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
               <button
                 type="button"
                 onClick={resetGoal}
-                className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-sm transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold shadow-sm transition-all"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
                 Réinitialiser
@@ -230,7 +224,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
           </div>
 
           {/* COLONNE DROITE — Carte "Aperçu rapide" */}
-          <div className="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
+          <div className="bg-white rounded-xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
             <div>
               {/* Header */}
               <div className="flex items-start justify-between gap-4">
@@ -247,7 +241,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                     </p>
                   </div>
                 </div>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 shadow-sm transition-colors shrink-0">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-50 shadow-sm transition-colors shrink-0">
                   Mois en cours <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </button>
               </div>
@@ -296,9 +290,9 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                 {/* 3 mini-cartes statistiques */}
                 <div className="flex-1 space-y-2">
                   {/* Commerces actifs */}
-                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-lg border border-slate-100">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
+                      <div className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                         <Store className="w-4 h-4" />
                       </div>
                       <div>
@@ -306,15 +300,15 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                         <p className="text-[13px] font-bold text-slate-800">{currentPartners}</p>
                       </div>
                     </div>
-                    <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-0.5">
+                    <span className="text-[11px] font-bold text-[#DD2C1F] flex items-center gap-0.5">
                       <span className="text-xs">↑</span> +12%
                     </span>
                   </div>
 
                   {/* En progression */}
-                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-lg border border-slate-100">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+                      <div className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                         <TrendingUp className="w-4 h-4" />
                       </div>
                       <div>
@@ -322,13 +316,13 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                         <p className="text-[13px] font-bold text-slate-800">+12%</p>
                       </div>
                     </div>
-                    <span className="text-emerald-600 font-bold text-sm">↑</span>
+                    <span className="text-[#DD2C1F] font-bold text-sm">↑</span>
                   </div>
 
                   {/* Reste */}
-                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-lg border border-slate-100">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                      <div className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                         <Clock className="w-4 h-4" />
                       </div>
                       <div>
@@ -343,7 +337,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
             </div>
 
             {/* Bannière d'astuce en bas */}
-            <div className="mt-4 p-3 bg-[#FDF6F5] rounded-xl border border-[#F8E3DE] flex items-center justify-between gap-3">
+            <div className="mt-4 p-3 bg-[#FDF6F5] rounded-lg border border-[#F8E3DE] flex items-center justify-between gap-3">
               <div className="w-7 h-7 rounded-full bg-red-100/60 flex items-center justify-center shrink-0">
                 <Lightbulb className="w-3.5 h-3.5 text-[#DD2C1F]" />
               </div>
@@ -356,7 +350,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
         </div>
 
         {/* BLOC PLEINE LARGEUR (bas de page) — Carte "Notifications par e-mail" */}
-        <div className="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
+        <div className="bg-white rounded-xl border border-slate-200/70 p-6 shadow-sm">
           {/* Header */}
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
@@ -376,48 +370,54 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
           <form onSubmit={handleSaveNotifications} className="mt-5">
             {/* Messages de statut */}
             {successNotifs && (
-              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-xl border border-emerald-200 text-xs font-medium mb-4">
+              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-lg border border-emerald-200 text-xs font-medium mb-4">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 {successNotifs}
               </div>
             )}
             {errorNotifs && (
-              <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-xl border border-red-200 mb-4">
+              <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-lg border border-red-200 mb-4">
                 {errorNotifs}
               </div>
             )}
 
             {/* 3 cartes horizontales en grille */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-              {notifItems.map(({ key, icon: Icon, title, description, color, bgColor }) => (
-                <div
-                  key={key}
-                  className="flex items-center justify-between p-3.5 bg-slate-50/70 rounded-xl border border-slate-100"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg ${bgColor} flex items-center justify-center shrink-0`}>
-                      <Icon className={`w-4 h-4 ${color}`} />
+              {notifItems.map(({ key, icon: Icon, title, description }) => {
+                const isEnabled = notifs[key];
+                const iconColor = isEnabled ? 'text-[#DD2C1F]' : 'text-slate-400';
+                const iconBg = isEnabled ? 'bg-[#FDF0ED]' : 'bg-slate-100';
+
+                return (
+                  <div
+                    key={key}
+                    className="flex items-center justify-between p-3.5 bg-slate-50/70 rounded-lg border border-slate-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-md ${iconBg} flex items-center justify-center shrink-0 transition-colors`}>
+                        <Icon className={`w-4 h-4 ${iconColor} transition-colors`} />
+                      </div>
+                      <div>
+                        <h3 className="text-xs font-bold text-slate-800 leading-tight">{title}</h3>
+                        <p className="text-[11px] text-slate-400 mt-0.5">{description}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xs font-bold text-slate-800 leading-tight">{title}</h3>
-                      <p className="text-[11px] text-slate-400 mt-0.5">{description}</p>
+                    <div className="ml-3 shrink-0">
+                      <Toggle
+                        enabled={isEnabled}
+                        onToggle={() => toggleNotif(key)}
+                      />
                     </div>
                   </div>
-                  <div className="ml-3 shrink-0">
-                    <Toggle
-                      enabled={notifs[key]}
-                      onToggle={() => toggleNotif(key)}
-                    />
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Bouton enregistrer */}
             <button
               type="submit"
               disabled={isLoadingNotifs}
-              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-xl text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-lg text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
             >
               {isLoadingNotifs ? (
                 <><Loader2 className="w-3.5 h-3.5 animate-spin" />Sauvegarde...</>
