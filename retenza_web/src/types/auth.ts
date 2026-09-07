@@ -15,4 +15,5 @@ export interface ActionResponse {
   role?: string;
   code?: string;
   isOnboardingComplete?: boolean;
+  data?: any;
 }
