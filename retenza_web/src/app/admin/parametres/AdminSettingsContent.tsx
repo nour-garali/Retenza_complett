@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import {
-  Settings, Target, CheckCircle2, Loader2, ArrowRight,
-  Bell, ShieldCheck, Users, FileText
+  Target, CheckCircle2, Loader2,
+  Bell, ShieldCheck, Users, FileText, Save, RotateCcw,
+  ChevronDown, Store, TrendingUp,
+  Clock, ChevronRight, Lightbulb, Sliders, Pencil
 } from 'lucide-react';
 import { updateAdminSettingsAction, NotificationPreferences } from '@/services/adminDashboardActions';
 import { useRouter } from 'next/navigation';
@@ -18,8 +20,8 @@ function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
     <button
       type="button"
       onClick={onToggle}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none ${
-        enabled ? 'bg-[#D73E26]' : 'bg-gray-200'
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none shrink-0 ${
+        enabled ? 'bg-[#DD2C1F]' : 'bg-slate-200'
       }`}
     >
       <span
@@ -34,13 +36,9 @@ function Toggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
 export default function AdminSettingsContent({ initialGoal, initialNotifications }: AdminSettingsContentProps) {
   const router = useRouter();
 
-  // Objectif mensuel
+  // States
   const [goal, setGoal] = useState<string>(initialGoal.toString());
-
-  // Notifications
   const [notifs, setNotifs] = useState<NotificationPreferences>(initialNotifications);
-
-  // UI states
   const [isLoadingGoal, setIsLoadingGoal] = useState(false);
   const [isLoadingNotifs, setIsLoadingNotifs] = useState(false);
   const [successGoal, setSuccessGoal] = useState('');
@@ -48,10 +46,18 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
   const [successNotifs, setSuccessNotifs] = useState('');
   const [errorNotifs, setErrorNotifs] = useState('');
 
+  // Fonctions utilitaires
   const toggleNotif = (key: keyof NotificationPreferences) => {
     setNotifs(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const resetGoal = () => {
+    setGoal(initialGoal.toString());
+    setSuccessGoal('');
+    setErrorGoal('');
+  };
+
+  // Gestion des formulaires
   const handleSaveGoal = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoadingGoal(true);
@@ -95,169 +101,337 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
     }
   };
 
+  // Calculs pour l'aperçu rapide
+  const currentGoal = parseInt(goal, 10) || initialGoal;
+  const currentPartners = 34; // Simulation
+  const progressPercentage = Math.min((currentPartners / currentGoal) * 100, 100);
+  const remaining = Math.max(currentGoal - currentPartners, 0);
+
   const notifItems = [
     {
       key: 'securityAlerts' as keyof NotificationPreferences,
       icon: ShieldCheck,
       title: 'Alertes de sécurité',
       description: "Soyez notifié lors d'une connexion suspecte.",
+      color: 'text-[#DD2C1F]',
+      bgColor: 'bg-red-50'
     },
     {
       key: 'newPartnerNotif' as keyof NotificationPreferences,
       icon: Users,
       title: 'Nouveaux partenaires',
       description: 'Recevoir un e-mail à chaque nouvelle inscription.',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50'
     },
     {
       key: 'weeklyReport' as keyof NotificationPreferences,
       icon: FileText,
       title: 'Rapports hebdomadaires',
       description: 'Recevoir un résumé des statistiques chaque lundi.',
+      color: 'text-slate-500',
+      bgColor: 'bg-slate-100'
     },
   ];
 
   return (
-    <div className="p-6 md:p-8 max-w-4xl mx-auto space-y-6">
+    <div className="font-inter w-full">
+      <div className="w-full space-y-6">
 
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-          <Settings className="w-6 h-6 text-[#D73E26]" />
-          Paramètres Globaux
-        </h1>
-        <p className="text-[13px] text-gray-500 mt-1">
-          Gérez les configurations générales de la plateforme Retenza.
-        </p>
-      </div>
+        {/* STRUCTURE EN 2 COLONNES (haut de page) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
-      {/* ── Section 1 : Objectif d'acquisition ── */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="border-b border-gray-100 p-5 bg-gray-50/50">
-          <h2 className="text-[16px] font-semibold text-gray-800 flex items-center gap-2">
-            <Target className="w-5 h-5 text-gray-400" />
-            Objectif d'Acquisition
-          </h2>
-        </div>
+          {/* COLONNE GAUCHE — Carte "Paramètres globaux" */}
+          <div className="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
+            <div>
+              {/* Header */}
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
+                  <Sliders className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
+                    Paramètres globaux
+                  </h2>
+                  <p className="text-[12px] text-slate-400 mt-1">
+                    Gérez les configurations générales de la plateforme Retenza.
+                  </p>
+                </div>
+              </div>
 
-        <form onSubmit={handleSaveGoal} className="p-5 sm:p-6 space-y-6">
-          {successGoal && (
-            <div className="flex items-center gap-2 bg-[#EEF3E8] text-[#7D9B4E] p-3 rounded-xl border border-[#c9dbb2] text-[13px] font-medium animate-in fade-in">
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
-              {successGoal}
-            </div>
-          )}
-          {errorGoal && (
-            <div className="text-red-500 text-[13px] font-medium bg-red-50 p-3 rounded-xl border border-red-100">
-              {errorGoal}
-            </div>
-          )}
-
-          <div>
-            <label className="block text-[12px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Objectif mensuel de nouveaux partenaires
-            </label>
-            <p className="text-[13px] text-gray-400 mb-4 leading-relaxed">
-              Définit le nombre de nouveaux commerces actifs à acquérir durant le mois en cours. Cette valeur est utilisée pour calculer la jauge de progression sur votre tableau de bord.
-            </p>
-            <div className="max-w-xs relative">
-              <input
-                type="number"
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                min="1"
-                className="w-full pl-4 pr-12 py-3 rounded-xl border border-gray-200 text-gray-800 font-semibold focus:border-[#D73E26] focus:ring-2 focus:ring-[#D73E26]/20 transition-all outline-none"
-                placeholder="Ex: 50"
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[12px] font-medium text-gray-400">
-                commerces
-              </span>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-gray-100 flex items-center gap-4">
-            <button
-              type="submit"
-              disabled={isLoadingGoal}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white rounded-xl text-[14px] font-semibold transition-all disabled:opacity-70 shadow-sm"
-            >
-              {isLoadingGoal ? (
-                <><Loader2 className="w-4 h-4 animate-spin" />Sauvegarde...</>
-              ) : (
-                'Enregistrer'
+              {/* Messages de statut */}
+              {successGoal && (
+                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-xl border border-emerald-200 text-xs font-medium mt-4">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  {successGoal}
+                </div>
               )}
-            </button>
-            <button
-              type="button"
-              onClick={() => router.push('/admin')}
-              className="text-[13px] font-medium text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-1"
-            >
-              Retour au tableau de bord <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </form>
-      </div>
+              {errorGoal && (
+                <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-xl border border-red-200 mt-4">
+                  {errorGoal}
+                </div>
+              )}
 
-      {/* ── Section 2 : Notifications ── */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="border-b border-gray-100 p-5 bg-gray-50/50">
-          <h2 className="text-[16px] font-semibold text-gray-800 flex items-center gap-2">
-            <Bell className="w-5 h-5 text-gray-400" />
-            Notifications par e-mail
-          </h2>
-        </div>
-
-        <form onSubmit={handleSaveNotifications} className="p-5 sm:p-6 space-y-4">
-          {successNotifs && (
-            <div className="flex items-center gap-2 bg-[#EEF3E8] text-[#7D9B4E] p-3 rounded-xl border border-[#c9dbb2] text-[13px] font-medium animate-in fade-in">
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
-              {successNotifs}
-            </div>
-          )}
-          {errorNotifs && (
-            <div className="text-red-500 text-[13px] font-medium bg-red-50 p-3 rounded-xl border border-red-100">
-              {errorNotifs}
-            </div>
-          )}
-
-          <div className="space-y-3">
-            {notifItems.map(({ key, icon: Icon, title, description }) => (
-              <div
-                key={key}
-                className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:bg-gray-50/50 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0 mt-0.5">
-                    <Icon className="w-4 h-4 text-[#D73E26]" />
+              {/* Bloc encadré "Objectif d'acquisition" */}
+              <div className="mt-5 bg-[#FDF6F5] rounded-2xl border border-[#F8E3DE] p-5">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 rounded-full bg-[#FBEAE6] flex items-center justify-center shrink-0 text-[#DD2C1F]">
+                    <Target className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[13px] font-semibold text-gray-800">{title}</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">{description}</p>
+                    <h3 className="text-[13px] font-bold text-slate-800 leading-tight">
+                      Objectif d'acquisition
+                    </h3>
+                    <p className="text-[12px] text-slate-500 mt-1 leading-relaxed">
+                      Définissez le nombre de nouveaux commerces actifs à acquérir durant le mois en cours.
+                      Cette valeur est utilisée pour calculer la jauge de progression sur votre tableau de bord.
+                    </p>
                   </div>
                 </div>
-                <Toggle
-                  enabled={notifs[key]}
-                  onToggle={() => toggleNotif(key)}
-                />
+
+                {/* Champ input */}
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="flex items-center bg-white border border-slate-200/90 rounded-xl px-4 py-2.5 shadow-sm w-44 focus-within:border-[#DD2C1F] focus-within:ring-1 focus-within:ring-[#DD2C1F]">
+                    <input
+                      type="number"
+                      value={goal}
+                      onChange={(e) => setGoal(e.target.value)}
+                      min="1"
+                      className="w-full font-semibold text-sm text-slate-800 outline-none bg-transparent"
+                    />
+                  </div>
+                  <span className="text-xs font-medium text-slate-600">commerces</span>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Boutons d'action */}
+            <form onSubmit={handleSaveGoal} className="mt-5 flex items-center gap-3">
+              <button
+                type="submit"
+                disabled={isLoadingGoal}
+                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-xl text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
+              >
+                {isLoadingGoal ? (
+                  <><Loader2 className="w-3.5 h-3.5 animate-spin" />Sauvegarde...</>
+                ) : (
+                  <><Save className="w-3.5 h-3.5" />Enregistrer</>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={resetGoal}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-sm transition-all"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                Réinitialiser
+              </button>
+            </form>
           </div>
 
-          <div className="pt-4 border-t border-gray-100">
+          {/* COLONNE DROITE — Carte "Aperçu rapide" */}
+          <div className="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
+            <div>
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
+                    <Pencil className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
+                      Aperçu rapide
+                    </h2>
+                    <p className="text-[12px] text-slate-400 mt-1">
+                      Suivez vos objectifs et indicateurs clés en un coup d'œil.
+                    </p>
+                  </div>
+                </div>
+                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 shadow-sm transition-colors shrink-0">
+                  Mois en cours <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </div>
+
+              {/* Contenu : Graphique Donut + 3 Mini Cartes */}
+              <div className="mt-5 flex items-center gap-6">
+                {/* Donut Chart Gauge */}
+                <div className="flex flex-col items-center justify-center shrink-0 w-32">
+                  <div className="relative w-28 h-28 flex items-center justify-center">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="38"
+                        stroke="#F1F5F9"
+                        strokeWidth="8"
+                        fill="none"
+                      />
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="38"
+                        stroke="#DD2C1F"
+                        strokeWidth="8"
+                        strokeDasharray={2 * Math.PI * 38}
+                        strokeDashoffset={2 * Math.PI * 38 * (1 - progressPercentage / 100)}
+                        strokeLinecap="round"
+                        fill="none"
+                        className="transition-all duration-700 ease-out"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-xl font-bold text-slate-800">
+                        {Math.round(progressPercentage)}%
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-center mt-2">
+                    <p className="text-xs font-bold text-slate-800">Progression de l'objectif</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      {currentPartners} / {currentGoal} commerces
+                    </p>
+                  </div>
+                </div>
+
+                {/* 3 mini-cartes statistiques */}
+                <div className="flex-1 space-y-2">
+                  {/* Commerces actifs */}
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
+                        <Store className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-medium text-slate-400">Commerces actifs</p>
+                        <p className="text-[13px] font-bold text-slate-800">{currentPartners}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-0.5">
+                        <span className="text-xs">↑</span> +12%
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-emerald-600" />
+                    </div>
+                  </div>
+
+                  {/* En progression */}
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 shrink-0">
+                        <TrendingUp className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-medium text-slate-400">En progression</p>
+                        <p className="text-[13px] font-bold text-slate-800">+12%</p>
+                      </div>
+                    </div>
+                    <span className="text-emerald-600 font-bold text-sm">↑</span>
+                  </div>
+
+                  {/* Reste */}
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                        <Clock className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-medium text-slate-400">Reste</p>
+                        <p className="text-[13px] font-bold text-slate-800">{remaining}</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bannière d'astuce en bas */}
+            <div className="mt-4 p-3 bg-[#FDF6F5] rounded-xl border border-[#F8E3DE] flex items-center justify-between gap-3">
+              <div className="w-7 h-7 rounded-full bg-red-100/60 flex items-center justify-center shrink-0">
+                <Lightbulb className="w-3.5 h-3.5 text-[#DD2C1F]" />
+              </div>
+              <span className="text-[11px] text-slate-600 font-medium flex-1">
+                Votre objectif vous aide à mesurer la croissance de votre réseau de partenaires.
+              </span>
+              <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+            </div>
+          </div>
+        </div>
+
+        {/* BLOC PLEINE LARGEUR (bas de page) — Carte "Notifications par e-mail" */}
+        <div className="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
+          {/* Header */}
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
+              <Bell className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
+                Notifications par e-mail
+              </h2>
+              <p className="text-[12px] text-slate-400 mt-1">
+                Gérez les notifications et rapports envoyés par e-mail.
+              </p>
+            </div>
+          </div>
+
+          {/* Formulaire notifications */}
+          <form onSubmit={handleSaveNotifications} className="mt-5">
+            {/* Messages de statut */}
+            {successNotifs && (
+              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-xl border border-emerald-200 text-xs font-medium mb-4">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                {successNotifs}
+              </div>
+            )}
+            {errorNotifs && (
+              <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-xl border border-red-200 mb-4">
+                {errorNotifs}
+              </div>
+            )}
+
+            {/* 3 cartes horizontales en grille */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+              {notifItems.map(({ key, icon: Icon, title, description, color, bgColor }) => (
+                <div
+                  key={key}
+                  className="flex items-center justify-between p-3.5 bg-slate-50/70 rounded-xl border border-slate-100"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg ${bgColor} flex items-center justify-center shrink-0`}>
+                      <Icon className={`w-4 h-4 ${color}`} />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-slate-800 leading-tight">{title}</h3>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{description}</p>
+                    </div>
+                  </div>
+                  <div className="ml-3 shrink-0">
+                    <Toggle
+                      enabled={notifs[key]}
+                      onToggle={() => toggleNotif(key)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bouton enregistrer */}
             <button
               type="submit"
               disabled={isLoadingNotifs}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#D73E26] hover:bg-[#C0321C] text-white rounded-xl text-[14px] font-semibold transition-all disabled:opacity-70 shadow-sm"
+              className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-xl text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
             >
               {isLoadingNotifs ? (
-                <><Loader2 className="w-4 h-4 animate-spin" />Sauvegarde...</>
+                <><Loader2 className="w-3.5 h-3.5 animate-spin" />Sauvegarde...</>
               ) : (
-                'Enregistrer les notifications'
+                <><Bell className="w-3.5 h-3.5" />Enregistrer les notifications</>
               )}
             </button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
 
+      </div>
     </div>
   );
 }
