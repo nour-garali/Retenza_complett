@@ -60,6 +60,7 @@ export default function ClientProfilPage() {
   // Security Tab State
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Reconciliation state
   const [reconciling, setReconciling] = useState(false);
@@ -393,16 +394,31 @@ export default function ClientProfilPage() {
                       />
                     </div>
                     
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
-                      <input 
-                        type="password" 
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        autoComplete="new-password"
-                        className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
-                        placeholder="••••••••"
-                      />
+                    {/* Ligne avec 2 colonnes pour les nouveaux mots de passe */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
+                        <input 
+                          type="password" 
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          autoComplete="new-password"
+                          className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-semibold text-[#736C72]">Confirmer nouveau mdp</label>
+                        <input 
+                          type="password" 
+                          value={confirmNewPassword}
+                          onChange={(e) => setConfirmNewPassword(e.target.value)}
+                          autoComplete="new-password"
+                          className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                          placeholder="••••••••"
+                        />
+                      </div>
                     </div>
 
                     <div className="pt-2">
@@ -466,18 +482,13 @@ export default function ClientProfilPage() {
             <div className="bg-white border border-[#F0EBE6] rounded-[28px] p-6 sm:p-10 shadow-[0_2px_8px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 w-full">
               
               {/* ── Header ── */}
-              <div className="flex items-start gap-3.5 sm:gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-[#FFF5F4] flex items-center justify-center shrink-0">
-                  <Headphones className="w-6 h-6 text-[#DD2C1F]" />
-                </div>
-                <div>
-                  <h3 className="text-[22px] sm:text-[24px] font-bold text-[#17151A] tracking-tight leading-tight">
-                    Centre d&apos;aide
-                  </h3>
-                  <p className="text-[13px] sm:text-[14px] text-[#736C72] mt-1">
-                    Consultez notre FAQ ou contactez directement notre équipe support.
-                  </p>
-                </div>
+              <div className="mb-8">
+                <h3 className="text-[22px] sm:text-[24px] font-bold text-[#17151A] tracking-tight leading-tight">
+                  Centre d&apos;aide
+                </h3>
+                <p className="text-[13px] sm:text-[14px] text-[#736C72] mt-1">
+                  Consultez notre FAQ ou contactez directement notre équipe support.
+                </p>
               </div>
 
               {/* ── Content Grid ── */}
