@@ -4,6 +4,29 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+function useHasAuthCookie() {
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    setHasToken(document.cookie.includes('auth_token='));
+  }, []);
+  return hasToken;
+}
+
+function SmartLink({ href, style, children }: { href: string; style: React.CSSProperties; children: React.ReactNode }) {
+  const hasToken = useHasAuthCookie();
+  const handleClick = (e: React.MouseEvent) => {
+    if (hasToken) {
+      e.preventDefault();
+      window.location.href = `/api/logout-redirect?to=${encodeURIComponent(href)}`;
+    }
+  };
+  return (
+    <Link href={href} style={style} onClick={handleClick}>
+      {children}
+    </Link>
+  );
+}
+
 export default function PublicNavbar() {
   const pathname = usePathname();
   const [activeHash, setActiveHash] = useState('');
@@ -152,7 +175,7 @@ export default function PublicNavbar() {
       </div>
 
       <div style={{ display: 'flex', gap: 12 }}>
-        <Link href="/login" style={{
+        <SmartLink href="/login" style={{
           padding: '10px 20px', borderRadius: 12,
           border: '1.5px solid #E4DAD5', background: '#fff',
           color: '#1C1C2E', fontWeight: 700, fontSize: 14,
@@ -162,8 +185,8 @@ export default function PublicNavbar() {
             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
           </svg>
           Se connecter
-        </Link>
-        <Link href="/register" style={{
+        </SmartLink>
+        <SmartLink href="/register" style={{
           padding: '10px 20px', borderRadius: 12,
           background: 'linear-gradient(135deg, #D94030, #9E1A0A)',
           color: '#fff', fontWeight: 700, fontSize: 14,
@@ -175,7 +198,7 @@ export default function PublicNavbar() {
             <line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
           </svg>
           Créer un compte
-        </Link>
+        </SmartLink>
       </div>
     </nav>
   );

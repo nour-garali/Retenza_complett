@@ -1,16 +1,90 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Eye, EyeOff, Mail, Lock, ArrowRight, User, CheckCircle2, Star, Phone, Loader2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, User, CheckCircle2, Star, Phone, Loader2, ChevronDown, Search } from 'lucide-react';
 import { registerClientAction, checkVerificationStatusAction } from '@/services/authActions';
 import Link from 'next/link';
 import PublicNavbar from '@/components/landing/PublicNavbar';
+
+const COUNTRIES = [
+  { code: 'FR', name: 'France', dialCode: '+33', flag: '🇫🇷' },
+  { code: 'TN', name: 'Tunisie', dialCode: '+216', flag: '🇹🇳' },
+  { code: 'DZ', name: 'Algérie', dialCode: '+213', flag: '🇩🇿' },
+  { code: 'MA', name: 'Maroc', dialCode: '+212', flag: '🇲🇦' },
+  { code: 'BE', name: 'Belgique', dialCode: '+32', flag: '🇧🇪' },
+  { code: 'CH', name: 'Suisse', dialCode: '+41', flag: '🇨🇭' },
+  { code: 'LU', name: 'Luxembourg', dialCode: '+352', flag: '🇱🇺' },
+  { code: 'DE', name: 'Allemagne', dialCode: '+49', flag: '🇩🇪' },
+  { code: 'ES', name: 'Espagne', dialCode: '+34', flag: '🇪🇸' },
+  { code: 'IT', name: 'Italie', dialCode: '+39', flag: '🇮🇹' },
+  { code: 'PT', name: 'Portugal', dialCode: '+351', flag: '🇵🇹' },
+  { code: 'GB', name: 'Royaume-Uni', dialCode: '+44', flag: '🇬🇧' },
+  { code: 'NL', name: 'Pays-Bas', dialCode: '+31', flag: '🇳🇱' },
+  { code: 'SE', name: 'Suède', dialCode: '+46', flag: '🇸🇪' },
+  { code: 'NO', name: 'Norvège', dialCode: '+47', flag: '🇳🇴' },
+  { code: 'DK', name: 'Danemark', dialCode: '+45', flag: '🇩🇰' },
+  { code: 'FI', name: 'Finlande', dialCode: '+358', flag: '🇫🇮' },
+  { code: 'PL', name: 'Pologne', dialCode: '+48', flag: '🇵🇱' },
+  { code: 'CZ', name: 'Tchéquie', dialCode: '+420', flag: '🇨🇿' },
+  { code: 'AT', name: 'Autriche', dialCode: '+43', flag: '🇦🇹' },
+  { code: 'GR', name: 'Grèce', dialCode: '+30', flag: '🇬🇷' },
+  { code: 'RO', name: 'Roumanie', dialCode: '+40', flag: '🇷🇴' },
+  { code: 'HU', name: 'Hongrie', dialCode: '+36', flag: '🇭🇺' },
+  { code: 'TR', name: 'Turquie', dialCode: '+90', flag: '🇹🇷' },
+  { code: 'RU', name: 'Russie', dialCode: '+7', flag: '🇷🇺' },
+  { code: 'US', name: 'États-Unis', dialCode: '+1', flag: '🇺🇸' },
+  { code: 'CA', name: 'Canada', dialCode: '+1', flag: '🇨🇦' },
+  { code: 'MX', name: 'Mexique', dialCode: '+52', flag: '🇲🇽' },
+  { code: 'BR', name: 'Brésil', dialCode: '+55', flag: '🇧🇷' },
+  { code: 'AR', name: 'Argentine', dialCode: '+54', flag: '🇦🇷' },
+  { code: 'CL', name: 'Chili', dialCode: '+56', flag: '🇨🇱' },
+  { code: 'CO', name: 'Colombie', dialCode: '+57', flag: '🇨🇴' },
+  { code: 'JP', name: 'Japon', dialCode: '+81', flag: '🇯🇵' },
+  { code: 'CN', name: 'Chine', dialCode: '+86', flag: '🇨🇳' },
+  { code: 'KR', name: 'Corée du Sud', dialCode: '+82', flag: '🇰🇷' },
+  { code: 'IN', name: 'Inde', dialCode: '+91', flag: '🇮🇳' },
+  { code: 'AU', name: 'Australie', dialCode: '+61', flag: '🇦🇺' },
+  { code: 'NZ', name: 'Nouvelle-Zélande', dialCode: '+64', flag: '🇳🇿' },
+  { code: 'ZA', name: 'Afrique du Sud', dialCode: '+27', flag: '🇿🇦' },
+  { code: 'NG', name: 'Nigeria', dialCode: '+234', flag: '🇳🇬' },
+  { code: 'EG', name: 'Égypte', dialCode: '+20', flag: '🇪🇬' },
+  { code: 'GH', name: 'Ghana', dialCode: '+233', flag: '🇬🇭' },
+  { code: 'KE', name: 'Kenya', dialCode: '+254', flag: '🇰🇪' },
+  { code: 'SN', name: 'Sénégal', dialCode: '+221', flag: '🇸🇳' },
+  { code: 'CI', name: "Côte d'Ivoire", dialCode: '+225', flag: '🇨🇮' },
+  { code: 'CM', name: 'Cameroun', dialCode: '+237', flag: '🇨🇲' },
+  { code: 'LY', name: 'Libye', dialCode: '+218', flag: '🇱🇾' },
+  { code: 'SA', name: 'Arabie Saoudite', dialCode: '+966', flag: '🇸🇦' },
+  { code: 'AE', name: 'Émirats Arabes Unis', dialCode: '+971', flag: '🇦🇪' },
+  { code: 'QA', name: 'Qatar', dialCode: '+974', flag: '🇶🇦' },
+  { code: 'KW', name: 'Koweït', dialCode: '+965', flag: '🇰🇼' },
+  { code: 'BH', name: 'Bahreïn', dialCode: '+973', flag: '🇧🇭' },
+  { code: 'JO', name: 'Jordanie', dialCode: '+962', flag: '🇯🇴' },
+  { code: 'LB', name: 'Liban', dialCode: '+961', flag: '🇱🇧' },
+  { code: 'IQ', name: 'Irak', dialCode: '+964', flag: '🇮🇶' },
+  { code: 'SY', name: 'Syrie', dialCode: '+963', flag: '🇸🇾' },
+  { code: 'PS', name: 'Palestine', dialCode: '+970', flag: '🇵🇸' },
+  { code: 'PK', name: 'Pakistan', dialCode: '+92', flag: '🇵🇰' },
+  { code: 'BD', name: 'Bangladesh', dialCode: '+880', flag: '🇧🇩' },
+  { code: 'LK', name: 'Sri Lanka', dialCode: '+94', flag: '🇱🇰' },
+  { code: 'TH', name: 'Thaïlande', dialCode: '+66', flag: '🇹🇭' },
+  { code: 'VN', name: 'Vietnam', dialCode: '+84', flag: '🇻🇳' },
+  { code: 'PH', name: 'Philippines', dialCode: '+63', flag: '🇵🇭' },
+  { code: 'ID', name: 'Indonésie', dialCode: '+62', flag: '🇮🇩' },
+  { code: 'MY', name: 'Malaisie', dialCode: '+60', flag: '🇲🇾' },
+  { code: 'SG', name: 'Singapour', dialCode: '+65', flag: '🇸🇬' },
+];
 
 export default function RegisterClientScreen() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]); // France par défaut
+  const [countrySearch, setCountrySearch] = useState('');
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const countryDropdownRef = useRef<HTMLDivElement>(null);
+  const phone = phoneNumber ? `${selectedCountry.dialCode} ${phoneNumber}` : '';
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -130,7 +204,7 @@ export default function RegisterClientScreen() {
         {/* ── RIGHT — Form Card ── */}
         <div className="w-full lg:w-[55%] flex justify-end">
           <div className="w-full max-w-[540px] bg-[#FFFBFA] rounded-[32px] p-6 lg:p-8 mt-4 lg:mt-8 shadow-2xl shadow-[#BF2112]/15 border-l-[4px] border-l-[#BF2112] border-t border-r border-b border-white relative">
-
+            
             {waitingUserId ? (
               <div className="flex flex-col items-center text-center py-10">
                 <div className="w-20 h-20 bg-[#FCE7DD] rounded-full flex items-center justify-center mb-6">
@@ -234,16 +308,91 @@ export default function RegisterClientScreen() {
 
                 <div className="space-y-1">
                   <label className="text-[12px] font-bold text-[#1B100C] ml-1 uppercase tracking-wide opacity-80">Téléphone</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Phone className="w-4 h-4 text-[#BF2112]/50" />
+                  <div className="relative" ref={countryDropdownRef}>
+                    <div className="flex bg-[#FDF3F0] border border-[#FCE7DD]/60 focus-within:border-[#BF2112] focus-within:ring-[3px] focus-within:ring-[#BF2112]/10 rounded-xl shadow-sm transition-all relative overflow-hidden h-[42px]">
+                      
+                      {/* ── Sélecteur de pays ── */}
+                      <button
+                        type="button"
+                        onClick={() => { setShowCountryDropdown(v => !v); setCountrySearch(''); }}
+                        className="flex items-center gap-2 h-full px-3 hover:bg-black/5 outline-none transition-colors whitespace-nowrap cursor-pointer"
+                      >
+                        <img 
+                          src={`https://flagcdn.com/${selectedCountry.code.toLowerCase()}.svg`} 
+                          alt={selectedCountry.name} 
+                          className="w-5 h-auto object-cover rounded-[2px] shadow-sm"
+                        />
+                        <span className="text-[13px] font-bold text-gray-800">{selectedCountry.dialCode}</span>
+                        <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${showCountryDropdown ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      <div className="w-[1px] bg-[#FCE7DD]/60 my-2"></div>
+
+                      {/* ── Numéro de téléphone ── */}
+                      <div className="relative flex-1 flex items-center">
+                        <input
+                          type="tel"
+                          value={phoneNumber}
+                          onChange={e => setPhoneNumber(e.target.value.replace(/[^0-9 \-().]/g, ''))}
+                          placeholder="6 12 34 56 78"
+                          className="w-full h-full bg-transparent outline-none py-2.5 px-3 text-[14px] font-medium text-gray-900 transition-all placeholder-gray-400"
+                        />
+                      </div>
                     </div>
-                    <input
-                      type="tel" value={phone}
-                      onChange={e => setPhone(e.target.value)}
-                      placeholder="+216 12 345 678"
-                      className="w-full bg-[#FDF3F0] border border-[#FCE7DD]/60 focus:border-[#BF2112] focus:ring-[3px] focus:ring-[#BF2112]/10 outline-none rounded-xl py-2.5 lg:py-2 pl-11 pr-4 text-[14px] font-medium text-gray-900 transition-all placeholder-gray-400 shadow-sm"
-                    />
+
+                    {showCountryDropdown && (
+                      <div className="absolute left-0 top-full mt-1.5 z-50 w-[280px] bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
+                        {/* Barre de recherche */}
+                        <div className="p-2 border-b border-gray-100">
+                          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg">
+                            <Search className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                            <input
+                              autoFocus
+                              type="text"
+                              value={countrySearch}
+                              onChange={e => setCountrySearch(e.target.value)}
+                              placeholder="Rechercher un pays..."
+                              className="flex-1 bg-transparent text-[13px] text-gray-800 placeholder-gray-400 outline-none"
+                            />
+                          </div>
+                        </div>
+                        {/* Liste des pays */}
+                        <div className="max-h-[240px] overflow-y-auto">
+                          {COUNTRIES.filter(c =>
+                            c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+                            c.dialCode.includes(countrySearch)
+                          ).map(country => (
+                            <button
+                              key={country.code}
+                              type="button"
+                              onClick={() => { setSelectedCountry(country); setShowCountryDropdown(false); setCountrySearch(''); }}
+                              className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-[#FDF3F0] transition-colors ${
+                                selectedCountry.code === country.code ? 'bg-[#FDF3F0] text-[#BF2112]' : 'text-gray-700'
+                              }`}
+                            >
+                              <img 
+                                src={`https://flagcdn.com/${country.code.toLowerCase()}.svg`} 
+                                alt={country.name} 
+                                className="w-5 h-auto object-cover rounded-[2px] shadow-sm shrink-0"
+                              />
+                              <span className="flex-1 text-[13px] font-medium truncate">{country.name}</span>
+                              <span className="text-[12px] text-gray-400 font-mono font-semibold shrink-0">{country.dialCode}</span>
+                            </button>
+                          ))}
+                          {COUNTRIES.filter(c =>
+                            c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+                            c.dialCode.includes(countrySearch)
+                          ).length === 0 && (
+                            <p className="px-4 py-6 text-center text-[13px] text-gray-400">Aucun pays trouvé</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Fermer le dropdown en cliquant ailleurs */}
+                    {showCountryDropdown && (
+                      <div className="fixed inset-0 z-40" onClick={() => setShowCountryDropdown(false)} />
+                    )}
                   </div>
                 </div>
               </div>

@@ -188,7 +188,8 @@ exports.activateCommerce = asyncHandler(async (req, res) => {
   await commerce.save();
 
   // ── Créer / mettre à jour le QR Code ─────────────────────────
-  const qrUrl = `https://retenza.app/join/${commerce.merchantCode}`;
+  const frontendBase = process.env.FRONTEND_URL || 'http://localhost:3001';
+  const qrUrl = `${frontendBase}/m/${commerce.merchantCode}`;
   await QRCode.findOneAndUpdate(
     { commerce: commerce._id },
     {

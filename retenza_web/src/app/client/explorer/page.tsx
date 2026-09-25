@@ -1,6 +1,6 @@
 import React from 'react';
 import { getClientExploreData } from '@/services/clientDashboardActions';
-import { Compass, Search, MapPin, Star } from 'lucide-react';
+import { MapPin, Star } from 'lucide-react';
 
 export default async function ClientExplorerPage() {
   const fetchedSuggestions = await getClientExploreData() || [];
@@ -41,28 +41,6 @@ export default async function ClientExplorerPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto">
       
-      {/* Header with Search on the right */}
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center shrink-0">
-            <Compass className="w-5 h-5 text-[#D73E26]" />
-          </div>
-          <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C]">
-            Explorer les commerces
-          </h1>
-        </div>
-
-        {/* Local Search Bar */}
-        <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-[#9C8B82] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input 
-            type="text" 
-            placeholder="Rechercher par nom, catégorie..." 
-            className="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-10 pr-4 text-[13px] text-[#1B100C] placeholder-[#9C8B82] outline-none focus:border-[#D73E26] focus:ring-2 focus:ring-[#D73E26]/10 transition-all shadow-sm"
-          />
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {suggestions.length > 0 ? suggestions.map((commerce: any, idx: number) => (
           <div key={idx} className="bg-white rounded-2xl border border-[#EDE5DF] overflow-hidden hover:shadow-md transition-shadow group cursor-pointer">

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-const API_URL = process.env.API_URL || 'http://localhost:3000/api';
+const API_URL = process.env.API_URL || 'http://127.0.0.1:3000/api';
 const COOKIE_NAME = 'auth_token';
 
 async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {

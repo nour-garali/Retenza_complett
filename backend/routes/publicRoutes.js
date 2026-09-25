@@ -96,11 +96,27 @@ router.get('/merchant/:code/check-email', merchantLimit, async (req, res) => {
     const User = require('../models/User');
     const Client = require('../models/Client');
     const LoyaltyAccount = require('../models/LoyaltyAccount');
+    const GuestLoyaltyCard = require('../models/GuestLoyaltyCard');
 
-    const commerce = await Commerce.findOne({ merchantPublicId: code, status: 'active' });
+    const normalizedEmail = email.toLowerCase().trim();
+    const upperCode = code.toUpperCase();
+
+    const commerce = await Commerce.findOne({
+      $or: [{ merchantCode: upperCode }, { merchantCode: code }],
+      status: 'active'
+    });
     if (!commerce) return res.json({ success: true, registered: false });
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    // Strategy 1: Check GuestLoyaltyCard (guests who used OTP flow)
+    const guestCard = await GuestLoyaltyCard.findOne({
+      email: normalizedEmail,
+      merchantId: commerce._id,
+      status: { $ne: 'merged' }, // merged cards are already linked to a real account
+    });
+    if (guestCard) return res.json({ success: true, registered: true });
+
+    // Strategy 2: Check LoyaltyAccount (clients with full Retenza accounts)
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) return res.json({ success: true, registered: false });
 
     const clientProfile = await Client.findOne({ user: user._id });

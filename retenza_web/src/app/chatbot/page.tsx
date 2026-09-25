@@ -186,7 +186,7 @@ export default function ClientChatbotPage() {
       {
         id: `welcome-${Date.now()}`,
         role: "assistant",
-        content: `Bonjour **${firstName}** ! 👋 Je suis l'assistant virtuel de **${shopName}**, propulsé par Retenza.\nJ'ai déjà accès à votre profil, donc n'hésitez pas à me poser votre question directement — je suis là pour vous aider. 😊\nComment puis-je vous aider aujourd'hui ?`,
+        content: `Bonjour **${firstName}** ! 👋 Je suis l'assistant virtuel de **${shopName}**, propulsé par Retenza Connect.\nJ'ai déjà accès à votre profil, donc n'hésitez pas à me poser votre question directement — je suis là pour vous aider. 😊\nComment puis-je vous aider aujourd'hui ?`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
       }
     ]);
@@ -697,15 +697,20 @@ export default function ClientChatbotPage() {
 
           {/* Header & Logo Brand */}
           <div className="text-center space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E8462F] to-[#F06038] flex items-center justify-center shadow-lg shadow-[#E8462F]/25 mx-auto">
-              <RefreshCw className="w-7 h-7 text-white" />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E8462F] to-[#C0291A] flex items-center justify-center shadow-lg shadow-[#E8462F]/25 mx-auto">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 3"/>
+              </svg>
             </div>
             <div>
               <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
-                Retenza <span className="text-[#E8462F]">AI</span>
+                Retenza <span className="text-[#E8462F]">Connect</span>
               </h1>
               <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mt-1">
-                Assistant Client Autonome
+                Assistant en ligne
+              </p>
+              <p className="text-xs text-slate-500 font-medium">
+                Assistant virtuel de <span className="font-bold text-[#E8462F]">Boutique Tunis</span>
               </p>
             </div>
           </div>
@@ -808,7 +813,7 @@ export default function ClientChatbotPage() {
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base font-black text-[#1A1A1A] leading-none">
-                Retenza <span className="text-[#E8462F]">AI</span>
+                Retenza <span className="text-[#E8462F]">Connect</span>
               </h2>
               <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -959,7 +964,7 @@ export default function ClientChatbotPage() {
                     <div className={`flex items-center gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
                       {!isUser && (
                         <span className="text-xs font-extrabold text-[#1A1A1A]">
-                          {isSupport ? "🎧 Conseiller Support" : "Assistant Retenza"}
+                          {isSupport ? "🎧 Conseiller Support" : "Assistant Retenza Connect"}
                         </span>
                       )}
                       <span className="text-[10px] text-slate-400 font-medium">{msg.timestamp}</span>
@@ -1121,7 +1126,7 @@ export default function ClientChatbotPage() {
                     <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-[#1A1A1A] tracking-tight">Support Retenza</h3>
+                    <h3 className="text-sm font-bold text-[#1A1A1A] tracking-tight">Support Retenza Connect</h3>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <span className="text-[11px] text-emerald-600 font-semibold">● En ligne</span>
                       <span className="text-[11px] text-stone-400">·</span>
@@ -1244,7 +1249,7 @@ export default function ClientChatbotPage() {
                           <span className={`text-[10px] font-bold mb-1 px-1 ${
                             isSupport ? "text-amber-700" : isBotContext ? "text-stone-500" : "text-[#E8462F]"
                           }`}>
-                            {isSupport ? "🎧 Conseiller Support" : isBotContext ? "🤖 Contexte Bot" : "Retenza IA"}
+                            {isSupport ? "🎧 Conseiller Support" : isBotContext ? "🤖 Contexte Bot" : "Retenza Connect"}
                           </span>
                         )}
 

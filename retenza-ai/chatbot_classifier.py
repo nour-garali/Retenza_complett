@@ -288,7 +288,7 @@ llm_ready = False
 if config.GROQ_API_KEYS:
     try:
         from groq import Groq  # noqa: F401 — verifie que la lib est installee
-        # Manager principal — llama-3.3-70b-versatile (génération SAV, réponses longues)
+        # Manager principal — openai/gpt-oss-120b (génération SAV, réponses longues)
         groq_manager = GroqKeyManager(config.GROQ_API_KEYS, config.GROQ_MODEL)
         # Manager rapide — llama-3.1-8b-instant (routage, classification, détection d'intentions)
         # Partage le même pool de clés, pas de configuration supplémentaire requise.

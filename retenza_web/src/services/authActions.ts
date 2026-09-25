@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { ActionResponse, AuthResponse } from '../types/auth';
 
-const API_URL = process.env.API_URL || 'http://localhost:3000/api';
+const API_URL = process.env.API_URL || 'http://127.0.0.1:3000/api';
 const COOKIE_NAME = 'auth_token';
 
 // --- HELPER FUNCTION FOR SESSION SETTING ---
@@ -66,18 +66,14 @@ export async function registerClientAction(payload: any): Promise<ActionResponse
       return { success: false, message: data.message || 'Erreur lors de l\'inscription' };
     }
 
-    if (data.success) {
-      if (data.data?.token) {
-        await setSessionCookie(data.data.token);
-      }
-      return { success: true, message: data.message || 'Inscription réussie', data: data.data };
-    }
-
-    return { success: false, message: 'Erreur inattendue lors de l\'inscription' };
+    // NOTE: We do NOT set a session cookie here — the account is pending email verification.
+    // The frontend will poll /auth/check-verification/:userId until the user verifies.
+    return { success: true, message: data.message || 'Inscription réussie', data: data.data };
   } catch (error) {
     return { success: false, message: 'Impossible de joindre le serveur' };
   }
 }
+
 
 // --- REGISTER MERCHANT ---
 export async function registerMerchantAction(payload: any): Promise<ActionResponse> {

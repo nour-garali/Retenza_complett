@@ -59,6 +59,7 @@ export default function AdminProfilPage() {
   // Security Tab State
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -76,15 +77,14 @@ export default function AdminProfilPage() {
   const [savedAvatar, setSavedAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) {
-      setEditForm(prev => ({
-        ...prev,
-        firstName: user.firstName || 'Admin',
-        lastName: user.lastName || 'System',
-        phone: (user as any).phone || '0123456789',
-      }));
-    }
-  }, [user]);
+    // Force les données admin pour cette page
+    setEditForm(prev => ({
+      ...prev,
+      firstName: 'Admin',
+      lastName: 'System',
+      phone: '0522123456',
+    }));
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -128,10 +128,10 @@ export default function AdminProfilPage() {
     setIsEditModalOpen(true);
   };
 
-  const adminName = `${editForm.firstName || user?.firstName || 'Admin'} ${editForm.lastName || user?.lastName || 'System'}`.trim();
-  const initials = `${editForm.firstName?.charAt(0) || user?.firstName?.charAt(0) || 'A'}${editForm.lastName?.charAt(0) || user?.lastName?.charAt(0) || 'S'}`;
-  const email = user?.email || 'admin@retenza.com';
-  const phone = editForm.phone || (user as any)?.phone || '0123456789';
+  const adminName = "Admin System"; // Force nom admin pour cette page
+  const initials = "AS"; // Force initiales admin
+  const email = 'admin@retenza.com'; // Force admin email pour cette page
+  const phone = '0522123456'; // Force téléphone admin
   const createdAt = (user as any)?.createdAt
     ? new Date((user as any).createdAt).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
     : 'Janvier 2026';
@@ -169,7 +169,7 @@ export default function AdminProfilPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-white border border-[#E9E4DD] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-white border border-[#E9E4DD] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-center hover:bg-[#F5D7CD]/20 transition-colors cursor-pointer"
                     title="Changer la photo"
                   >
                     <Camera className="w-3.5 h-3.5 text-[#17151A]" />
@@ -428,8 +428,8 @@ export default function AdminProfilPage() {
               <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
                 
-                <div className="space-y-5 max-w-md">
-                  <div className="flex flex-col gap-1.5">
+                <div className="space-y-5">
+                  <div className="flex flex-col gap-1.5 w-1/2 pr-2">
                     <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
                     <input 
                       type="password" 
@@ -441,16 +441,31 @@ export default function AdminProfilPage() {
                     />
                   </div>
                   
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
-                    <input 
-                      type="password" 
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      autoComplete="new-password"
-                      className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
-                      placeholder="••••••••"
-                    />
+                  {/* Ligne avec 2 colonnes pour les nouveaux mots de passe */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
+                      <input 
+                        type="password" 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        autoComplete="new-password"
+                        className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                    
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[13px] font-semibold text-[#736C72]">Confirmer nouveau mdp</label>
+                      <input 
+                        type="password" 
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        autoComplete="new-password"
+                        className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                        placeholder="••••••••"
+                      />
+                    </div>
                   </div>
 
                   <div className="pt-2">
@@ -559,7 +574,7 @@ export default function AdminProfilPage() {
 
                 {/* ── Colonne 2 : Actions récentes ── */}
                 <div className="flex flex-col justify-center lg:px-6">
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm w-full">
+                  <div className="bg-white p-5 rounded-2xl border border-[#E9E4DD] shadow-sm w-full">
                     
                     {/* Header avec icône horloge */}
                     <div className="flex items-center gap-3 mb-4">
@@ -567,15 +582,15 @@ export default function AdminProfilPage() {
                         <Clock className="w-4 h-4 text-[#DD2C1F]" />
                       </div>
                       <div>
-                        <h4 className="text-[14px] font-bold text-slate-800">Actions récentes</h4>
-                        <p className="text-[11px] text-slate-400 mt-0.5">Dernières modifications de votre système</p>
+                        <h4 className="text-[14px] font-bold text-[#17151A]">Actions récentes</h4>
+                        <p className="text-[11px] text-[#736C72] mt-0.5">Dernières modifications de votre système</p>
                       </div>
                     </div>
 
                     {/* Timeline verticale */}
                     <div className="relative mt-4">
                       {/* Ligne verticale */}
-                      <div className="absolute left-[3px] top-4 bottom-4 w-px bg-slate-200"></div>
+                      <div className="absolute left-[3px] top-4 bottom-4 w-px bg-[#E9E4DD]"></div>
                       
                       <div className="space-y-3">
                         {/* Action 1 - Partenaire activé */}
@@ -589,14 +604,14 @@ export default function AdminProfilPage() {
                                 <Check className="w-4 h-4" />
                               </div>
                               <div className="min-w-0">
-                                <p className="text-[12.5px] font-bold text-slate-800 truncate">Partenaire activé</p>
-                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-slate-400">
-                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                <p className="text-[12.5px] font-bold text-[#17151A] truncate">Partenaire activé</p>
+                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-[#736C72]">
+                                  <Clock className="w-3 h-3 text-[#736C72] shrink-0" />
                                   <span>Il y a 2h</span>
                                 </div>
                               </div>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
+                            <ChevronRight className="w-4 h-4 text-[#736C72] group-hover:text-[#17151A] transition-colors shrink-0 ml-2" />
                           </div>
                         </div>
                         
@@ -611,36 +626,36 @@ export default function AdminProfilPage() {
                                 <BarChart3 className="w-4 h-4" />
                               </div>
                               <div className="min-w-0">
-                                <p className="text-[12.5px] font-bold text-slate-800 truncate">Export généré</p>
-                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-slate-400">
-                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                <p className="text-[12.5px] font-bold text-[#17151A] truncate">Export généré</p>
+                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-[#736C72]">
+                                  <Clock className="w-3 h-3 text-[#736C72] shrink-0" />
                                   <span>Hier, 16h42</span>
                                 </div>
                               </div>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
+                            <ChevronRight className="w-4 h-4 text-[#736C72] group-hover:text-[#17151A] transition-colors shrink-0 ml-2" />
                           </div>
                         </div>
                         
                         {/* Action 3 - Paramètre modifié */}
                         <div className="relative pl-5 flex items-center">
                           {/* Point timeline */}
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-slate-400 ring-2 ring-white z-10" />
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#736C72] ring-2 ring-white z-10" />
                           
-                          <div className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70 hover:bg-slate-100/60 transition-colors cursor-pointer group">
+                          <div className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200/70 hover:bg-gray-100/60 transition-colors cursor-pointer group">
                             <div className="flex items-center gap-3 min-w-0">
-                              <div className="w-8 h-8 rounded-full bg-slate-200/80 flex items-center justify-center text-slate-600 shrink-0">
+                              <div className="w-8 h-8 rounded-full bg-gray-200/80 flex items-center justify-center text-gray-600 shrink-0">
                                 <Cog className="w-4 h-4" />
                               </div>
                               <div className="min-w-0">
-                                <p className="text-[12.5px] font-bold text-slate-800 truncate">Paramètre modifié</p>
-                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-slate-400">
-                                  <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                                <p className="text-[12.5px] font-bold text-[#17151A] truncate">Paramètre modifié</p>
+                                <div className="flex items-center gap-1 mt-0.5 text-[10.5px] text-[#736C72]">
+                                  <Clock className="w-3 h-3 text-[#736C72] shrink-0" />
                                   <span>06 Sept, 10h15</span>
                                 </div>
                               </div>
                             </div>
-                            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-2" />
+                            <ChevronRight className="w-4 h-4 text-[#736C72] group-hover:text-[#17151A] transition-colors shrink-0 ml-2" />
                           </div>
                         </div>
                       </div>
@@ -766,7 +781,7 @@ export default function AdminProfilPage() {
               </div>
               <button 
                 onClick={() => setIsEditModalOpen(false)}
-                className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer"
+                className="w-10 h-10 rounded-full bg-[#F7F4EF] flex items-center justify-center text-[#736C72] hover:bg-[#F5D7CD]/20 hover:text-[#17151A] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -842,13 +857,13 @@ export default function AdminProfilPage() {
                 <div className="space-y-2 opacity-70">
                   <label className="text-[13px] font-semibold text-[#17151A] flex items-center justify-between">
                     Adresse e-mail
-                    <span className="text-[11px] font-normal text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">Lecture seule</span>
+                    <span className="text-[11px] font-normal text-[#736C72] bg-[#F7F4EF] px-2 py-0.5 rounded-full">Lecture seule</span>
                   </label>
                   <input 
                     type="email" 
                     value={email}
                     disabled
-                    className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-500 cursor-not-allowed"
+                    className="w-full bg-[#F7F4EF]/70 border border-[#E9E4DD] rounded-xl px-4 py-3 text-[14px] text-[#736C72] cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -859,7 +874,7 @@ export default function AdminProfilPage() {
                 <button 
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-gray-600 bg-white border border-[#E9E4DD] hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
+                  className="flex-1 py-3 rounded-xl text-[14px] font-semibold text-[#736C72] bg-white border border-[#E9E4DD] hover:bg-[#F7F4EF] transition-colors shadow-sm cursor-pointer"
                 >
                   Annuler
                 </button>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   Users, Zap, TrendingUp, Store, Search,
@@ -50,6 +50,9 @@ function ChartTip({ active, payload, label }: any) {
    MAIN
 ══════════════════════════════════════════════ */
 export default function AdminHomeContent({ stats, commerces }: AdminHomeContentProps) {
+
+  // États pour les onglets principaux
+  const [activeMainTab, setActiveMainTab] = useState<'dashboard' | 'partners'>('dashboard');
 
   /* Values */
   const totalClients    = stats?.users?.clients                     ?? 102890;
@@ -118,27 +121,46 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
   return (
     <div className="font-inter">
 
-      {/* ─── MAIN ─────────────────────────────────── */}
-      <div className="space-y-6">
-
-        {/* Action bar */}
-        <div className="flex items-end justify-between">
-          <div />
-          <Link href="/admin/partenaires"
-            className="no-underline h-9 px-5 flex items-center gap-2 bg-[#1E2B4A] hover:bg-[#162038] text-white text-[12px] font-semibold rounded-xl transition-all shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30">
-            <Store className="w-3.5 h-3.5" />
-            Voir les partenaires
-          </Link>
+      {/* ─── ONGLETS PRINCIPAUX ─────────────────────── */}
+      <div className="mb-6">
+        <div className="flex gap-6 border-b border-slate-200 pb-0">
+          <button
+            onClick={() => setActiveMainTab('dashboard')}
+            className={`flex items-center gap-2 pb-3.5 text-[14px] font-semibold border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
+              activeMainTab === 'dashboard'
+                ? 'border-[#DD2C1F] text-[#DD2C1F]'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            <BarChart2 className="w-4 h-4 shrink-0" />
+            Dashboard
+          </button>
+          <button
+            onClick={() => setActiveMainTab('partners')}
+            className={`flex items-center gap-2 pb-3.5 text-[14px] font-semibold border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
+              activeMainTab === 'partners'
+                ? 'border-[#DD2C1F] text-[#DD2C1F]'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            <Store className="w-4 h-4 shrink-0" />
+            Historique des partenaires
+          </button>
         </div>
+      </div>
 
-        {/* ═══ ROW 1 — 4 KPI CARDS + GOAL ════════════ */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      {/* ─── CONTENU DASHBOARD ─────────────────────── */}
+      {activeMainTab === 'dashboard' && (
+        <div className="space-y-6">
+
+          {/* ═══ ROW 1 — 4 KPI CARDS + GOAL ════════════ */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 
           {/* KPI 1 */}
           {[
-            { label: 'Total clients', value: totalClients, trend: '+12.8%', sub: `+${(totalClients * 0.1).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} ce mois`, icon: Users, c1: '#EEF2FF', c2: '#4F46E5' },
-            { label: 'Scans QR', value: totalScans, trend: '+2.4%', sub: '-124 vs mois dernier', icon: Zap, c1: '#FFF7ED', c2: '#EA580C' },
-            { label: 'Rétention', value: Math.round(retention), suffix: '%', trend: `+${retentionTrend.toFixed(1)}%`, sub: `+${retentionTrend.toFixed(1)}% vs mois dernier`, icon: TrendingUp, c1: '#F0FDF4', c2: '#16A34A' },
+            { label: 'Total clients', value: totalClients, trend: '+12.8%', sub: `+${(totalClients * 0.1).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} ce mois`, icon: Users, c1: '#F7F4EF', c2: '#DD2C1F' },
+            { label: 'Scans QR', value: totalScans, trend: '+2.4%', sub: '-124 vs mois dernier', icon: Zap, c1: '#F1F5F9', c2: '#64748B' },
+            { label: 'Rétention', value: Math.round(retention), suffix: '%', trend: `+${retentionTrend.toFixed(1)}%`, sub: `+${retentionTrend.toFixed(1)}% vs mois dernier`, icon: TrendingUp, c1: '#F7F4EF', c2: '#DD2C1F' },
           ].map((kpi, i) => (
             <div key={i} className="bg-white rounded-2xl p-5 border border-slate-200/60 shadow-sm hover:shadow-md transition-all duration-200 group cursor-default">
               <div className="flex items-center justify-between mb-3">
@@ -148,7 +170,7 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
                   </div>
                   <p className="text-[12px] font-semibold text-slate-500">{kpi.label}</p>
                 </div>
-                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-bold text-[#DD2C1F] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
                   {kpi.trend}
                 </span>
               </div>
@@ -164,11 +186,11 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center">
-                  <Store className="w-4 h-4 text-[#D73E26]" />
+                  <Store className="w-4 h-4 text-[#DD2C1F]" />
                 </div>
                 <p className="text-[12px] font-semibold text-slate-500">Partenaires actifs</p>
               </div>
-              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">+19%</span>
+              <span className="text-[10px] font-bold text-[#DD2C1F] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">+19%</span>
             </div>
             <p className="font-bricolage text-[30px] font-bold text-[#1E2B4A] leading-none tracking-tight mb-2">
               <Counter to={activeMerchants} />
@@ -177,35 +199,23 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
           </div>
 
           {/* Objectif card */}
-          <div className="bg-[#1E2B4A] rounded-2xl p-5 border border-slate-700 shadow-lg relative overflow-hidden cursor-default">
-            <div className="absolute -right-6 -top-6 w-28 h-28 bg-white/5 rounded-full" />
-            <div className="absolute -right-2 -bottom-8 w-20 h-20 bg-white/5 rounded-full" />
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 relative z-10">Objectif mensuel</p>
-            <div className="flex items-center gap-4 mb-4 relative z-10">
-              {/* SVG Ring */}
-              <div className="relative w-[60px] h-[60px] shrink-0">
-                <svg width={60} height={60} viewBox="0 0 60 60" style={{ transform: 'rotate(-90deg)' }}>
-                  <circle cx={30} cy={30} r={24} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={5} />
-                  <circle cx={30} cy={30} r={24} fill="none" stroke="#D73E26" strokeWidth={5}
-                    strokeDasharray={2 * Math.PI * 24}
-                    strokeDashoffset={2 * Math.PI * 24 * (1 - goalPct / 100)}
-                    strokeLinecap="round"
-                    style={{ transition: 'stroke-dashoffset 1.2s ease' }}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white font-bold text-[11px] font-bricolage">{Math.round(goalPct)}%</span>
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/60 shadow-sm hover:shadow-md transition-all duration-200 group cursor-default">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center">
+                  <Target className="w-4 h-4 text-[#DD2C1F]" />
                 </div>
+                <p className="text-[12px] font-semibold text-slate-500">Objectif mensuel</p>
               </div>
-              <div>
-                <p className="font-bricolage text-[28px] font-bold text-white leading-none">{thisMonth}</p>
-                <p className="text-[11px] text-slate-400 mt-1">sur {monthlyGoal}</p>
-              </div>
+              <span className="text-[10px] font-bold text-[#DD2C1F] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
+                +{Math.round((thisMonth / monthlyGoal) * 100)}%
+              </span>
             </div>
-            <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10">
-              <div className="h-full bg-[#D73E26] rounded-full" style={{ width: `${goalPct}%`, transition: 'width 1.2s ease' }} />
-            </div>
-            <Link href="/admin/parametres" className="no-underline flex items-center gap-1 mt-4 text-[11px] font-semibold text-slate-400 hover:text-white transition-colors relative z-10 w-fit">
+            <p className="font-bricolage text-[30px] font-bold text-[#1E2B4A] leading-none tracking-tight mb-2">
+              {thisMonth}
+            </p>
+            <p className="text-[11px] text-slate-400 font-medium">sur {monthlyGoal} partenaires ce mois</p>
+            <Link href="/admin/parametres" className="no-underline flex items-center gap-1 mt-4 text-[11px] font-semibold text-slate-400 hover:text-[#DD2C1F] transition-colors w-fit">
               Modifier <ChevronRight className="w-3 h-3" />
             </Link>
           </div>
@@ -453,7 +463,11 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
           </div>
         </div>
 
-        {/* ═══ ROW 4 — TABLE ══════════════════════════ */}
+        </div>
+      )}
+
+      {/* ─── CONTENU HISTORIQUE DES PARTENAIRES ─────────────────────── */}
+      {activeMainTab === 'partners' && (
         <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
@@ -528,8 +542,8 @@ export default function AdminHomeContent({ stats, commerces }: AdminHomeContentP
             </div>
           </div>
         </div>
+      )}
 
-      </div>
     </div>
   );
 }

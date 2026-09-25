@@ -329,7 +329,7 @@ export default function MerchantHomeContent({ user, stats, billingStats }: Merch
                     dataKey="value"
                     onMouseEnter={(_, index) => setActivePieIndex(index)}
                     onMouseLeave={() => setActivePieIndex(undefined)}
-                    // @ts-ignore
+                    // @ts-expect-error - Recharts activeIndex prop type issue
                     activeIndex={activePieIndex}
                     activeShape={renderActiveShape}
                     isAnimationActive={true}

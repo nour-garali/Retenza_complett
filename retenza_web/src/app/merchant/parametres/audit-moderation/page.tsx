@@ -1314,7 +1314,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
                       <div className="flex items-center justify-end gap-2">
                         {/* Bouton Contacter par e-mail */}
                         <a
-                          href={`mailto:${t.email}?subject=Support Retenza AI - ${encodeURIComponent(getShopDisplayName(t.commerce_id, t.commerce_name))}&body=Bonjour,\n\nSuite à votre demande auprès du support virtuel de ${encodeURIComponent(getShopDisplayName(t.commerce_id, t.commerce_name))}, nous prenons en charge votre dossier.\n\nCordialement,`}
+                          href={`mailto:${t.email}?subject=Support Retenza Connect - ${encodeURIComponent(getShopDisplayName(t.commerce_id, t.commerce_name))}&body=Bonjour,\n\nSuite à votre demande auprès du support virtuel de ${encodeURIComponent(getShopDisplayName(t.commerce_id, t.commerce_name))}, nous prenons en charge votre dossier.\n\nCordialement,`}
                           className="p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 border border-slate-200 transition cursor-pointer shrink-0"
                           title="Envoyer un e-mail au client"
                         >
@@ -1605,7 +1605,7 @@ function TicketsTab({ selectedCommerce, initialTicketId }: { selectedCommerce: s
             {/* Actions Rapides Admin Footer */}
             <div className="px-6 py-3 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3">
               <a
-                href={`mailto:${selectedTicket.email}?subject=Support Retenza AI - ${encodeURIComponent(getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name))}&body=Bonjour,\n\nSuite à votre demande auprès du support virtuel de ${encodeURIComponent(getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name))}, nous prenons en charge votre dossier.\n\nCordialement,`}
+                href={`mailto:${selectedTicket.email}?subject=Support Retenza Connect - ${encodeURIComponent(getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name))}&body=Bonjour,\n\nSuite à votre demande auprès du support virtuel de ${encodeURIComponent(getShopDisplayName(selectedTicket.commerce_id, selectedTicket.commerce_name))}, nous prenons en charge votre dossier.\n\nCordialement,`}
                 className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 text-xs font-medium transition cursor-pointer border border-slate-200 shadow-xs"
               >
                 <Mail className="w-3.5 h-3.5 text-slate-400" />

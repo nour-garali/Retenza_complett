@@ -1,6 +1,6 @@
 import React from 'react';
 import { getClientBalances } from '@/services/clientDashboardActions';
-import { CreditCard, Star, Gift, Zap } from 'lucide-react';
+import { Star, Gift, Zap } from 'lucide-react';
 
 /* ── Mock cards for design preview ── */
 const mockCards = [
@@ -157,26 +157,6 @@ export default async function ClientCartesPage() {
 
   return (
     <div className="py-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center shrink-0">
-            <CreditCard className="w-5 h-5 text-[#D73E26]" />
-          </div>
-          <div>
-            <h1 className="text-[22px] font-bricolage font-bold text-[#1B100C] leading-tight">Mes Cartes</h1>
-            <p className="text-[12px] text-gray-400">{cards.length} carte{cards.length > 1 ? 's' : ''} active{cards.length > 1 ? 's' : ''}</p>
-          </div>
-        </div>
-
-        {isDemo && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100">
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[11px] font-semibold text-amber-600">Aperçu design</span>
-          </div>
-        )}
-      </div>
 
       {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

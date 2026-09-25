@@ -319,48 +319,67 @@ export default function ClientProfilPage() {
           {/* TAB: WALLET */}
           {activeTab === 'wallet' && (
             <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] animate-in fade-in duration-300">
-              <div className="max-w-3xl">
-                <div className="flex flex-col gap-6">
-                  <div>
-                    <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Synchroniser vos cartes de fidélité</h3>
-                    <p className="text-[14px] text-[#736C72] leading-relaxed">
-                      Si vous avez utilisé des cartes de fidélité chez nos commerçants partenaires avant de finaliser 
-                      votre compte, vous pouvez les synchroniser ici. Notre système retrouvera automatiquement vos points.
-                    </p>
-                  </div>
-
-                  {reconcileResult && (
-                    <div className={`p-4 rounded-xl border flex items-start gap-3 ${
-                      reconcileResult.mergedCount > 0 
-                        ? 'bg-[#F0F8F0] border-[#C8E6C8] text-[#2D5A2D]' 
-                        : 'bg-[#F7F4EF] border-[#E9E4DD] text-[#736C72]'
-                    }`}>
-                      {reconcileResult.mergedCount > 0 ? 
-                        <CheckCircle className="w-5 h-5 text-[#2D5A2D] shrink-0" /> : 
-                        <AlertCircle className="w-5 h-5 text-[#736C72] shrink-0" />
-                      }
-                      <p className="text-[13px] font-medium mt-0.5">{reconcileResult.message}</p>
+              
+              {/* ── Content Grid ── */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                
+                {/* Main content (7 columns) */}
+                <div className="lg:col-span-7">
+                  <div className="flex flex-col gap-6">
+                    <div>
+                      <h3 className="text-[16px] font-bold text-[#17151A] mb-2">Synchroniser vos cartes de fidélité</h3>
+                      <p className="text-[14px] text-[#736C72] leading-relaxed">
+                        Si vous avez utilisé des cartes de fidélité chez nos commerçants partenaires avant de finaliser 
+                        votre compte, vous pouvez les synchroniser ici. Notre système retrouvera automatiquement vos points.
+                      </p>
                     </div>
-                  )}
 
-                  {reconcileError && (
-                    <div className="p-4 rounded-xl bg-[#FDF2F2] border border-[#F5C6C6] text-[#C31F3C] flex items-center gap-3">
-                      <AlertCircle className="w-5 h-5 text-[#C31F3C] shrink-0" />
-                      <p className="text-[13px] font-medium">{reconcileError}</p>
+                    {reconcileResult && (
+                      <div className={`p-4 rounded-xl border flex items-start gap-3 ${
+                        reconcileResult.mergedCount > 0 
+                          ? 'bg-[#F0F8F0] border-[#C8E6C8] text-[#2D5A2D]' 
+                          : 'bg-[#F7F4EF] border-[#E9E4DD] text-[#736C72]'
+                      }`}>
+                        {reconcileResult.mergedCount > 0 ? 
+                          <CheckCircle className="w-5 h-5 text-[#2D5A2D] shrink-0" /> : 
+                          <AlertCircle className="w-5 h-5 text-[#736C72] shrink-0" />
+                        }
+                        <p className="text-[13px] font-medium mt-0.5">{reconcileResult.message}</p>
+                      </div>
+                    )}
+
+                    {reconcileError && (
+                      <div className="p-4 rounded-xl bg-[#FDF2F2] border border-[#F5C6C6] text-[#C31F3C] flex items-center gap-3">
+                        <AlertCircle className="w-5 h-5 text-[#C31F3C] shrink-0" />
+                        <p className="text-[13px] font-medium">{reconcileError}</p>
+                      </div>
+                    )}
+
+                    <div>
+                      <button 
+                        onClick={handleReconcile}
+                        disabled={reconciling}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[13px] font-bold rounded-xl transition-colors disabled:opacity-70 shadow-sm"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${reconciling ? 'animate-spin' : ''}`} />
+                        {reconciling ? 'Synchronisation...' : 'Lancer la synchronisation'}
+                      </button>
                     </div>
-                  )}
-
-                  <div>
-                    <button 
-                      onClick={handleReconcile}
-                      disabled={reconciling}
-                      className="flex items-center gap-2 px-6 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white text-[13px] font-bold rounded-xl transition-colors disabled:opacity-70 shadow-sm"
-                    >
-                      <RefreshCw className={`w-4 h-4 ${reconciling ? 'animate-spin' : ''}`} />
-                      {reconciling ? 'Synchronisation...' : 'Lancer la synchronisation'}
-                    </button>
                   </div>
                 </div>
+
+                {/* Illustration (5 columns) */}
+                <div className="lg:col-span-5 hidden sm:flex items-center justify-end relative min-h-[160px] overflow-visible py-1 pr-0">
+                  {/* Sync Illustration Image */}
+                  <div className="relative w-full h-full flex items-center justify-end ml-32 mr-[-150px]">
+                    <img 
+                      src="/sync-illustration.png" 
+                      alt="Synchronisation illustration" 
+                      className="w-full h-auto max-w-[450px] object-contain"
+                    />
+                  </div>
+                </div>
+
               </div>
             </div>
           )}
@@ -381,8 +400,8 @@ export default function ClientProfilPage() {
                 <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                   <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
                   
-                  <div className="space-y-5 max-w-md">
-                    <div className="flex flex-col gap-1.5">
+                  <div className="space-y-5">
+                    <div className="flex flex-col gap-1.5 w-1/2 pr-2">
                       <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
                       <input 
                         type="password" 
@@ -395,7 +414,7 @@ export default function ClientProfilPage() {
                     </div>
                     
                     {/* Ligne avec 2 colonnes pour les nouveaux mots de passe */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 w-full">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
                         <input 
@@ -479,46 +498,46 @@ export default function ClientProfilPage() {
 
           {/* TAB: SUPPORT */}
           {activeTab === 'support' && (
-            <div className="bg-white border border-[#F0EBE6] rounded-[28px] p-6 sm:p-10 shadow-[0_2px_8px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 w-full">
+            <div className="bg-white border border-[#F0EBE6] rounded-[28px] p-4 sm:p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] animate-in fade-in duration-300 w-full">
               
               {/* ── Header ── */}
-              <div className="mb-8">
-                <h3 className="text-[22px] sm:text-[24px] font-bold text-[#17151A] tracking-tight leading-tight">
+              <div className="mb-4">
+                <h3 className="text-[16px] sm:text-[18px] font-bold text-[#17151A] tracking-tight leading-tight">
                   Centre d&apos;aide
                 </h3>
-                <p className="text-[13px] sm:text-[14px] text-[#736C72] mt-1">
+                <p className="text-[11px] sm:text-[12px] text-[#736C72] mt-1">
                   Consultez notre FAQ ou contactez directement notre équipe support.
                 </p>
               </div>
 
               {/* ── Content Grid ── */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
                 
                 {/* Actions list (7 columns) */}
-                <div className="lg:col-span-7 space-y-4">
+                <div className="lg:col-span-7 space-y-3">
                   {/* FAQ */}
-                  <div className="flex items-center justify-between p-4 sm:p-5 border border-[#F0EBE6] rounded-2xl bg-white hover:border-[#FEE2E2] hover:shadow-sm transition-all cursor-pointer group">
+                  <div className="flex items-center justify-between p-3 sm:p-4 border border-[#F0EBE6] rounded-2xl bg-white hover:border-[#FEE2E2] hover:shadow-sm transition-all cursor-pointer group">
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="w-12 h-12 rounded-2xl bg-[#FFF5F4] flex items-center justify-center shrink-0 transition-colors">
-                        <FileText className="w-5 h-5 text-[#DD2C1F]" />
+                      <div className="w-10 h-10 rounded-xl bg-[#FFF5F4] flex items-center justify-center shrink-0 transition-colors">
+                        <FileText className="w-4 h-4 text-[#DD2C1F]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[15px] font-bold text-[#17151A] truncate">Questions fréquentes</p>
-                        <p className="text-[12.5px] text-[#736C72] mt-0.5 truncate">Trouvez rapidement vos réponses</p>
+                        <p className="text-[14px] font-bold text-[#17151A] truncate">Questions fréquentes</p>
+                        <p className="text-[11.5px] text-[#736C72] mt-0.5 truncate">Trouvez rapidement vos réponses</p>
                       </div>
                     </div>
                     <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-3" />
                   </div>
 
                   {/* Contact Support */}
-                  <div className="flex items-center justify-between p-4 sm:p-5 border border-[#F0EBE6] rounded-2xl bg-white hover:border-emerald-200 hover:shadow-sm transition-all cursor-pointer group">
+                  <div className="flex items-center justify-between p-3 sm:p-4 border border-[#F0EBE6] rounded-2xl bg-white hover:border-slate-200 hover:shadow-sm transition-all cursor-pointer group">
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0 transition-colors">
-                        <Headphones className="w-5 h-5 text-emerald-600" />
+                      <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 transition-colors">
+                        <Headphones className="w-4 h-4 text-slate-500" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[15px] font-bold text-[#17151A] truncate">Contacter le support</p>
-                        <p className="text-[12.5px] text-[#736C72] mt-0.5 truncate">Assistance personnalisée</p>
+                        <p className="text-[14px] font-bold text-[#17151A] truncate">Contacter le support</p>
+                        <p className="text-[11.5px] text-[#736C72] mt-0.5 truncate">Assistance personnalisée</p>
                       </div>
                     </div>
                     <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-3" />
@@ -526,48 +545,21 @@ export default function ClientProfilPage() {
                 </div>
 
                 {/* Illustration (5 columns) */}
-                <div className="lg:col-span-5 hidden sm:flex items-center justify-center relative min-h-[200px] overflow-visible py-4">
-                  {/* Organic Pink Background Blob */}
-                  <div className="absolute w-52 h-44 bg-[#FFF2F0] rounded-[50px] blur-2xl opacity-80 -z-0 pointer-events-none" />
-
-                  {/* Decorative Sparkles / Sunbeams top-left */}
-                  <div className="absolute top-2 left-10 text-slate-400">
-                    <svg className="w-7 h-7" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                      <line x1="14" y1="2" x2="14" y2="7" />
-                      <line x1="5.5" y1="5.5" x2="9" y2="9" />
-                      <line x1="2" y1="14" x2="7" y2="14" />
-                    </svg>
-                  </div>
-
-                  {/* Decorative Green Speech Bubble top-right */}
-                  <div className="absolute -top-1 right-8 z-20 flex flex-col items-start">
-                    <div className="bg-[#5B7B68] text-white px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
-                    </div>
-                    {/* Bubble Tail */}
-                    <div className="w-2.5 h-2.5 bg-[#5B7B68] transform rotate-45 -mt-1 ml-3 rounded-xs" />
-                  </div>
-
-                  {/* Center Card / Mockup with Headphones */}
-                  <div className="w-[130px] h-[165px] bg-white rounded-2xl border border-slate-100 shadow-[0_12px_28px_rgba(0,0,0,0.06)] flex items-center justify-center transform -rotate-6 relative z-10">
-                    <Headphones className="w-12 h-12 text-slate-400" strokeWidth={1.8} />
-                  </div>
-
-                  {/* Decorative Leaves bottom-right */}
-                  <div className="absolute bottom-2 right-6 text-[#9CB6A6] pointer-events-none">
-                    <svg className="w-10 h-10" viewBox="0 0 40 40" fill="currentColor">
-                      <path d="M30 8 C22 14, 20 24, 32 30 C24 30, 16 22, 30 8 Z" opacity="0.85" />
-                      <path d="M20 22 C14 26, 16 34, 26 36 C18 36, 12 30, 20 22 Z" opacity="0.65" />
-                    </svg>
+                <div className="lg:col-span-5 hidden sm:flex items-start justify-end relative min-h-[200px] overflow-visible py-0 pr-4">
+                  {/* Support Illustration Image */}
+                  <div className="relative w-full h-full flex items-start justify-end mt-[-40px] ml-4">
+                    <img 
+                      src="/support-illustration.png" 
+                      alt="Support illustration with phone and headset" 
+                      className="w-full h-auto max-w-[320px] object-contain"
+                    />
                   </div>
                 </div>
 
               </div>
 
               {/* ── Footer ── */}
-              <div className="mt-8 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[13px] text-[#736C72]">
+              <div className="mt-2 pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[12px] text-[#736C72]">
                 <div className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-slate-400" />
                   <span className="font-medium">support@retenza.com</span>

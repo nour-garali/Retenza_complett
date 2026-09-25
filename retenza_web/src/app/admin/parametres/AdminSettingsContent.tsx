@@ -136,7 +136,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
           {/* COLONNE GAUCHE — Carte "Paramètres globaux" */}
-          <div className="bg-white rounded-xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
+          <div className="bg-white rounded-lg border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
             <div>
               {/* Header */}
               <div className="flex items-start gap-3.5">
@@ -155,37 +155,32 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
 
               {/* Messages de statut */}
               {successGoal && (
-                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-lg border border-emerald-200 text-xs font-medium mt-4">
+                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-md border border-emerald-200 text-xs font-medium mt-4">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   {successGoal}
                 </div>
               )}
               {errorGoal && (
-                <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-lg border border-red-200 mt-4">
+                <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-md border border-red-200 mt-4">
                   {errorGoal}
                 </div>
               )}
 
               {/* Bloc encadré "Objectif d'acquisition" */}
-              <div className="mt-5 bg-[#FDF6F5] rounded-lg border border-[#F8E3DE] p-5">
-                <div className="flex items-start gap-3.5">
-                  <div className="w-9 h-9 rounded-full bg-[#FBEAE6] flex items-center justify-center shrink-0 text-[#DD2C1F]">
-                    <Target className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-[13px] font-bold text-slate-800 leading-tight">
-                      Objectif d'acquisition
-                    </h3>
-                    <p className="text-[12px] text-slate-500 mt-1 leading-relaxed">
-                      Définissez le nombre de nouveaux commerces actifs à acquérir durant le mois en cours.
-                      Cette valeur est utilisée pour calculer la jauge de progression sur votre tableau de bord.
-                    </p>
-                  </div>
+              <div className="mt-5 bg-[#FDF6F5] rounded-md border border-[#F8E3DE] p-5">
+                <div>
+                  <h3 className="text-[13px] font-bold text-slate-800 leading-tight">
+                    Objectif d'acquisition
+                  </h3>
+                  <p className="text-[12px] text-slate-500 mt-1 leading-relaxed">
+                    Définissez le nombre de nouveaux commerces actifs à acquérir durant le mois en cours.
+                    Cette valeur est utilisée pour calculer la jauge de progression sur votre tableau de bord.
+                  </p>
                 </div>
 
                 {/* Champ input */}
                 <div className="mt-5 flex items-center gap-3">
-                  <div className="flex items-center bg-white border border-slate-200/90 rounded-lg px-4 py-2.5 shadow-sm w-44 focus-within:border-[#DD2C1F] focus-within:ring-1 focus-within:ring-[#DD2C1F]">
+                  <div className="flex items-center bg-white border border-slate-200/90 rounded-md px-4 py-2.5 shadow-sm w-44 focus-within:border-[#DD2C1F] focus-within:ring-1 focus-within:ring-[#DD2C1F]">
                     <input
                       type="number"
                       value={goal}
@@ -204,7 +199,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
               <button
                 type="submit"
                 disabled={isLoadingGoal}
-                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-lg text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
+                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-[#DD2C1F] hover:bg-[#c42519] text-white rounded-md text-xs font-semibold shadow-sm transition-all disabled:opacity-70"
               >
                 {isLoadingGoal ? (
                   <><Loader2 className="w-3.5 h-3.5 animate-spin" />Sauvegarde...</>
@@ -215,7 +210,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
               <button
                 type="button"
                 onClick={resetGoal}
-                className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold shadow-sm transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-md text-xs font-semibold shadow-sm transition-all"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
                 Réinitialiser
@@ -224,73 +219,99 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
           </div>
 
           {/* COLONNE DROITE — Carte "Aperçu rapide" */}
-          <div className="bg-white rounded-xl border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
+          <div className="bg-white rounded-lg border border-slate-200/70 p-6 shadow-sm flex flex-col justify-between h-full">
             <div>
               {/* Header */}
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
-                    <Zap className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
-                      Aperçu rapide
-                    </h2>
-                    <p className="text-[12px] text-slate-400 mt-1">
-                      Suivez vos objectifs et indicateurs clés en un coup d'œil.
-                    </p>
-                  </div>
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
+                  <Zap className="w-5 h-5" />
                 </div>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-50 shadow-sm transition-colors shrink-0">
-                  Mois en cours <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                </button>
+                <div>
+                  <h2 className="text-[15px] font-bold text-slate-800 leading-tight">
+                    Aperçu rapide
+                  </h2>
+                  <p className="text-[12px] text-slate-400 mt-1">
+                    Suivez vos objectifs et indicateurs clés en un coup d'œil.
+                  </p>
+                </div>
               </div>
 
               {/* Contenu : Graphique Donut + 3 Mini Cartes */}
               <div className="mt-5 flex items-center gap-6">
                 {/* Donut Chart Gauge */}
-                <div className="flex flex-col items-center justify-center shrink-0 w-32">
-                  <div className="relative w-28 h-28 flex items-center justify-center">
-                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <div className="flex flex-col items-center justify-center shrink-0 w-44">
+                  <div className="relative w-40 h-40 flex items-center justify-center">
+                    {/* Fond circulaire avec bordure */}
+                    <div className="absolute inset-4 bg-gradient-to-br from-slate-50 to-white rounded-full border-2 border-slate-100 shadow-inner"></div>
+                    
+                    <svg className="w-full h-full transform -rotate-90 relative z-10" viewBox="0 0 120 120">
+                      <defs>
+                        <linearGradient id="trackGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#F1F5F9" />
+                          <stop offset="50%" stopColor="#E2E8F0" />
+                          <stop offset="100%" stopColor="#F1F5F9" />
+                        </linearGradient>
+                        <linearGradient id="fillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#EF4444" />
+                          <stop offset="50%" stopColor="#DD2C1F" />
+                          <stop offset="100%" stopColor="#DC2626" />
+                        </linearGradient>
+                      </defs>
+                      
+                      {/* Track de fond - style moderne épais */}
                       <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        stroke="#F1F5F9"
-                        strokeWidth="4"
+                        cx="60"
+                        cy="60"
+                        r="45"
+                        stroke="url(#trackGradient)"
+                        strokeWidth="12"
                         fill="none"
+                        opacity="0.3"
                       />
+                      
+                      {/* Barre de progression */}
                       <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        stroke="#DD2C1F"
-                        strokeWidth="4"
-                        strokeDasharray={2 * Math.PI * 40}
-                        strokeDashoffset={2 * Math.PI * 40 * (1 - progressPercentage / 100)}
+                        cx="60"
+                        cy="60"
+                        r="45"
+                        stroke="url(#fillGradient)"
+                        strokeWidth="12"
+                        strokeDasharray={2 * Math.PI * 45}
+                        strokeDashoffset={2 * Math.PI * 45 * (1 - progressPercentage / 100)}
                         strokeLinecap="round"
                         fill="none"
-                        className="transition-all duration-700 ease-out"
+                        className="transition-all duration-1200 ease-out"
+                        style={{
+                          filter: 'drop-shadow(0 0 8px rgba(221, 44, 31, 0.3))'
+                        }}
                       />
                     </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-xl font-bold text-slate-800">
-                        {Math.round(progressPercentage)}%
-                      </span>
+                    
+                    {/* Centre avec contenu */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+                      <div className="text-center">
+                        <div className="text-2xl font-black text-slate-800 tracking-tight">
+                          {Math.round(progressPercentage)}%
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-center mt-2">
-                    <p className="text-xs font-bold text-slate-800">Progression de l'objectif</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      {currentPartners} / {currentGoal} commerces
-                    </p>
+                  
+                  <div className="text-center mt-4">
+                    <p className="text-xs font-bold text-slate-800 mb-1">Progression de l'objectif</p>
+                    <div className="flex items-center justify-center gap-2 text-xs">
+                      <span className="font-semibold text-[#DD2C1F]">{currentPartners}</span>
+                      <span className="text-slate-300">/</span>
+                      <span className="font-medium text-slate-500">{currentGoal}</span>
+                      <span className="text-slate-400 text-[11px]">commerces</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* 3 mini-cartes statistiques */}
                 <div className="flex-1 space-y-2">
                   {/* Commerces actifs */}
-                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-lg border border-slate-100">
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-md border border-slate-100">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                         <Store className="w-4 h-4" />
@@ -306,7 +327,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                   </div>
 
                   {/* En progression */}
-                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-lg border border-slate-100">
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-md border border-slate-100">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                         <TrendingUp className="w-4 h-4" />
@@ -320,7 +341,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                   </div>
 
                   {/* Reste */}
-                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-lg border border-slate-100">
+                  <div className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-md border border-slate-100">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
                         <Clock className="w-4 h-4" />
@@ -337,20 +358,19 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
             </div>
 
             {/* Bannière d'astuce en bas */}
-            <div className="mt-4 p-3 bg-[#FDF6F5] rounded-lg border border-[#F8E3DE] flex items-center justify-between gap-3">
+            <div className="mt-4 p-3 bg-[#FDF6F5] rounded-md border border-[#F8E3DE] flex items-center justify-between gap-3">
               <div className="w-7 h-7 rounded-full bg-red-100/60 flex items-center justify-center shrink-0">
                 <Lightbulb className="w-3.5 h-3.5 text-[#DD2C1F]" />
               </div>
               <span className="text-[11px] text-slate-600 font-medium flex-1">
                 Votre objectif vous aide à mesurer la croissance de votre réseau de partenaires.
               </span>
-              <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
             </div>
           </div>
         </div>
 
         {/* BLOC PLEINE LARGEUR (bas de page) — Carte "Notifications par e-mail" */}
-        <div className="bg-white rounded-xl border border-slate-200/70 p-6 shadow-sm">
+        <div className="bg-white rounded-lg border border-slate-200/70 p-6 shadow-sm">
           {/* Header */}
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-full bg-[#FDF0ED] flex items-center justify-center shrink-0 text-[#DD2C1F]">
@@ -370,13 +390,13 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
           <form onSubmit={handleSaveNotifications} className="mt-5">
             {/* Messages de statut */}
             {successNotifs && (
-              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-lg border border-emerald-200 text-xs font-medium mb-4">
+              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 p-3 rounded-md border border-emerald-200 text-xs font-medium mb-4">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 {successNotifs}
               </div>
             )}
             {errorNotifs && (
-              <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-lg border border-red-200 mb-4">
+              <div className="text-red-600 text-xs font-medium bg-red-50 p-3 rounded-md border border-red-200 mb-4">
                 {errorNotifs}
               </div>
             )}
@@ -391,7 +411,7 @@ export default function AdminSettingsContent({ initialGoal, initialNotifications
                 return (
                   <div
                     key={key}
-                    className="flex items-center justify-between p-3.5 bg-slate-50/70 rounded-lg border border-slate-100 transition-colors"
+                    className="flex items-center justify-between p-3.5 bg-slate-50/70 rounded-md border border-slate-100 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-md ${iconBg} flex items-center justify-center shrink-0 transition-colors`}>

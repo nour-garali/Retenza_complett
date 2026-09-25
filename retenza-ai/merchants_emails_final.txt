@@ -1,0 +1,12 @@
+EMAILS DES COMMERÇANTS RETENZA CONNECT
+========================================
+
+EMAILS TROUVÉS:
+admin@gmail.com
+
+
+DÉTAILS:
+
+admin@gmail.com
+  Rôle: super_admin
+  Source: users.bson

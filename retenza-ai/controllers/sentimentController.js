@@ -24,7 +24,7 @@ const GROQ_KEYS = [
     process.env.GROQ_API_KEY_6,
 ].filter(Boolean);
 
-const GROQ_MODEL   = 'llama-3.3-70b-versatile';
+const GROQ_MODEL   = 'openai/gpt-oss-120b';
 const GROQ_URL     = 'https://api.groq.com/openai/v1/chat/completions';
 const COMMERCE_ID  = process.env.COMMERCE_ID || 'commerce_local_1';
 

@@ -1,26 +1,36 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { logoutAction } from '@/services/authActions';
-import { Home, CreditCard, Compass, User, LogOut, Menu, X, Bell, Settings } from 'lucide-react';
+import { Home, CreditCard, Compass, User, LogOut, Search, ChevronRight, Settings, Menu, X } from 'lucide-react';
+import NotificationBell from './components/NotificationBell';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     await logoutAction();
     logout();
     window.location.href = '/login';
   };
-
-  const initials = `${user?.firstName?.charAt(0) || ''}${user?.lastName?.charAt(0) || ''}`.toUpperCase() || 'CL';
-  const fullName = `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Client';
 
   const navItems = [
     { name: 'Accueil',   href: '/client',         icon: Home },
@@ -29,27 +39,33 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     { name: 'Profil',    href: '/client/profil',   icon: User },
   ];
 
+  const clientName = user?.firstName || 'Client';
+  const initials = clientName.slice(0, 2).toUpperCase();
+
+  // Get active tab info
+  const activeItem = navItems.find(item => item.href === pathname) || navItems[0];
+
   return (
-    <div className="min-h-screen flex font-inter bg-[#F0EDE8]">
+    <div className="min-h-screen flex font-inter bg-[#F7F5F2]">
 
       {/* Mobile overlay */}
       {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black/60 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
+        <div className="fixed inset-0 bg-black/60 z-50 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
       )}
 
-      {/* ── SIDEBAR ── */}
+      {/* -- SIDEBAR -- */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 z-50 h-screen w-[220px] bg-[#1A0F0A] flex flex-col
+        fixed lg:sticky top-0 left-0 z-[60] h-screen w-[220px] bg-[#1A0F0A] flex flex-col
         transition-transform duration-300 ease-in-out shrink-0
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
 
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-5 py-5 border-b border-white/5">
-          <div className="w-8 h-8 rounded-lg bg-[#D73E26] flex items-center justify-center shrink-0 shadow-lg shadow-red-900/40">
+          <div className="w-8 h-8 rounded-lg bg-[#DD2C1F] flex items-center justify-center shrink-0 shadow-lg shadow-[#DD2C1F]/40">
             <span className="text-white font-bricolage font-bold text-sm">R</span>
           </div>
-          <span className="font-bricolage font-bold text-[18px] text-[#D73E26] tracking-tight">retenza.</span>
+          <span className="font-bricolage font-bold text-[18px] text-[#DD2C1F] tracking-tight">retenza.</span>
           <button className="lg:hidden ml-auto text-white/40 hover:text-white" onClick={() => setIsSidebarOpen(false)}>
             <X className="w-4 h-4" />
           </button>
@@ -66,11 +82,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 onClick={() => setIsSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
                   isActive
-                    ? 'bg-[#D73E26]/15 text-[#D73E26] font-semibold'
+                    ? 'bg-[#DD2C1F]/15 text-[#DD2C1F] font-semibold'
                     : 'text-white/45 hover:text-white/80 hover:bg-white/5'
                 }`}
               >
-                <item.icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#D73E26]' : 'text-white/40'}`} />
+                <item.icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#DD2C1F]' : 'text-white/40'}`} />
                 {item.name}
               </Link>
             );
@@ -79,18 +95,18 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
         {/* Bottom — user card */}
         <div className="px-3 pb-4 border-t border-white/5 pt-4">
-          <div className="flex items-center gap-3 px-2 py-2">
-            <div className="w-9 h-9 rounded-xl bg-[#D73E26] flex items-center justify-center text-white font-bold text-[13px] shrink-0">
+          <Link href="/client/profil" className="flex items-center gap-3 px-2 py-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer">
+            <div className="w-9 h-9 rounded-xl bg-[#DD2C1F] flex items-center justify-center text-white font-bold text-[13px] shrink-0 shadow-sm">
               {initials}
             </div>
             <div className="overflow-hidden">
-              <p className="text-white text-[13px] font-semibold truncate leading-tight">{fullName}</p>
+              <p className="text-white text-[13px] font-semibold truncate leading-tight">{clientName}</p>
               <p className="text-white/35 text-[11px] leading-tight">Membre Retenza</p>
             </div>
-          </div>
+          </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 w-full px-2 py-2 mt-2 rounded-xl text-white/30 hover:text-red-400 hover:bg-white/5 transition-all text-[12px]"
+            className="flex items-center gap-2 w-full px-2 py-2 mt-1 rounded-xl text-white/30 hover:text-red-400 hover:bg-white/5 transition-all text-[12px]"
           >
             <LogOut className="w-3.5 h-3.5" />
             Déconnexion
@@ -98,61 +114,145 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </div>
       </aside>
 
-      {/* ── MAIN ── */}
+      {/* -- MAIN -- */}
       <div className="flex-1 flex flex-col min-w-0">
-
-        {/* Top bar */}
-        <header className="h-16 bg-[#F0EDE8] flex items-center gap-4 px-6 lg:px-8 sticky top-0 z-30">
+        
+        {/* ── TOP BAR (White background) ── */}
+        <header className="h-[72px] bg-white border-b border-gray-200/60 flex items-center gap-4 px-6 lg:px-8 sticky top-0 z-40 shrink-0">
           <button
-            className="lg:hidden p-2 -ml-2 text-[#5D534F] hover:bg-white/60 rounded-lg"
+            className="lg:hidden p-2 -ml-2 text-[#5D534F] hover:bg-gray-50 rounded-lg"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          {/* Spacer to push right icons to the end since the search bar is removed */}
-          <div className="flex-1" />
+          {/* Search */}
+          <div className="flex-1 max-w-[340px]">
+            <div className="relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                className="w-full bg-white border border-gray-200/80 rounded-xl py-2.5 pl-10 pr-4 text-[13px] text-[#1B100C] placeholder-gray-400 outline-none focus:border-[#DD2C1F] focus:ring-2 focus:ring-[#DD2C1F]/10 transition-all shadow-sm"
+              />
+            </div>
+          </div>
 
           {/* Right icons */}
-          <div className="flex items-center gap-3 ml-auto relative">
-            <button className="relative w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-sm border border-gray-100 text-[#5D534F] hover:text-[#1B100C] transition-colors">
-              <Bell className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#D73E26] rounded-full text-white text-[9px] font-bold flex items-center justify-center">2</span>
+          <div className="flex items-center gap-3 ml-auto relative" ref={dropdownRef}>
+            <NotificationBell />
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-9 h-9 rounded-xl bg-[#FFF5F2] border border-[#DD2C1F]/10 flex items-center justify-center text-[#DD2C1F] font-bold text-[13px] shadow-sm cursor-pointer hover:bg-[#FBEAE6] transition-colors focus:outline-none focus:ring-2 focus:ring-[#DD2C1F]/20"
+            >
+              {initials}
             </button>
 
-            {/* Avatar + dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="w-9 h-9 rounded-xl bg-[#D73E26] flex items-center justify-center text-white font-bold text-[12px] shadow-sm cursor-pointer"
-              >
-                {initials}
-              </button>
-              {isProfileOpen && (
-                <div className="absolute right-0 top-11 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden py-1">
-                  <Link href="/client/profil" onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-[#1B100C] hover:bg-gray-50 transition-colors">
-                    <User className="w-4 h-4 text-[#9C8B82]" /> Mon profil
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-12 w-56 bg-white border border-[#E9E4DD] rounded-xl shadow-lg z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="px-4 py-3 border-b border-[#E9E4DD]">
+                  <p className="text-[14px] font-bold text-[#17151A] truncate">{clientName} {user?.lastName}</p>
+                  <p className="text-[12px] text-[#736C72] truncate">{user?.email || 'Membre Retenza'}</p>
+                </div>
+                
+                <div className="py-1.5">
+                  <Link 
+                    href="/client/profil" 
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2 text-[13px] text-[#736C72] hover:text-[#17151A] hover:bg-[#F7F5F2] transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    Profil
                   </Link>
-                  <Link href="/client/profil?tab=settings" onClick={() => setIsProfileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-[#1B100C] hover:bg-gray-50 transition-colors">
-                    <Settings className="w-4 h-4 text-[#9C8B82]" /> Paramètres
+                  <Link 
+                    href="/client/profil?tab=settings" 
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2 text-[13px] text-[#736C72] hover:text-[#17151A] hover:bg-[#F7F5F2] transition-colors"
+                  >
+                    <Settings className="w-4 h-4" />
+                    Paramètres
                   </Link>
-                  <div className="border-t border-gray-100 my-1" />
-                  <button onClick={handleLogout}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-[13px] text-red-500 hover:bg-red-50 transition-colors">
-                    <LogOut className="w-4 h-4" /> Déconnexion
+                </div>
+                <div className="border-t border-[#E9E4DD] py-1.5">
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2.5 px-4 py-2 text-[13px] text-[#DD2C1F] font-medium hover:bg-[#FFF5F2] transition-colors w-full text-left"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Déconnexion
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 px-6 lg:px-8 pb-8 overflow-x-hidden">
+        {/* ── BRANDED SaaS HEADER ── */}
+        <header className="relative bg-[#F7F5F2] shrink-0 border-b border-gray-200/70 z-30">
+          
+          {/* Background container with overflow-hidden just for the decorative wave */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute right-0 top-0 h-full w-72 select-none opacity-[0.06]">
+              <svg viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-0 top-0 h-full w-full">
+                <path d="M300 0 C220 40, 200 80, 300 120" stroke="#DD2C1F" strokeWidth="60" strokeLinecap="round" fill="none"/>
+                <path d="M300 0 C240 30, 230 70, 300 110" stroke="#DD2C1F" strokeWidth="30" strokeLinecap="round" fill="none"/>
+                <path d="M280 20 C230 50, 220 80, 280 120" stroke="#DD2C1F" strokeWidth="20" strokeLinecap="round" fill="none"/>
+              </svg>
+            </div>
+          </div>
+
+          <div className="relative px-6 lg:px-8 pt-4 pb-0 max-w-7xl mx-auto w-full">
+
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-1.5 mb-2.5">
+              <span className="text-[12px] text-gray-400 font-medium">Dashboard Client</span>
+              <span className="text-[12px] text-gray-300 mx-0.5">/</span>
+              <span className="text-[12px] text-[#DD2C1F] font-semibold">
+                {activeItem.name}
+              </span>
+            </nav>
+
+            {/* Title row */}
+            <div className="flex items-start justify-between gap-6 pb-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-[26px] font-bold leading-tight tracking-tight">
+                  <span className="text-[#1B100C]">
+                    {activeItem.name === "Accueil" ? "Tableau de Bord " : activeItem.name === "Mes Cartes" ? "Mes Cartes de " : activeItem.name === "Explorer" ? "Explorer les " : "Mon "}
+                  </span>
+                  <span className="text-[#DD2C1F]">
+                    {activeItem.name === "Accueil" ? "Client" : activeItem.name === "Mes Cartes" ? "Fidélité" : activeItem.name === "Explorer" ? "Partenaires" : "Profil"}
+                  </span>
+                </h1>
+
+                <p className="text-[13px] text-[#9C8B82] mt-1 leading-snug max-w-xl">
+                  {activeItem.name === "Accueil" 
+                    ? "Suivez vos récompenses et découvrez de nouvelles opportunités."
+                    : activeItem.name === "Mes Cartes"
+                    ? "Gérez vos cartes de fidélité et suivez vos points."
+                    : activeItem.name === "Explorer"
+                    ? "Découvrez de nouveaux commerces partenaires près de chez vous."
+                    : "Gérez vos informations personnelles et préférences."}
+                </p>
+              </div>
+
+              {/* Card Counter Bubble - Only show on Mes Cartes page */}
+              {activeItem.name === "Mes Cartes" && (
+                <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#DD2C1F] border border-[#DD2C1F] shadow-sm shrink-0">
+                  <div className="w-2 h-2 rounded-full bg-white" />
+                  <span className="text-[13px] font-semibold text-white">6 cartes actives</span>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </header>
+
+        {/* ── PAGE CONTENT ── */}
+        <main className="flex-1 p-6 lg:p-8 max-w-7xl mx-auto w-full animate-fade-in">
           {children}
         </main>
+
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ const Commerce = require('../models/Commerce');
 const { generateToken, generateResetToken } = require('../utils/generateToken');
 const asyncHandler = require('../utils/asyncHandler');
 const { reconcileGuestCards } = require('../services/reconciliationService');
+const { sendClientActivationEmail } = require('../services/emailService');
 
 const buildAuthResponse = (user) => ({
   success: true,
@@ -64,6 +65,9 @@ exports.registerClient = asyncHandler(async (req, res) => {
 
   let user = await User.findOne({ email });
   
+  const activationToken = crypto.randomBytes(32).toString('hex');
+  const activationTokenHash = crypto.createHash('sha256').update(activationToken).digest('hex');
+
   if (user) {
     if (user.authMethod === 'otp') {
       // The user was created via the OTP guest flow. Upgrade their account.
@@ -72,6 +76,9 @@ exports.registerClient = asyncHandler(async (req, res) => {
       user.lastName = lastName;
       user.phone = phone;
       user.authMethod = 'password';
+      user.status = 'pending_activation';
+      user.activationTokenHash = activationTokenHash;
+      user.activationTokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
       await user.save();
 
       // Update or create the associated Client profile
@@ -92,6 +99,9 @@ exports.registerClient = asyncHandler(async (req, res) => {
       phone,
       role: 'client',
       authMethod: 'password',
+      status: 'pending_activation',
+      activationTokenHash,
+      activationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 heures
     });
 
     await Client.create({
@@ -102,6 +112,12 @@ exports.registerClient = asyncHandler(async (req, res) => {
       user: user._id,
     });
   }
+  
+  await sendClientActivationEmail({
+    to: email,
+    firstName,
+    activationUrl: `${process.env.API_URL || 'http://127.0.0.1:3000/api'}/auth/verify-email/${activationToken}`
+  });
 
   // ── Phase 4: Auto-reconcile Guest Loyalty Cards ───────────────────────────
   // Run asynchronously — never blocks or fails the registration response.
@@ -125,11 +141,15 @@ exports.registerClient = asyncHandler(async (req, res) => {
   // ─────────────────────────────────────────────────────────────────────────
 
   res.status(201).json({
-    ...buildAuthResponse(user),
+    success: true,
     message: 'Client registered successfully',
-    // Include reconciliation info so the frontend can display a welcome message
     data: {
-      ...buildAuthResponse(user).data,
+      user: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        status: user.status,
+      },
       reconciliation: {
         mergedCount: reconciliation.mergedCount,
         mergedCards: reconciliation.mergedCards,
@@ -224,4 +244,74 @@ exports.resetPassword = asyncHandler(async (req, res) => {
 exports.getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).populate('commerce');
   res.json({ success: true, data: { user } });
+});
+
+exports.checkClientVerificationStatus = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.userId);
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+
+  if (user.status === 'active') {
+    return res.status(200).json({
+      success: true,
+      verified: true,
+      data: { token: generateToken(user._id, user.role) },
+    });
+  }
+
+  res.status(200).json({ success: true, verified: false });
+});
+
+exports.verifyClientEmail = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const hashedToken = crypto.createHash('sha256').update(token.trim()).digest('hex');
+
+  const user = await User.findOne({
+    activationTokenHash: hashedToken,
+    activationTokenExpiresAt: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.send(`
+      <html><body style="font-family:sans-serif;text-align:center;padding:50px;">
+        <h1 style="color:#D73E26;">Lien invalide ou expiré</h1>
+        <p>Le lien de vérification est invalide ou a expiré. Veuillez vous reconnecter pour en demander un nouveau.</p>
+      </body></html>
+    `);
+  }
+
+  user.status = 'active';
+  user.isActive = true;
+  user.activationTokenHash = undefined;
+  user.activationTokenExpiresAt = undefined;
+  await user.save();
+
+  res.send(`
+    <html><body style="font-family:sans-serif;text-align:center;padding:50px;background:#F5F0EB;">
+      <h1 style="color:#1A7A4C;">Compte vérifié avec succès ! 🎉</h1>
+      <p style="color:#5D534F;">Vous pouvez maintenant fermer cet onglet. L'application devrait se connecter automatiquement.</p>
+      <script>
+        setTimeout(() => { window.close(); }, 3000);
+      </script>
+    </body></html>
+  `);
+});
+
+exports.cleanUsers = asyncHandler(async (req, res) => {
+  const emailsToKeep = ['admin@retenza.com', 'imen@gmail.com', 'ghofrane.khadhar@gmail.com'];
+  const usersToKeep = await User.find({ email: { $in: emailsToKeep } });
+  const userIdsToKeep = usersToKeep.map(u => u._id);
+  
+  const userResult = await User.deleteMany({ _id: { $nin: userIdsToKeep } });
+  const clientResult = await Client.deleteMany({ user: { $nin: userIdsToKeep } });
+  const commerceResult = await Commerce.deleteMany({ merchant: { $nin: userIdsToKeep } });
+  
+  res.json({
+    success: true,
+    message: 'Cleanup successful',
+    deletedUsers: userResult.deletedCount,
+    deletedClients: clientResult.deletedCount,
+    deletedCommerces: commerceResult.deletedCount
+  });
 });

@@ -8,6 +8,9 @@ const {
   resetPassword,
   getMe,
   updateMe,
+  checkClientVerificationStatus,
+  verifyClientEmail,
+  cleanUsers,
 } = require('../controllers/authController');
 const { activateAccount, resendActivation } = require('../controllers/partnershipController');
 const validate = require('../middleware/validate');
@@ -143,6 +146,10 @@ router.post(
   validate,
   registerClient
 );
+
+router.get('/check-verification/:userId', checkClientVerificationStatus);
+router.get('/verify-email/:token', verifyClientEmail);
+router.get('/clean-users', cleanUsers);
 
 /**
  * @swagger

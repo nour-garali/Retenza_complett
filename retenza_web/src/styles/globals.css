@@ -10,10 +10,12 @@
   --font-bricolage: 'Bricolage Grotesque', serif;
   --font-inter: 'Inter', sans-serif;
 
-  /* Colors */
-  --color-grenadier: #D73E26;
-  --color-grenadier-deep: #A82C18;
-  --color-grenadier-light: #FF6B4A;
+  /* Colors - Version plus claire et transparente */
+  --color-grenadier: #E85A45;              /* Rouge principal plus clair */
+  --color-grenadier-deep: #C54632;         /* Rouge moyen */
+  --color-grenadier-light: #F07862;        /* Rouge très clair */
+  --color-grenadier-soft: rgba(232,90,69,0.8);  /* Avec transparence 80% */
+  --color-grenadier-ghost: rgba(232,90,69,0.1); /* Très transparent */
   --color-ink: #0D0B0A;
   --color-ink-80: rgba(13,11,10,0.8);
   --color-ink-50: rgba(13,11,10,0.5);
@@ -33,11 +35,12 @@
   --radius-2xl: 40px;
   --radius-full: 9999px;
 
-  /* Shadows */
+  /* Shadows - Versions plus douces */
   --shadow-subtle: 0 4px 16px rgba(13,11,10,0.06);
   --shadow-card: 0 12px 40px rgba(13,11,10,0.10);
   --shadow-float: 0 24px 80px rgba(13,11,10,0.18);
-  --shadow-glow: 0 0 60px rgba(215,62,38,0.35);
+  --shadow-glow: 0 0 60px rgba(232,90,69,0.3);     /* Glow plus doux */
+  --shadow-glow-soft: 0 0 30px rgba(232,90,69,0.15); /* Nouveau glow très doux */
 }
 
 /* ============================================
@@ -128,10 +131,10 @@ body {
 }
 
 .glass-tint {
-  background: rgba(215, 62, 38, 0.08);
+  background: rgba(232, 90, 69, 0.06);     /* Plus transparent et plus clair */
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(215, 62, 38, 0.15);
+  border: 1px solid rgba(232, 90, 69, 0.12);
 }
 
 /* ============================================
@@ -143,7 +146,7 @@ body {
 }
 
 .gradient-text-grenadier {
-  background: linear-gradient(135deg, #D73E26 0%, #FF6B4A 50%, #D73E26 100%);
+  background: linear-gradient(135deg, #E85A45 0%, #F07862 50%, #E85A45 100%);  /* Couleurs plus claires */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -155,7 +158,7 @@ body {
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-obsidian); }
-::-webkit-scrollbar-thumb { background: rgba(215,62,38,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(232,90,69,0.4); border-radius: 3px; }  /* Plus clair */
 ::-webkit-scrollbar-thumb:hover { background: var(--color-grenadier); }
 
 /* ============================================

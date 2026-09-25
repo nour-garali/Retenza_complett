@@ -1,9 +1,32 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import PublicNavbar from '@/components/landing/PublicNavbar';
+
+function useHasAuthCookie() {
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    setHasToken(document.cookie.includes('auth_token='));
+  }, []);
+  return hasToken;
+}
+
+function SmartLink({ href, style, children }: { href: string; style?: React.CSSProperties; children: React.ReactNode }) {
+  const hasToken = useHasAuthCookie();
+  const handleClick = (e: React.MouseEvent) => {
+    if (hasToken) {
+      e.preventDefault();
+      window.location.href = `/api/logout-redirect?to=${encodeURIComponent(href)}`;
+    }
+  };
+  return (
+    <Link href={href} style={style} onClick={handleClick}>
+      {children}
+    </Link>
+  );
+}
 
 export default function LandingPage() {
   return (
@@ -100,7 +123,7 @@ export default function LandingPage() {
 
           {/* Buttons */}
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
-            <Link href="/login" style={{
+            <SmartLink href="/login" style={{
               display: 'flex', alignItems: 'center', gap: 9,
               padding: '14px 26px', borderRadius: 14,
               background: 'linear-gradient(135deg, #D94030, #9E1A0A)',
@@ -112,8 +135,8 @@ export default function LandingPage() {
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
               Se connecter
-            </Link>
-            <Link href="/register" style={{
+            </SmartLink>
+            <SmartLink href="/register" style={{
               display: 'flex', alignItems: 'center', gap: 9,
               padding: '14px 26px', borderRadius: 14,
               background: '#fff', border: '1.5px solid #E4DAD5',
@@ -125,11 +148,11 @@ export default function LandingPage() {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
               Créer un compte
-            </Link>
+            </SmartLink>
           </div>
 
           {/* Partner link */}
-          <Link href="/register/merchant" style={{
+          <SmartLink href="/register/merchant" style={{
             display: 'flex', alignItems: 'center', gap: 6,
             color: '#8C7B73', fontSize: 14, textDecoration: 'none',
           }}>
@@ -137,7 +160,7 @@ export default function LandingPage() {
             <span style={{ color: '#BF2112', fontWeight: 700 }}>
               Devenir Partenaire Retenza →
             </span>
-          </Link>
+          </SmartLink>
         </motion.div>
 
         {/* ── RIGHT: Card 3D image ── */}

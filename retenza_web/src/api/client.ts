@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Base URL points to the Next.js Route Handlers (BFF) which will proxy to the Node.js backend
 // OR it points directly to Node.js backend if used from server components
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3000/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

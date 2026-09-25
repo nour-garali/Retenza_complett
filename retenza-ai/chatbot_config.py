@@ -12,8 +12,8 @@ DB_NAME = "retenza_ai"
 
 # Clé API Groq (provider principal — quotas gratuits très généreux)
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_MODEL      = "llama-3.3-70b-versatile"  # Modele principal — génération SAV, sentiment (qualité prioritaire)
-GROQ_MODEL_FAST = "llama-3.1-8b-instant"    # Modele rapide/économique — routage, classification, détection d'intentions
+GROQ_MODEL      = "openai/gpt-oss-120b"     # Modele principal — génération SAV, sentiment (qualité prioritaire)
+GROQ_MODEL_FAST = "openai/gpt-oss-20b"      # Modele rapide/économique — routage, classification, détection d'intentions
 
 # Pool de rotation automatique — charge GROQ_API_KEY_1 à _6, filtre les vides
 # Si aucune cle numerotee n'est configuree, utilise la cle principale comme fallback

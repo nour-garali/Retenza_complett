@@ -22,8 +22,8 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 _groq_raw = os.getenv("GROQ_API_KEYS", "")
 GROQ_API_KEYS = [k.strip() for k in _groq_raw.split(",") if k.strip()]
 
-GROQ_MODEL       = os.getenv("GROQ_MODEL",      "llama-3.3-70b-versatile")
-GROQ_MODEL_FAST  = os.getenv("GROQ_MODEL_FAST", "llama-3.1-8b-instant")
+GROQ_MODEL       = os.getenv("GROQ_MODEL",      "openai/gpt-oss-120b")
+GROQ_MODEL_FAST  = os.getenv("GROQ_MODEL_FAST", "openai/gpt-oss-20b")
 
 GEMINI_API_KEY   = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL     = os.getenv("GEMINI_MODEL",   "gemini-2.0-flash")

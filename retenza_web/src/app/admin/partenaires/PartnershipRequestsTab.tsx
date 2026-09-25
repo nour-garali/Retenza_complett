@@ -13,6 +13,7 @@ export default function PartnershipRequestsTab() {
   const [requests, setRequests] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState('PENDING'); // PENDING, APPROVED, REJECTED, ALL
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchRequests = async () => {
     setIsLoading(true);
@@ -78,7 +79,15 @@ export default function PartnershipRequestsTab() {
     }
   };
 
-  const filtered = requests.filter(r => filter === 'ALL' || r.status === filter);
+  const filtered = requests.filter(r => {
+    const matchesFilter = filter === 'ALL' || r.status === filter;
+    const matchesSearch = r.businessName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         r.contactEmail?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         r.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         r.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         `${r.ownerFirstName} ${r.ownerLastName}`.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   if (isLoading) {
     return <div className="flex justify-center p-20"><RefreshCw className="w-8 h-8 animate-spin text-gray-400" /></div>;
@@ -86,13 +95,23 @@ export default function PartnershipRequestsTab() {
 
   return (
     <div className="space-y-6">
-      {/* Header & Filters */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold font-bricolage text-[#0D1117]">Demandes de Partenariat</h2>
-        <div className="flex gap-2 bg-white border border-gray-200 rounded-xl p-1">
+      {/* Search & Filters */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Rechercher une demande..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#F5F0EB]/50 border-none rounded-lg py-2 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-[#D73E26]/20 transition-all placeholder-gray-400 font-medium"
+          />
+        </div>
+        
+        <div className="flex bg-[#F5F0EB] p-0.5 rounded-lg w-full sm:w-auto">
           {['PENDING', 'APPROVED', 'REJECTED', 'ALL'].map(f => (
             <button key={f} onClick={() => setFilter(f)}
-              className={`px-4 py-1.5 rounded-lg text-[13px] font-bold transition-all ${filter === f ? 'bg-[#0D1117] text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}>
+              className={`flex-1 sm:flex-none px-3 py-1 rounded text-xs font-bold transition-all ${filter === f ? 'bg-white text-[#1B100C] shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}>
               {f === 'PENDING' ? 'En attente' : f === 'APPROVED' ? 'Approuvées' : f === 'REJECTED' ? 'Refusées' : 'Toutes'}
             </button>
           ))}
@@ -101,83 +120,136 @@ export default function PartnershipRequestsTab() {
 
       {/* List */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center border border-gray-100">
-          <Clock className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="font-bricolage font-bold text-lg text-[#1B100C]">Aucune demande</h3>
-          <p className="text-gray-500 text-[14px]">Il n'y a pas de demande pour ce statut.</p>
+        <div className="bg-white rounded-xl p-8 text-center border border-gray-200">
+          <Clock className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+          <h3 className="font-bricolage font-bold text-base text-gray-900">Aucune demande</h3>
+          <p className="text-gray-500 text-sm">Il n'y a pas de demande pour ce statut.</p>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="space-y-3">
           {filtered.map(req => (
-            <div key={req._id} className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col lg:flex-row gap-6 shadow-sm hover:shadow-md transition-shadow">
-              {/* Info Commerce */}
-              <div className="flex-1 space-y-4">
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="font-bricolage font-extrabold text-[20px] text-[#0D1117]">{req.businessName}</h3>
-                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                      req.status === 'PENDING' ? 'bg-orange-100 text-orange-700' :
-                      req.status === 'APPROVED' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                    }`}>
-                      {req.status}
-                    </span>
+            <div key={req._id} className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-200">
+              {/* Header */}
+              <div className="flex items-start justify-between pb-4 border-b border-gray-100">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
+                    <Building2 className="w-4 h-4 text-gray-600" />
                   </div>
-                  <p className="text-[13px] font-semibold text-[#D73E26]">{req.category}</p>
+                  <div>
+                    <h3 className="font-bricolage font-bold text-lg text-gray-900 mb-1">{req.businessName}</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700">
+                        {req.category}
+                      </span>
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
+                        req.status === 'PENDING' ? 'bg-gray-100 text-gray-700' :
+                        req.status === 'APPROVED' ? 'bg-gray-100 text-gray-700' : 'bg-red-50 text-red-700'
+                      }`}>
+                        {req.status === 'PENDING' ? 'En attente' : req.status === 'APPROVED' ? 'Approuvée' : 'Refusée'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-y-2 gap-x-4">
-                  <div className="flex items-center gap-2 text-[13px] text-gray-600">
-                    <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="font-medium">{req.ownerFirstName} {req.ownerLastName} ({req.ownerRole})</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[13px] text-gray-600">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    <span>{req.city} {req.address ? `- ${req.address}` : ''}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[13px] text-gray-600">
-                    <Mail className="w-4 h-4 text-gray-400" />
-                    <a href={`mailto:${req.contactEmail}`} className="text-[#D73E26] hover:underline">{req.contactEmail}</a>
-                  </div>
-                  {req.phone && (
-                    <div className="flex items-center gap-2 text-[13px] text-gray-600">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <span>{req.phone}</span>
+                
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                  {req.status === 'PENDING' ? (
+                    <>
+                      <button onClick={() => handleApprove(req._id, req.businessName)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors">
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        Approuver
+                      </button>
+                      <button onClick={() => handleReject(req._id, req.businessName)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-red-300 text-red-700 hover:bg-red-50 rounded-lg text-sm font-medium transition-colors">
+                        <XCircle className="w-3.5 h-3.5" />
+                        Refuser
+                      </button>
+                    </>
+                  ) : (
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-gray-900">
+                        {req.status === 'APPROVED' ? '✓ Approuvée' : '✗ Refusée'}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(req.reviewedAt).toLocaleDateString('fr-FR')}
+                      </p>
                     </div>
                   )}
                 </div>
-
-                {req.message && (
-                  <div className="p-3 bg-gray-50 rounded-xl text-[13px] text-gray-700 italic border border-gray-100">
-                    "{req.message}"
-                  </div>
-                )}
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center justify-end lg:w-48 lg:border-l lg:border-gray-100 lg:pl-6">
-                {req.status === 'PENDING' ? (
-                  <div className="flex flex-col gap-2 w-full">
-                    <button onClick={() => handleApprove(req._id, req.businessName)}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#00A896] hover:bg-[#009080] text-white rounded-xl text-[13px] font-bold transition-colors">
-                      <CheckCircle className="w-4 h-4" /> Approuver
-                    </button>
-                    <button onClick={() => handleReject(req._id, req.businessName)}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 bg-white border border-red-200 text-red-600 hover:bg-red-50 rounded-xl text-[13px] font-bold transition-colors">
-                      <XCircle className="w-4 h-4" /> Refuser
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-right text-[12px] text-gray-500 w-full">
-                    <p className="font-bold text-[#0D1117] mb-1">
-                      {req.status === 'APPROVED' ? 'Demande approuvée' : 'Demande refusée'}
-                    </p>
-                    <p>Le {new Date(req.reviewedAt).toLocaleDateString('fr-FR')}</p>
-                    <p className="mt-1">Par : {req.reviewedBy?.firstName} {req.reviewedBy?.lastName}</p>
-                    {req.status === 'REJECTED' && req.rejectionReason && (
-                      <p className="mt-2 text-red-600 italic">Motif : {req.rejectionReason}</p>
+              {/* Content Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+                {/* Contact Info */}
+                <div>
+                  <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Contact Principal</h4>
+                  <div className="space-y-2.5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                        <Building2 className="w-3.5 h-3.5 text-gray-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">{req.ownerFirstName} {req.ownerLastName}</p>
+                        <p className="text-xs text-gray-500">{req.ownerRole}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                        <Mail className="w-3.5 h-3.5 text-gray-600" />
+                      </div>
+                      <div>
+                        <a href={`mailto:${req.contactEmail}`} className="text-sm font-medium text-[#D73E26] hover:underline">
+                          {req.contactEmail}
+                        </a>
+                      </div>
+                    </div>
+
+                    {req.phone && (
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                          <Phone className="w-3.5 h-3.5 text-gray-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{req.phone}</p>
+                        </div>
+                      </div>
                     )}
                   </div>
-                )}
+                </div>
+
+                {/* Location Info */}
+                <div>
+                  <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Localisation</h4>
+                  <div className="space-y-2.5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                        <MapPin className="w-3.5 h-3.5 text-gray-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">{req.city}</p>
+                        {req.address && (
+                          <p className="text-xs text-gray-500 mt-0.5">{req.address}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {req.message && (
+                      <div className="p-3 bg-gray-50 rounded-lg border-l-3 border-gray-300 mt-3">
+                        <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Message</h5>
+                        <p className="text-sm text-gray-700 leading-relaxed italic">"{req.message}"</p>
+                      </div>
+                    )}
+
+                    {req.status === 'REJECTED' && req.rejectionReason && (
+                      <div className="p-3 bg-red-50 rounded-lg border-l-3 border-red-400 mt-3">
+                        <h5 className="text-xs font-medium text-red-700 uppercase tracking-wide mb-1">Motif du refus</h5>
+                        <p className="text-sm text-red-700 leading-relaxed">{req.rejectionReason}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))}

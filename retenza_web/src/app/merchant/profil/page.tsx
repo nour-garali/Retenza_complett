@@ -8,7 +8,7 @@ import PageHeader from '@/components/PageHeader';
 import { 
   Store, Phone, Mail, MapPin, Pencil, Calendar, Tag, ExternalLink,
   Building2, User, Hash, Briefcase, Link2, FileText, Lock, QrCode,
-  ShieldCheck, Shield, Headphones, Camera, X, Save, Upload, Info, 
+  ShieldCheck, Shield, Headphones, Camera, X, Save, Upload, Info, Check,
   CreditCard, Copy, Zap, TrendingUp, CornerRightDown
 } from 'lucide-react';
 
@@ -61,10 +61,12 @@ export default function MerchantProfilPage() {
   // Security Tab State
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   // QR Code State
   const [qrCodeData, setQrCodeData] = useState<string | null>(null);
   const [isLoadingQr, setIsLoadingQr] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   // Billing State
   const [billingStats, setBillingStats] = useState<any>(null);
@@ -168,10 +170,31 @@ export default function MerchantProfilPage() {
   const responsibleName = `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || (user as any)?.name || 'cozyy ,';
   const customUrl = `retenza.app/c/${commerceName.toLowerCase().replace(/\s+/g, '') || 'moncommerce'}`;
 
-  const handleCopyQrUrl = () => {
-    const urlToCopy = typeof qrCodeData === 'string' ? 'https://retenza.app' : ((qrCodeData as any)?.url || 'https://retenza.app');
-    navigator.clipboard.writeText(urlToCopy);
-    alert('Lien copié !');
+  const handleCopyQrUrl = async () => {
+    const urlToCopy = typeof qrCodeData === 'string'
+      ? 'https://retenza.app'
+      : ((qrCodeData as any)?.url || 'https://retenza.app');
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(urlToCopy);
+      } else {
+        // Fallback for HTTP / non-secure contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = urlToCopy;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2500);
+    } catch (err) {
+      console.error('Erreur copie :', err);
+    }
   };
 
   return (
@@ -493,8 +516,8 @@ export default function MerchantProfilPage() {
               <div className="bg-white border border-[#E9E4DD] rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <h3 className="text-[16px] font-bold text-[#17151A] mb-6">Mettre à jour le mot de passe</h3>
                 
-                <div className="space-y-5 max-w-md">
-                  <div className="flex flex-col gap-1.5">
+                <div className="space-y-5">
+                  <div className="flex flex-col gap-1.5 w-1/2 pr-2">
                     <label className="text-[13px] font-semibold text-[#736C72]">Mot de passe actuel</label>
                     <input 
                       type="password" 
@@ -506,16 +529,31 @@ export default function MerchantProfilPage() {
                     />
                   </div>
                   
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
-                    <input 
-                      type="password" 
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      autoComplete="new-password"
-                      className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
-                      placeholder="••••••••"
-                    />
+                  {/* Ligne avec 2 colonnes pour les nouveaux mots de passe */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[13px] font-semibold text-[#736C72]">Nouveau mot de passe</label>
+                      <input 
+                        type="password" 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        autoComplete="new-password"
+                        className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                    
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[13px] font-semibold text-[#736C72]">Confirmer nouveau mdp</label>
+                      <input 
+                        type="password" 
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        autoComplete="new-password"
+                        className="w-full px-3 py-2 bg-white border border-[#E9E4DD] rounded-xl focus:border-[#C31F3C] focus:outline-none transition-colors text-[14px]"
+                        placeholder="••••••••"
+                      />
+                    </div>
                   </div>
 
                   <div className="pt-2">
@@ -657,10 +695,23 @@ export default function MerchantProfilPage() {
 
                 <button 
                   onClick={handleCopyQrUrl}
-                  className="w-full sm:w-auto px-8 py-2.5 bg-[#C31F3C] hover:bg-[#8A1329] text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer text-[13.5px]"
+                  className={`w-full sm:w-auto px-8 py-2.5 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer text-[13.5px] ${
+                    isCopied
+                      ? 'bg-[#1A7A4C] hover:bg-[#155E3B]'
+                      : 'bg-[#C31F3C] hover:bg-[#8A1329]'
+                  }`}
                 >
-                  <Copy className="w-4 h-4" />
-                  Copier le lien
+                  {isCopied ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      Copié !
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      Copier le lien
+                    </>
+                  )}
                 </button>
               </div>
 

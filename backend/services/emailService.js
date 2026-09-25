@@ -199,9 +199,39 @@ const sendPasswordResetEmail = async ({ to, resetUrl }) => {
   });
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. Email d'activation Client
+// ─────────────────────────────────────────────────────────────────────────────
+const sendClientActivationEmail = async ({ to, firstName, activationUrl }) => {
+  const html = card(`
+    <h2 style="color:#0D1117;font-size:24px;font-weight:800;margin:0 0 8px;">
+      Bienvenue sur Retenza, ${firstName} ! 🎉
+    </h2>
+    <p style="color:#5D534F;font-size:14px;margin:0 0 20px;">
+      Merci de rejoindre la communauté Retenza. Pour finaliser la création de votre compte,
+      veuillez vérifier votre adresse e-mail.
+    </p>
+    <div style="text-align:center;">
+      <a href="${activationUrl}" style="${btnStyle}">
+        Vérifier mon e-mail
+      </a>
+    </div>
+    <p style="color:#9C8B82;font-size:12px;text-align:center;margin:0;">
+      Ce lien est valable <strong>24 heures</strong>.
+    </p>
+  `);
+
+  await sendMail({
+    to,
+    subject: 'Vérifiez votre adresse e-mail - Retenza',
+    html,
+  });
+};
+
 module.exports = {
   sendActivationEmail,
   sendRejectionEmail,
   sendResendActivationEmail,
   sendPasswordResetEmail,
+  sendClientActivationEmail,
 };

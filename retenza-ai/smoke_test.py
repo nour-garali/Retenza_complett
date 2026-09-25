@@ -50,8 +50,8 @@ print(f"[OK] METRICS_TRACKER : {len(required_keys)} clés présentes (dont groq_
 # 5b. Vérifier la config dual-model
 import chatbot_config as cfg
 assert hasattr(cfg, 'GROQ_MODEL_FAST'), "GROQ_MODEL_FAST absent de chatbot_config"
-assert cfg.GROQ_MODEL_FAST == "llama-3.1-8b-instant", f"Modèle rapide inattendu: {cfg.GROQ_MODEL_FAST}"
-assert cfg.GROQ_MODEL == "llama-3.3-70b-versatile", f"Modèle principal inattendu: {cfg.GROQ_MODEL}"
+assert cfg.GROQ_MODEL_FAST == "openai/gpt-oss-20b", f"Modèle rapide inattendu: {cfg.GROQ_MODEL_FAST}"
+assert cfg.GROQ_MODEL == "openai/gpt-oss-120b", f"Modèle principal inattendu: {cfg.GROQ_MODEL}"
 print(f"[OK] Dual-Model config : principal={cfg.GROQ_MODEL} | rapide={cfg.GROQ_MODEL_FAST}")
 assert c.groq_manager_fast is not None or not cfg.GROQ_API_KEYS, "groq_manager_fast non initialisé alors que des clés existent"
 if c.groq_manager_fast:

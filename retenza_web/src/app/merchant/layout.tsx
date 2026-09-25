@@ -78,7 +78,6 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
   const initials = commerceName.slice(0, 2).toUpperCase();
 
   const navItems = [
-    { name: 'Tableau de bord', href: '/merchant', icon: LayoutDashboard },
     { name: 'Dashboard', href: '/merchant/dashboard-ia', icon: LayoutDashboard },
     { name: 'Clients', href: '/merchant/clients-ia', icon: Users },
     { name: 'Campagnes', href: '/merchant/campagnes-ia', icon: Megaphone },

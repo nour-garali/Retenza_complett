@@ -109,8 +109,8 @@ export default function LoginScreen() {
                  </div>
                )}
                {successMsg && (
-                 <div className="mb-6 p-4 bg-green-50 border border-green-100 text-green-700 text-[13px] rounded-xl flex items-start gap-3">
-                   <CheckCircle2 className="w-4 h-4 mt-0.5" />
+                 <div className="mb-6 p-4 rounded-xl flex items-start gap-3" style={{ background: "#FFF0EE", border: "1px solid #F5C5BE", color: "#BF2112" }}>
+                   <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "#BF2112" }} />
                    <div className="font-medium">{successMsg}</div>
                  </div>
                )}

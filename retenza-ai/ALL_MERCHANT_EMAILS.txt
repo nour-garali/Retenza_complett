@@ -1,0 +1,30 @@
+TOUS LES EMAILS DES COMMERÇANTS - RETENZA CONNECT
+============================================================
+
+LISTE SIMPLE:
+---------------
+admin@gmail.com
+compta@tunis.tn
+ghofrane.khadhar@gmail.com
+
+
+DÉTAILS COMPLETS:
+--------------------
+
+admin@gmail.com
+  Source: audit_logs.bson
+  Type: Utilisateur actif (127 actions)
+  Rôle: super_admin
+  Actions audit: 127
+
+compta@tunis.tn
+  Source: commerces_settings.bson
+  Type: Email comptable
+  Rôle: accountant
+  Commerce ID: commerce_local_1
+
+ghofrane.khadhar@gmail.com
+  Source: support_tickets.bson
+  Type: Utilisateur support actif (10 tickets)
+  Rôle: support_user
+  Tickets support: 10

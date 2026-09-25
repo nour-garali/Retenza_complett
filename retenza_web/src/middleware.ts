@@ -5,19 +5,19 @@ import type { NextRequest } from 'next/server';
 const publicRoutes = [
   '/login',
   '/register',
-  '/register/client',
   '/register/merchant',
   '/register/merchant/demande-envoyee',
   '/activate-account',
   '/forgot-password',
   '/reset-password',
-  '/m', // QR Code landing pages — public by design (no Retenza account required)
 ];
 
 // Routes always accessible regardless of auth state — no redirect in either direction
 const alwaysPublicRoutes = [
-  '/chatbot', // Standalone client chatbot — accessible by anyone without Retenza account
-  '/avantages', // Public marketing page — accessible whether logged in or not
+  '/chatbot',     // Standalone client chatbot — accessible by anyone without Retenza account
+  '/avantages',   // Public marketing page — accessible whether logged in or not
+  '/register/client', // Client registration — must be accessible even during pending verification polling
+  '/m',           // QR Code merchant landing pages — must be accessible even when logged in
 ];
 
 export function middleware(request: NextRequest) {
@@ -48,6 +48,7 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
 
 export const config = {
   matcher: [
